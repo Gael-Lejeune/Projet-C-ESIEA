@@ -29,18 +29,24 @@ char key_pressed(){
 }
 
 int main() {
-
-    charger_menu();
-
-    int option, n;
-    n = scanf("%d",&option);
-    if (n != 1){
-        printf("Input error\n");
-        exit(-1);
+    // char fichier[20] = "txt/menu.txt";
+    charger_fichier();
+    char option;
+    while (option == 0x00) {
+        option = key_pressed();
     }
-    printf("Vous avez choisi l'option %d\n", option);
 
-    if (option == 1) {
+    // printf("option = %c\n", option);
+    // char option;
+    // int n;
+    // n = scanf("%d",&option);
+    // if (n != 1){
+    //     printf("Input error\n");
+    //     exit(-1);
+    // }
+    printf("Vous avez choisi l'option %c\n", option);
+
+    if (option == '1') {
         charger_train();
     }
     return 0;
