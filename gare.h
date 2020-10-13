@@ -1,62 +1,57 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define LONGUEUR 62
+#define LARGEUR 17
+
 typedef struct gare GARE;
 struct gare{
-    char custom[17][62];   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
+    char ** custom;   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
 };
 
+char ** ALLOCATION_GARE_DYN(int NB_L, int NB_C) {
+	char ** tab = (char **)malloc(NB_L*sizeof(char *));
+	for(int i =0; i<NB_L;i++) {
+		tab[i] = (char *)malloc(NB_C*sizeof(char));
+	}
+	return tab;
+}
+
 GARE charger_gare(){
-    FILE *fichier = fopen("txt/gare_test.txt", "r+");
+    // FILE *fichier = fopen("txt/gare_test.txt", "r+");
     GARE magare;
-    // magare.custom = (char**)malloc(62*sizeof(char *));
-    // for(int i =0; i<62;i++) {
-    // magare.custom[i] = (char*)malloc(17*sizeof(int));
-    // printf("L%p\n", magare.custom[i]);
-    // }
 
-    if (fichier == NULL){
-        printf("Le fichier gare_test.txt n'a pas pu être ouvert\n");
-        // return EXIT_FAILURE;
-    }
-    // Teste l'existence du fichier.
+    magare.custom = ALLOCATION_GARE_DYN(LARGEUR,LONGUEUR);
 
-    char c;
-    // int i = 0;
-    // int j = 0;
-    // while(1) {
-    //     c = fgetc(fichier);
-    //     if (c != '\n') {
-    //         magare.custom[i][j] = c;
-    //         j++;
-    //     }
-    //     else{
-    //         j = 0;
-    //         i++;
-    //     }
-    //
-    //     if( feof(fichier) ) {
-    //         break;
-    //     }
-    //     printf("%c", c);
-    // }
-
-    for (size_t i = 0; i < 62; i++) {
-        for (size_t j = 0; j < 17; j++) {
-            c = fgetc(fichier);
-            magare.custom[i][j] = c;
+    int i, j;
+    FILE * fichier = fopen("txt/gare_test.txt", "r");
+    for(i=0; i<LARGEUR; i++){
+        for(j=0; j<LONGUEUR; j++){
+            fscanf(fichier,"%c",  &magare.custom[i][j]);
         }
     }
     fclose(fichier);
 
-    for (int k = 0; k < sizeof(magare.custom); k++) {
-        for (int l = 0; l < sizeof(magare.custom[k]); l++) {
-            printf("%c", magare.custom[k][l]);
-            fflush(stdout);
+    //
+    // if (fichier == NULL){
+    //     printf("Le fichier gare_test.txt n'a pas pu être ouvert\n");
+    //     // return EXIT_FAILURE;
+    // }
+    // // Teste l'existence du fichier.
+    //
+    // for(int i=0; i<LARGEUR; i++){
+    //     for(int j=0; j<LONGUEUR; j++){
+    //         fscanf(fichier,"%c",  &magare.custom[i][j]);
+    //         if (feof(fichier)) {break;}
+    //     }
+    // }
+    // fclose( fichier );
+    // // Ferme le fichier.
+    for(int i=0; i<LARGEUR; i++){
+        for(int j=0; j<LONGUEUR; j++){
+            printf("%c", magare.custom[i][j]);
         }
-        printf("\n");
     }
 
-    // Ferme le fichier.
     return magare;
 }
