@@ -5,8 +5,10 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+// #include <ncurses.h>
 #include "menu.h"
 #include "train.h"
+#include "gare.h"
 
 char key_pressed(){
     struct termios oldterm, newterm;
@@ -30,7 +32,7 @@ char key_pressed(){
 
 int main() {
     // char fichier[20] = "txt/menu.txt";
-    charger_fichier();
+    charger_menu();
     char option;
     while (option == 0x00) {
         option = key_pressed();
@@ -47,7 +49,7 @@ int main() {
     printf("Vous avez choisi l'option %c\n", option);
 
     if (option == '1') {
-        charger_train();
+        charger_gare();
     }
     return 0;
 }

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void charger_fichier(){
+void charger_menu(){
     FILE *fichier = fopen("txt/menu_projet.txt", "r+");
     // Récupère le fichier et l'ouvre en mode lecture et écriture.
     // Le fichier doit exister.
