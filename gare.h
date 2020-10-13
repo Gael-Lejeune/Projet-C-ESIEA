@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define LONGUEUR 62
+#define LONGUEUR 120
 #define LARGEUR 17
 
 typedef struct gare GARE;
@@ -32,26 +32,12 @@ GARE charger_gare(){
     }
     fclose(fichier);
 
-    //
-    // if (fichier == NULL){
-    //     printf("Le fichier gare_test.txt n'a pas pu être ouvert\n");
-    //     // return EXIT_FAILURE;
-    // }
-    // // Teste l'existence du fichier.
-    //
-    // for(int i=0; i<LARGEUR; i++){
-    //     for(int j=0; j<LONGUEUR; j++){
-    //         fscanf(fichier,"%c",  &magare.custom[i][j]);
-    //         if (feof(fichier)) {break;}
-    //     }
-    // }
-    // fclose( fichier );
-    // // Ferme le fichier.
     for(int i=0; i<LARGEUR; i++){
         for(int j=0; j<LONGUEUR; j++){
             printf("%c", magare.custom[i][j]);
         }
     }
+    printf("\n");
 
     return magare;
 }

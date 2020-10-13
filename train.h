@@ -6,9 +6,9 @@ struct train{
     int posx;           /*Position courante x de la tête du train*/
     int posy;           /*Position courante y de la tête du train*/
     int vitesse;        /*Vitesse du train*/
-    char custom[52][2];   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
+    char custom[2][52];   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
     char etat;          /*État du train => dehors, entrant, stationné,sortant, sorti*/
-    int portes ;        /*Portes ouvertes ou fermées*/
+    int portes;        /*Portes ouvertes ou fermées*/
     /*Vous pouvez bien-sur rajouter d’autres variables si nécessaire*/
     int longueur;       /*Longueur du train*/
 };
