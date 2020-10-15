@@ -15,5 +15,4 @@ GARE init_gare(FILE * fichier);
 
 void afficher_gare (FILE * fichier,GARE magare);
 
-
 #endif

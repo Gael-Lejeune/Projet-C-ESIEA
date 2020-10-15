@@ -19,17 +19,21 @@ struct gare{
     char ** custom;   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
 };
 
-char ** ALLOCATION_MAT_DYN(int NB_L, int NB_C) {
-	char ** tab = (char **)malloc(NB_L*sizeof(char *));
-	for(int i =0; i<NB_L;i++) {
-		tab[i] = (char *)malloc(NB_C*sizeof(char));
-	}
-	return tab;
-}
+// char ** ALLOCATION_MAT_DYN(int NB_L, int NB_C) {
+// 	char ** tab = (char **)malloc(NB_L*sizeof(char *));
+// 	for(int i =0; i<NB_L;i++) {
+// 		tab[i] = (char *)malloc(NB_C*sizeof(char));
+// 	}
+// 	return tab;
+// }
 
 GARE init_gare(FILE * fichier){
     GARE magare;
-    magare.custom = ALLOCATION_MAT_DYN(LARGEUR,LONGUEUR);
+    // magare.custom = ALLOCATION_MAT_DYN(LARGEUR,LONGUEUR);
+    magare.custom = (char **)malloc(LARGEUR*sizeof(char *));
+    for(int i =0; i<LARGEUR;i++) {
+        magare.custom[i] = (char *)malloc(LONGUEUR*sizeof(char));
+    }
     char c;
     for(int i=0; i<LARGEUR; i++){
         for(int j=0; j<LONGUEUR; j++){

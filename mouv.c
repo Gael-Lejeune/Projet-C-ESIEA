@@ -120,7 +120,7 @@ void mvtVoy(int posVoyL, int posVoyC, int nb_l, int nb_c, char matGare[nb_l][nb_
 			return;
 		case 2 :
 			l=c=0;
-			break;	
+			break;
 	}
 	//monterTrain();
 	//showBiD(nb_l, nb_c, matPos);
