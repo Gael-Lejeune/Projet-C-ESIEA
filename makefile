@@ -14,6 +14,7 @@ main: gare.o main.c
 clean:
 	rm -rf *.o
 	rm -rf *.h.gch
+	rm main
 	rm main.out
 
 execute:
