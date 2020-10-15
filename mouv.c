@@ -9,9 +9,9 @@ void initBiDChar(int nb_l, int nb_c, char array[nb_l][nb_c], char lettre){
                 int j;
                 for(j=0; j<nb_c; j++){
                         array[i][j]=lettre;
-                        printf("%c ", array[i][j]);
+                        //printf("%c ", array[i][j]);
                 }
-                printf("\n");
+                //printf("\n");
         }
 }
 
@@ -23,16 +23,16 @@ void initBiDChar2(int nb_l, int nb_c, char array[nb_l][nb_c], char lettre1, char
                 for(j=0; j<nb_c; j++){
 			if (c==3){
 				array[i][j]=lettre2;
-				printf("%c", array[i][j]);
+				//printf("%c", array[i][j]);
 				c=0;
 			}
 			else {
 				array[i][j]=lettre1;
-                       		printf("%c ", array[i][j]);
+                       		//printf("%c ", array[i][j]);
 				c++;
 			}
                 }
-                printf("\n");
+                //printf("\n");
         }
 }
 
@@ -82,27 +82,7 @@ int posLibre(int Vl, int Vc, int nb_l, int nb_c, char mP[nb_l][nb_c], int l, int
 }
 
 
-//fonction qui fait bouger le train. Le train reste à quai pendant 3 mouvements de l'utilisateur.
-//Les rails font partie de la gare.
-//arguments : compteur à quai(W), compteur autre train(N), matGare, matTrain, matpos.
-//int compt, char matGare[nb_l][nb_c], char matTrain[2][nb_t], char matPos[][].
-//matPos prend la valeur "r" pour rails quand le train n'est pas là, l'endroit des portes est noté "p".
-//matPos prend la valeur "w" pour wait à l'endroit où le train doit s'arrêter lorsqu'il est en gare.
-void mouvTrain(int comptW, int comptN, char matGare[nb_l][nb_c], char matPos[nb_l][nb_c], char matTrain[2][nb_t]){
-		
-}
-
-
-//fonction qui affiche les "a", conditions de sortie
-//arguments : matPos
-void monterTrain()
-
-
-
-
-
 ///////////// Fonction mouvement voyageur /////////////
-//Foncitionne et fait bouger un voyageur.
 
 void mvtVoy(int posVoyL, int posVoyC, int nb_l, int nb_c, char matGare[nb_l][nb_c], char matPos[nb_l][nb_c]){
 	printf("Entrer la direction vers laquelle vous souhaitez vous diriger : \n");
@@ -134,6 +114,8 @@ void mvtVoy(int posVoyL, int posVoyC, int nb_l, int nb_c, char matGare[nb_l][nb_
 			break;
 		case 1 :
 			matGare[posVoyL][posVoyC]=' ';
+			system("clear");
+			showBiD(nb_l, nb_c, matGare);
 			printf("Bravo, vous avez pris le métro !\n");
 			return;
 		case 2 :
@@ -141,7 +123,9 @@ void mvtVoy(int posVoyL, int posVoyC, int nb_l, int nb_c, char matGare[nb_l][nb_
 			break;	
 	}
 	//monterTrain();
-	showBiD(nb_l, nb_c, matPos);
+	//showBiD(nb_l, nb_c, matPos);
+	system("clear");
+	showBiD(nb_l, nb_c, matGare);
 	mvtVoy((posVoyL+l), (posVoyC+c), nb_l, nb_c, matGare, matPos);
 }
 
@@ -149,12 +133,12 @@ void mvtVoy(int posVoyL, int posVoyC, int nb_l, int nb_c, char matGare[nb_l][nb_
 int main(){
 	int nb_l = 4;
 	int nb_c = 4;
-	//int compt;
 	char matGare[nb_l][nb_c], matPos[nb_l][nb_c];
-        initBiDChar(nb_l, nb_c, matGare, 'c');
+	initBiDChar(nb_l, nb_c, matGare, 'c');
 	initBiDChar2(nb_l, nb_c, matPos, 'l', 'a');
 	mvtVoy(0,1, nb_l, nb_c, matGare, matPos);
-	showBiD(nb_l, nb_c, matPos);
-        showBiD(nb_l, nb_c, matGare);
+	//printf("\n\n\n");
+	//showBiD(nb_l, nb_c, matPos);
+        //showBiD(nb_l, nb_c, matGare);
 	return 0;
 }
