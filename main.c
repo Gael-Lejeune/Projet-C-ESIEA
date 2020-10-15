@@ -33,6 +33,7 @@ char key_pressed(){
 int main() {
     // char fichier[20] = "txt/menu.txt";
     charger_menu();
+
     char option;
     while (option == 0x00) {
         option = key_pressed();
@@ -49,7 +50,10 @@ int main() {
     printf("Vous avez choisi l'option %c\n", option);
 
     if (option == '1') {
-        charger_gare();
+        FILE * gare = fopen("txt/gare_test.txt", "r");
+        GARE magare = init_gare(gare);
+        afficher_gare(gare, magare);
+        fclose(gare);
     }
     return 0;
 }
