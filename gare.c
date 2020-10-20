@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define LONGUEUR 101
+#define LONGUEUR 64
 #define LARGEUR 17
 
 #define BLACK    "\033[1;30m"
@@ -13,19 +13,12 @@
 #define CYAN     "\033[1;36m"
 #define GREY     "\033[1;37m"
 #define DEFAULT_COLOR "\033[0;m"
+#define WALLCOLOR RED
 
 typedef struct gare GARE;
 struct gare{
     char ** custom;   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
 };
-
-// char ** ALLOCATION_MAT_DYN(int NB_L, int NB_C) {
-// 	char ** tab = (char **)malloc(NB_L*sizeof(char *));
-// 	for(int i =0; i<NB_L;i++) {
-// 		tab[i] = (char *)malloc(NB_C*sizeof(char));
-// 	}
-// 	return tab;
-// }
 
 GARE init_gare(FILE * fichier){
     GARE magare;
@@ -38,34 +31,60 @@ GARE init_gare(FILE * fichier){
     for(int i=0; i<LARGEUR; i++){
         for(int j=0; j<LONGUEUR; j++){
             c = fgetc(fichier);
-            if (c == 201) {
-                magare.custom[i][j] = 'm';
-            }
-            else {
-                c = ' ';
-            }
+            magare.custom[i][j] = c;
         }
+        fgetc(fichier);
     }
+
     // printf("\n");
     return magare;
 }
 
 void afficher_gare (FILE * fichier,GARE magare){
+    system("clear");
     fseek(fichier, 0, 0);
     for(int i=0; i<LARGEUR; i++){
         for(int j=0; j<LONGUEUR; j++){
-            // if (magare.custom[i][j] == 'm') {
-                // printf("%s%c%s", RED,fgetc(fichier), DEFAULT_COLOR);
-                // printf("%c", magare.custom[i][j]);
-                // printf("%c",fgetc(fichier));
-            // }
-            // else {
-                printf("%c",fgetc(fichier));
-                // printf("%c",201);
-            // }
-            // printf("%c", magare.custom[i][j]);
-            // printf("%s", DEFAULT_COLOR);
+            switch (magare.custom[i][j]) {
+                case '=':
+                // printf("%s%c%s", WALLCOLOR, 201, DEFAULT_COLOR);
+                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                case 'a':
+                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                case 'c':
+                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                case 'w':
+                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                case 'e':
+                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                case '_':
+                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                case '|':
+                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                case 'l':
+                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                case '-':
+                printf("%s%c%s", BLUE, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                case '*':
+                printf("%s%c%s", CYAN, magare.custom[i][j], DEFAULT_COLOR);
+                break;
+                default:
+                printf("%c", magare.custom[i][j]);
+
+                break;
+            }
         }
+        // fgetc(fichier);
     }
     printf("\n");
 }

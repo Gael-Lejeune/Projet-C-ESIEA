@@ -58,7 +58,6 @@ void afficher_fichier(char * nomfic){
 int main() {
     // char fichier[20] = "txt/menu.txt";
     afficher_fichier("txt/menu_projet.txt");
-
     char option;
     while (option == 0x00) {
         option = key_pressed();
@@ -76,16 +75,23 @@ int main() {
 
     if (option == '1') {
         FILE * gare = fopen("txt/gare_test.txt", "r");
-        VOYAGEUR monvoyageur = init_voyageur(12, 12, '*');
         GARE magare = init_gare(gare);
+        VOYAGEUR monvoyageur = init_voyageur(0, 14, '*', magare);
         char mov = 0;
+        // printf("coucou\n");
+        // int i = 0;
+        afficher_gare(gare, magare);
+        // afficher_voyageur(monvoyageur);
         while(1){
             mov = key_pressed();
-            mvtVoy(monvoyageur, magare, mov);
-            usleep(100000);
-            system("clear");
-            afficher_gare(gare, magare);
-            mov = 0;
+            if (mov != 0) {
+                mvtVoy(monvoyageur, magare, mov);
+            }
+            // printf("%d %d\n", monvoyageur.posX, monvoyageur.posY);
+            // usleep(100000);
+            // system("clear");
+            // mov = 0;
+            // printf("%d\n", i);
         }
         fclose(gare);
     }
