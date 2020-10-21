@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #define LONGUEUR 64
-#define LARGEUR 17
+#define LARGEUR 16
 
 #define BLACK    "\033[1;30m"
 #define RED      "\033[1;31m"
@@ -14,6 +14,8 @@
 #define GREY     "\033[1;37m"
 #define DEFAULT_COLOR "\033[0;m"
 #define WALLCOLOR RED
+#define RAILCOLOR GREY
+#define PLAYERCOLOR CYAN
 
 typedef struct gare GARE;
 struct gare{
@@ -48,39 +50,37 @@ void afficher_gare (FILE * fichier,GARE magare){
             switch (magare.custom[i][j]) {
                 case '=':
                 // printf("%s%c%s", WALLCOLOR, 201, DEFAULT_COLOR);
-                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", WALLCOLOR, "═", DEFAULT_COLOR);
                 break;
                 case 'a':
-                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", WALLCOLOR, "╔", DEFAULT_COLOR);
                 break;
                 case 'c':
-                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", WALLCOLOR, "╝", DEFAULT_COLOR);
                 break;
-                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
                 case 'w':
-                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", WALLCOLOR, "╚", DEFAULT_COLOR);
                 break;
                 case 'e':
-                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", WALLCOLOR, "╗", DEFAULT_COLOR);
                 break;
                 case '_':
-                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", WALLCOLOR, "■", DEFAULT_COLOR);
                 break;
                 case '|':
-                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", WALLCOLOR, "║", DEFAULT_COLOR);
                 break;
                 case 'l':
-                printf("%s%c%s", WALLCOLOR, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", WALLCOLOR, "═", DEFAULT_COLOR);
                 break;
                 case '-':
-                printf("%s%c%s", BLUE, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", RAILCOLOR, "─", DEFAULT_COLOR);
                 break;
                 case '*':
-                printf("%s%c%s", CYAN, magare.custom[i][j], DEFAULT_COLOR);
+                printf("%s%s%s", PLAYERCOLOR, "*", DEFAULT_COLOR);
                 break;
                 default:
                 printf("%c", magare.custom[i][j]);
-
                 break;
             }
         }
