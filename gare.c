@@ -12,6 +12,7 @@
 #define PURPLE          "\033[1;35m"
 #define CYAN            "\033[1;36m"
 #define GREY            "\033[1;37m"
+#define BLINK           "\033[1;5m"
 #define DEFAULT_COLOR   "\033[0;m"
 #define WALLCOLOR RED
 #define RAILCOLOR GREY
@@ -62,7 +63,7 @@ void afficher_gare (GARE magare){
                 printf("%s%s%s", WALLCOLOR, "╗", DEFAULT_COLOR);
                 break;
                 case '_':
-                printf("%s%s%s", WALLCOLOR, "■", DEFAULT_COLOR);
+                printf("%s%s%s", GREY, "■", DEFAULT_COLOR);
                 break;
                 case '|':
                 printf("%s%s%s", WALLCOLOR, "║", DEFAULT_COLOR);
