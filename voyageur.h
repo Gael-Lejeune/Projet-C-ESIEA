@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "gare.h"
 
-typedef struct voyageur VOYAGEUR;
+typedef struct voyageur * VOYAGEUR;
 struct voyageur{
     char carvoy;
     int posX;

@@ -80,11 +80,15 @@ int main() {
         // printf("coucou\n");
         // int i = 0;
         afficher_gare(magare);
+        printf("\033[%d;%dHCoordonees : %d %d", 40, 40, monvoyageur->posX, monvoyageur->posY);
+
         // afficher_voyageur(monvoyageur);
         while(1){
             mov = key_pressed();
             if (mov != 0) {
                 mvtVoy(monvoyageur, magare, mov);
+                // printf("Coordonees : %d %d\n", monvoyageur->posX, monvoyageur->posY );
+                printf("\033[%d;%dHCoordonees : %d %d", 40, 40, monvoyageur->posX, monvoyageur->posY);
             }
             // printf("%d %d\n", monvoyageur.posX, monvoyageur.posY);
             // usleep(100000);
