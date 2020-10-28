@@ -34,7 +34,6 @@ void afficher_fichier(char * nomfic){
     FILE *fichier = fopen(nomfic, "r+");
     // Récupère le fichier et l'ouvre en mode lecture et écriture.
     // Le fichier doit exister.
-
     if (fichier == NULL){
         printf("Le fichier menu_projet.txt n'a pas pu être ouvert\n");
         // return EXIT_FAILURE;
@@ -80,7 +79,7 @@ int main() {
         char mov = 0;
         // printf("coucou\n");
         // int i = 0;
-        afficher_gare(gare, magare);
+        afficher_gare(magare);
         // afficher_voyageur(monvoyageur);
         while(1){
             mov = key_pressed();
