@@ -92,19 +92,65 @@ int main() {
 
     printf("Vous avez choisi l'option %c\n", option);
 
+    FILE * gare = fopen("txt/gare_test.txt", "r");
+    GARE magare = init_gare(gare);
+
     if (option == '1') {
-        FILE * gare = fopen("txt/gare_test.txt", "r");
-        GARE magare = init_gare(gare);
+        afficher_gare(magare);
+        FILE * train = fopen("txt/train_test.txt", "r");
+        TRAIN montrain = init_train(train, 'e');
+
+        int time = 0;
+        int posX, posY;
+        char* rail = "─";
+        int tempsAQuai = 100;
+        int tempsAttente = 50;
+        while(1){
+            switch (montrain.etat){
+                case 'd': //dehors
+                if (tempsAttente == 0){
+                    montrain.etat='e';
+                }
+                else{
+                    tempsAttente--;
+                }
+                break;
+
+                case 'e':
+                // printf("test\n");
+                if (montrain.direction == 'e') {
+                    for (int i = montrain.posx; i >= 0; i--) {
+                        printf("\033[%d;%dH%c\n", 10, montrain.longueur - i, montrain.custom[0][montrain.longueur - i]);
+                        printf("\033[%d;%dH%c\n", 11, montrain.longueur - i, montrain.custom[1][montrain.longueur - i]);
+                    }
+                    montrain.posx++;
+                    if(montrain.posx == 64){
+                        montrain.etat = 's';
+                    }
+                }
+                break;
+
+                case 's' :
+                tempsAttente=5;
+                printf("fin");
+                break;
+
+                // printf("test\n");
+            }
+            printf("\033[%d;%dHCoordonees : %d %d", 30, 20, tempsAttente, montrain.posx);
+        }
+        fclose(gare);
+    }
+    else if (option == '2'){
         VOYAGEUR monvoyageur = init_voyageur(0, 14, '*', magare);
-        char mov = 0;
+        char movPlayer = 0;
 
         afficher_gare(magare);
         printf("\033[%d;%dHCoordonees : %d %d", 30, 20, monvoyageur->posX, monvoyageur->posY);
-
         while(1){
-            mov = key_pressed();
-            if (mov != 0) {
-                mvtVoy(monvoyageur, magare, mov);
+            movPlayer = key_pressed();
+            if (movPlayer != 0) {
+                mvtVoy(monvoyageur, magare, movPlayer);
                 // printf("Coordonees : %d %d\n", monvoyageur->posX, monvoyageur->posY );
                 printf("\033[%d;%dHCoordonees : %d %d", 30, 20, monvoyageur->posX, monvoyageur->posY);
             }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "gare.h"
 
 #define LONGUEUR 62
 #define LARGEUR 17
@@ -18,16 +19,11 @@
 #define RAILCOLOR GREY
 #define PLAYERCOLOR CYAN
 
-typedef struct gare GARE;
-struct gare{
-    char ** custom;   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
-};
-
 GARE init_gare(FILE * fichier){
     GARE magare;
     // magare.custom = ALLOCATION_MAT_DYN(LARGEUR,LONGUEUR);
     magare.custom = (char **)malloc(LARGEUR*sizeof(char *));
-    for(int i =0; i<LARGEUR;i++) {
+    for(int i =0; i<LARGEUR; i++) {
         magare.custom[i] = (char *)malloc(LONGUEUR*sizeof(char));
     }
     char c;

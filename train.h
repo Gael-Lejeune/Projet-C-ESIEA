@@ -1,39 +1,31 @@
+#ifndef H_TRAIN
+#define H_TRAIN
+
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct train TRAIN;
 struct train{
-    char direction ;    /*N => Nord, S => Sud, E => EST, O => OUEST*/
+    char direction ;    /*n => Nord, s => Sud, e => EST, o => OUEST*/
     int posx;           /*Position courante x de la tête du train*/
-    int posy;           /*Position courante y de la tête du train*/
+    int posy;           /*Position courante y de l'arrière du train*/
     int vitesse;        /*Vitesse du train*/
-    char custom[2][52];   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
-    char etat;          /*État du train => dehors, entrant, stationné,sortant, sorti*/
-    int portes;        /*Portes ouvertes ou fermées*/
-    /*Vous pouvez bien-sur rajouter d’autres variables si nécessaire*/
+    char ** custom;     /*Contient le train customisé, il faut choisir la bonne taille de votre tableau*/
+    char etat;          /*État du train => d dehors, e entrant, s stationné, p portant*/
+    int portes;         /*Portes ouvertes ou fermées*/
     int longueur;       /*Longueur du train*/
 };
 
-void charger_train(){
-    FILE *fichier = fopen("txt/train_test.txt", "r+");
-    // Récupère le fichier et l'ouvre en mode lecture et écriture.
-    // Le fichier doit exister.
+TRAIN init_train(FILE * fichier, char direction);
 
-    if (fichier == NULL){
-        printf("Le fichier train_test.txt n'a pas pu être ouvert\n");
-        // return EXIT_FAILURE;
-    }
-    // Teste l'existence du fichier.
+void deplacementTrain(TRAIN montrain, int rail, int col, int time, int posX, int posY, int posArret);
 
-    char c;
-    while(1) {
-        c = fgetc(fichier);
-        if( feof(fichier) ) {
-            break ;
-        }
-        printf("%c", c);
-    }
-    // récupère les éléments du fichier, un par un.
+void afficherSortTrain(TRAIN montrain, int rail, int posX, int premierwagon, int val, int i);
 
-    fclose(fichier);
-    // Ferme le fichier.
-}
+void entreeTrain(TRAIN montrain, int posX, int time);
+
+void afficherSortTrain(TRAIN montrain, int rail, int posX, int premierwagon, int val, int i);
+
+void sortieTrain(TRAIN montrain, int rail, int posX, int time, int vitesse, char direction);
+
+#endif

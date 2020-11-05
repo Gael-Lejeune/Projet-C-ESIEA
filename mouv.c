@@ -12,7 +12,7 @@ void initBiDChar(int nb_l, int nb_c, char array[nb_l][nb_c], char lettre){
                         //printf("%c ", array[i][j]);
                 }
                 //printf("\n");
-        }
+        } 
 }
 
 //Initialise un tableau à deux dimensions contenant une matrice de postions//
