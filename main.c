@@ -97,47 +97,70 @@ int main() {
 
     if (option == '1') {
         afficher_gare(magare);
-        FILE * train = fopen("txt/train_test.txt", "r");
+        FILE * train = fopen("txt/train_test2.txt", "r");
         TRAIN montrain = init_train(train, 'e');
 
         int time = 0;
         int posX, posY;
         char* rail = "─";
-        int tempsAQuai = 100;
-        int tempsAttente = 50;
+        int tempsAQuai = 0;
+        int tempsAttente = 5;
         while(1){
-            switch (montrain.etat){
-                case 'd': //dehors
-                if (tempsAttente == 0){
-                    montrain.etat='e';
-                }
-                else{
-                    tempsAttente--;
-                }
-                break;
-
-                case 'e':
+            time=(time+1)%montrain.vitesse;
+            // printf("\033[%d;%dHTime : %d", 30, 20, time);
+            if(time == 1000){
                 // printf("test\n");
-                if (montrain.direction == 'e') {
-                    for (int i = montrain.posx; i >= 0; i--) {
-                        printf("\033[%d;%dH%c\n", 10, montrain.longueur - i, montrain.custom[0][montrain.longueur - i]);
-                        printf("\033[%d;%dH%c\n", 11, montrain.longueur - i, montrain.custom[1][montrain.longueur - i]);
+                switch (montrain.etat){
+                    case 'd': //dehors
+                    if (tempsAttente == 0){
+                        montrain.etat='e';
                     }
-                    montrain.posx++;
-                    if(montrain.posx == 64){
-                        montrain.etat = 's';
+                    else{
+                        tempsAttente--;
                     }
+                    break;
+
+                    case 'e':
+                    // printf("test\n");
+                    if (montrain.direction == 'e') {
+                        for (int i = montrain.posx; i >= 0; i--) {
+                            afficherCarTrain(montrain.custom[0][montrain.longueur - i], 10, montrain.posx-i);
+                            afficherCarTrain(montrain.custom[1][montrain.longueur - i], 11, montrain.posx-i);
+                        }
+                        if (montrain.posx > 52) {
+                            printf("\033[%d;%dH%s\n", 10, montrain.posx - 53, "─");
+                            printf("\033[%d;%dH%s\n", 11, montrain.posx - 53, "─");
+                        }
+                        montrain.posx++;
+                        if(montrain.posx == 58){
+                            montrain.etat = 's';
+                        }
+                    }
+                    break;
+
+                    case 's' :
+                    if (tempsAQuai == 0) {
+                        for (int i = montrain.posx; i >= 0; i--) {
+                            if (montrain.custom[0][montrain.longueur - i] == 'd') {
+                                printf("\033[%d;%dH%c\n", 11, montrain.posx-i-1, ' ');
+                            }
+                        }
+                    }
+                    else if (tempsAQuai >= 80) {
+                        for (int i = montrain.posx; i >= 0; i--) {
+                            if (montrain.custom[0][montrain.longueur - i] == 'd') {
+                                printf("\033[%d;%dH%s\n", 11, montrain.posx-i-1, "_");
+                            }
+                        }
+                        montrain.etat = 'p';
+                    }
+                    tempsAQuai++;
+                    break;
+
+                    // printf("test\n");
                 }
-                break;
-
-                case 's' :
-                tempsAttente=5;
-                printf("fin");
-                break;
-
-                // printf("test\n");
+                printf("\033[%d;%dHCoordonees : %d %d", 30, 20, tempsAQuai, montrain.posx);
             }
-            printf("\033[%d;%dHCoordonees : %d %d", 30, 20, tempsAttente, montrain.posx);
         }
         fclose(gare);
     }

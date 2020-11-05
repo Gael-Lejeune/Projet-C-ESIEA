@@ -28,4 +28,6 @@ void afficherSortTrain(TRAIN montrain, int rail, int posX, int premierwagon, int
 
 void sortieTrain(TRAIN montrain, int rail, int posX, int time, int vitesse, char direction);
 
+void afficherCarTrain(char c, int x, int y);
+
 #endif

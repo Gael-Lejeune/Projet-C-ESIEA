@@ -1,10 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include "train.h"
 
 #define LARGT 2
 #define LONGT 52
+
+#define PURPLE          "\033[1;35m"
+#define CYAN            "\033[1;36m"
+#define TRAINCOLOR      PURPLE
+#define DOORCOLOR      	CYAN
+#define DEFAULT_COLOR   "\033[0;m"
+
+
 
 TRAIN init_train(FILE * fichier, char direction){
 	TRAIN montrain;
@@ -198,6 +207,51 @@ void sortieTrain(TRAIN montrain, int rail, int posX, int time, int vitesse, char
 		}
 	}
 }
+
+void afficherCarTrain(char c, int x, int y){
+	switch (c) {
+		case 'a':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎛", DEFAULT_COLOR);
+		break;
+		case 'w':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎝", DEFAULT_COLOR);
+		break;
+		case '-':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "▔", DEFAULT_COLOR);
+		break;
+		case '_':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "▁", DEFAULT_COLOR);
+		break;
+		case 'e':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎞", DEFAULT_COLOR);
+		break;
+		case 'c':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎠", DEFAULT_COLOR);
+		break;
+		case 'l':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎣", DEFAULT_COLOR);
+		break;
+		case 'j':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎦", DEFAULT_COLOR);
+		break;
+		case 'u':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎤", DEFAULT_COLOR);
+		break;
+		case 'o':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎡", DEFAULT_COLOR);
+		break;
+		case 'd':
+		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "¯", DEFAULT_COLOR);
+		break;
+		case 'f':
+		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "_", DEFAULT_COLOR);
+		break;
+		default:
+		printf("\033[%d;%dH%c\n", x, y, c);
+		break;
+	}
+}
+
 
 // int main(){
 // 	//int tempsAttente=3;
