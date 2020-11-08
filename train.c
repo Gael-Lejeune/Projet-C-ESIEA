@@ -19,12 +19,14 @@ TRAIN init_train(FILE * fichier, char direction){
 	TRAIN montrain;
 	montrain.direction = direction;
 	if (direction == 'e') {montrain.posx=0;}
-	else {montrain.posx=63;}
-	montrain.posy=0;
+	else {montrain.posx=62;}
+	montrain.longueur=LONGT;
+	montrain.posy=montrain.posx-LONGT;
 	montrain.vitesse= 10000000;
 	montrain.etat='d'; //dehors
 	montrain.portes=0; //fermées
-	montrain.longueur=LONGT;
+	montrain.tempsAttente=5;
+	montrain.tempsAQuai=15;
 
 	montrain.custom = (char **)malloc(2*sizeof(char *));
 	for(int i =0; i<2;i++) {
@@ -241,10 +243,11 @@ void afficherCarTrain(char c, int x, int y){
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎡", DEFAULT_COLOR);
 		break;
 		case 'd':
-		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "¯", DEFAULT_COLOR);
+		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "-", DEFAULT_COLOR);
+		// printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "¯", DEFAULT_COLOR);
 		break;
 		case 'f':
-		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "_", DEFAULT_COLOR);
+		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "-", DEFAULT_COLOR);
 		break;
 		default:
 		printf("\033[%d;%dH%c\n", x, y, c);

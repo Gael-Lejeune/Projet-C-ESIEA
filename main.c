@@ -10,6 +10,13 @@
 #include "gare.h"
 #include "voyageur.h"
 
+#define PURPLE          "\033[1;35m"
+#define CYAN            "\033[1;36m"
+#define TRAINCOLOR      PURPLE
+#define DOORCOLOR      	CYAN
+#define DEFAULT_COLOR   "\033[0;m"
+
+
 char key_pressed(){
     struct termios oldterm, newterm;
     int oldfd;
@@ -98,69 +105,153 @@ int main() {
     if (option == '1') {
         afficher_gare(magare);
         FILE * train = fopen("txt/train_test2.txt", "r");
-        TRAIN montrain = init_train(train, 'e');
+        TRAIN montrain = init_train(train, 'o');
 
         int time = 0;
         int posX, posY;
         char* rail = "─";
-        int tempsAQuai = 0;
-        int tempsAttente = 5;
+        int lDoor;
+        int tempsAQuai = montrain.tempsAQuai;
+
         while(1){
             time=(time+1)%montrain.vitesse;
             // printf("\033[%d;%dHTime : %d", 30, 20, time);
-            if(time == 1000){
-                // printf("test\n");
-                switch (montrain.etat){
-                    case 'd': //dehors
-                    if (tempsAttente == 0){
-                        montrain.etat='e';
-                    }
-                    else{
-                        tempsAttente--;
-                    }
-                    break;
-
-                    case 'e':
+            if(time == 500){
+                if (montrain.direction == 'e') {
+                    lDoor = 11;
                     // printf("test\n");
-                    if (montrain.direction == 'e') {
+                    switch (montrain.etat){
+                        case 'd': //dehors
+                        if (montrain.tempsAttente == 0){
+                            montrain.etat='e';
+                        }
+                        else{
+                            montrain.tempsAttente--;
+                        }
+                        break;
+
+                        case 'e':
                         for (int i = montrain.posx; i >= 0; i--) {
-                            afficherCarTrain(montrain.custom[0][montrain.longueur - i], 10, montrain.posx-i);
-                            afficherCarTrain(montrain.custom[1][montrain.longueur - i], 11, montrain.posx-i);
+                            afficherCarTrain(montrain.custom[0][montrain.longueur - i], lDoor - 1, montrain.posx-i);
+                            afficherCarTrain(montrain.custom[1][montrain.longueur - i], lDoor, montrain.posx-i);
                         }
                         if (montrain.posx > 52) {
-                            printf("\033[%d;%dH%s\n", 10, montrain.posx - 53, "─");
-                            printf("\033[%d;%dH%s\n", 11, montrain.posx - 53, "─");
+                            printf("\033[%d;%dH%s\n", lDoor - 1, montrain.posx - montrain.longueur - 1, "─");
+                            printf("\033[%d;%dH%s\n", lDoor, montrain.posx - montrain.longueur - 1, "─");
                         }
                         montrain.posx++;
                         if(montrain.posx == 58){
                             montrain.etat = 's';
                         }
-                    }
-                    break;
+                        break;
 
-                    case 's' :
-                    if (tempsAQuai == 0) {
-                        for (int i = montrain.posx; i >= 0; i--) {
-                            if (montrain.custom[0][montrain.longueur - i] == 'd') {
-                                printf("\033[%d;%dH%c\n", 11, montrain.posx-i-1, ' ');
+                        case 's' :
+                        if (tempsAQuai == montrain.tempsAQuai) {
+                            for (int i = montrain.posx; i >= 0; i--) {
+                                if (montrain.custom[1][montrain.longueur - i] == 'f') {
+                                    printf("\033[%d;%dH%c\n", lDoor, montrain.posx-i-1, ' ');
+                                }
                             }
                         }
-                    }
-                    else if (tempsAQuai >= 80) {
-                        for (int i = montrain.posx; i >= 0; i--) {
-                            if (montrain.custom[0][montrain.longueur - i] == 'd') {
-                                printf("\033[%d;%dH%s\n", 11, montrain.posx-i-1, "_");
+                        else if (tempsAQuai == 0) {
+                            for (int i = montrain.posx; i >= 0; i--) {
+                                if (montrain.custom[1][montrain.longueur - i] == 'f') {
+                                    printf("\033[%d;%dH%s%s%s\n", lDoor, montrain.posx-i-1, DOORCOLOR, "-", DEFAULT_COLOR);
+                                }
+                            }
+                            montrain.etat = 'p';
+                        }
+                        tempsAQuai--;
+                        break;
+
+                        case 'p' :
+                        for (int i = montrain.longueur; i >= 0; i--) {
+                            if (montrain.posx - i <= 62) {
+                                afficherCarTrain(montrain.custom[0][montrain.longueur - i], lDoor - 1, montrain.posx-i);
+                                afficherCarTrain(montrain.custom[1][montrain.longueur - i], lDoor, montrain.posx-i);
                             }
                         }
-                        montrain.etat = 'p';
-                    }
-                    tempsAQuai++;
-                    break;
+                        printf("\033[%d;%dH%s\n", lDoor - 1, montrain.posx - montrain.longueur - 1, "─");
+                        printf("\033[%d;%dH%s\n", lDoor, montrain.posx - montrain.longueur - 1, "─");
+                        montrain.posx++;
+                        if(montrain.posx == montrain.longueur + 1 + 62 + 1){
+                            montrain.etat = 'r';
+                        }
 
-                    // printf("test\n");
+                        break;
+
+                        // printf("test\n");
+                    }
                 }
-                printf("\033[%d;%dHCoordonees : %d %d", 30, 20, tempsAQuai, montrain.posx);
+
+                else{
+                    lDoor = 7;
+                    switch (montrain.etat){
+                        case 'd': //dehors
+                        if (montrain.tempsAttente == 0){
+                            montrain.etat='e';
+                        }
+                        else{
+                            montrain.tempsAttente--;
+                        }
+                        break;
+
+                        case 'e':
+                        for (int i = montrain.posx; i <= 62; i++) {
+                            afficherCarTrain(montrain.custom[0][i - montrain.posx], lDoor, i);
+                            afficherCarTrain(montrain.custom[1][i - montrain.posx], lDoor + 1, i);
+                        }
+                        if (montrain.posx < 11) {
+                            printf("\033[%d;%dH%s\n", lDoor, montrain.posx + montrain.longueur, "─");
+                            printf("\033[%d;%dH%s\n", lDoor + 1, montrain.posx + montrain.longueur, "─");
+                        }
+                        montrain.posx--;
+                        if(montrain.posx == 6){
+                            montrain.etat = 's';
+                        }
+                        break;
+                        case 's' :
+                        if (tempsAQuai == montrain.tempsAQuai) {
+                            for (int i = montrain.posx; i <= montrain.posx + montrain.longueur; i++) {
+                                if (montrain.custom[0][montrain.longueur - i] == 'd') {
+                                    printf("\033[%d;%dH%c\n", lDoor, montrain.posx+i, ' ');
+                                }
+                            }
+                        }
+                        else if (tempsAQuai == 0) {
+                            for (int i = montrain.posx; i <= montrain.posx + montrain.longueur; i++) {
+                                if (montrain.custom[0][montrain.longueur - i] == 'd') {
+                                    printf("\033[%d;%dH%s%s%s\n", lDoor, montrain.posx+i, DOORCOLOR, "-", DEFAULT_COLOR);
+                                }
+                            }
+                            montrain.etat = 'p';
+                        }
+                        tempsAQuai--;
+                        break;
+
+                        case 'p' :
+                        for (int i = montrain.longueur; i >= 0; i--) {
+                            if (montrain.posx + i >= 0) {
+                                afficherCarTrain(montrain.custom[0][i], lDoor, montrain.posx+i);
+                                afficherCarTrain(montrain.custom[1][i], lDoor + 1, montrain.posx+i);
+                            }
+                        }
+                        printf("\033[%d;%dH%s\n", lDoor, montrain.posx + montrain.longueur, "─");
+                        printf("\033[%d;%dH%s\n", lDoor + 1, montrain.posx + montrain.longueur, "─");
+                        montrain.posx--;
+                        if(montrain.posx == -montrain.longueur){
+                            montrain.etat = 'r';
+                        }
+
+                        break;
+
+                    }
+                }
+
+                printf("\033[%d;%dHCoordonees :           ", 30, 20);
+                printf("\033[%d;%dHCoordonees : %c %d", 30, 20, montrain.etat, montrain.posx);
             }
+
         }
         fclose(gare);
     }

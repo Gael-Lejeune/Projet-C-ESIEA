@@ -11,9 +11,11 @@ struct train{
     int posy;           /*Position courante y de l'arrière du train*/
     int vitesse;        /*Vitesse du train*/
     char ** custom;     /*Contient le train customisé, il faut choisir la bonne taille de votre tableau*/
-    char etat;          /*État du train => d dehors, e entrant, s stationné, p portant*/
+    char etat;          /*État du train => d dehors, e entrant, s stationné, p partant*/
     int portes;         /*Portes ouvertes ou fermées*/
     int longueur;       /*Longueur du train*/
+    int tempsAttente;
+    int tempsAQuai;
 };
 
 TRAIN init_train(FILE * fichier, char direction);
