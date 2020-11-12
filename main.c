@@ -17,6 +17,8 @@
 #define TRAINCOLOR      PURPLE
 #define DOORCOLOR      	CYAN
 #define DEFAULT_COLOR   "\033[0;m"
+#define LONGUEUR 126
+#define LARGEUR 29
 
 
 char key_pressed(){
@@ -129,7 +131,7 @@ int main() {
             // printf("\033[%d;%dHTime : %d", 30, 20, time);
             if(time == 500){
                 if (monElementTrain->train.direction == 'e') {
-                    lDoor = 11;
+                    lDoor = 18;
                     // printf("test\n");
                     switch (monElementTrain->train.etat){
                         case 'd': //dehors
@@ -143,49 +145,56 @@ int main() {
 
                         case 'e':
                         for (int i = monElementTrain->train.posx; i >= 0; i--) {
-                            afficherCarTrain(monElementTrain->train.custom[0][monElementTrain->train.longueur - i], lDoor - 1, monElementTrain->train.posx-i);
-                            afficherCarTrain(monElementTrain->train.custom[1][monElementTrain->train.longueur - i], lDoor, monElementTrain->train.posx-i);
+                            afficherCarTrain(monElementTrain->train.custom[0][monElementTrain->train.longueur - i], lDoor-2, monElementTrain->train.posx-i);
+                            afficherCarTrain(monElementTrain->train.custom[1][monElementTrain->train.longueur - i], lDoor-1, monElementTrain->train.posx-i);
+                            afficherCarTrain(monElementTrain->train.custom[2][monElementTrain->train.longueur - i], lDoor, monElementTrain->train.posx-i);
                         }
-                        if (monElementTrain->train.posx > 52) {
-                            printf("\033[%d;%dH%s\n", lDoor - 1, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                        if (monElementTrain->train.posx > 96) {
                             printf("\033[%d;%dH%s\n", lDoor, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                            printf("\033[%d;%dH%s\n", lDoor - 1, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                            printf("\033[%d;%dH%s\n", lDoor - 2, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
                         }
                         monElementTrain->train.posx++;
-                        if(monElementTrain->train.posx == 58){
+                        if(monElementTrain->train.posx == 102){
                             monElementTrain->train.etat = 's';
                         }
                         break;
 
                         case 's' :
-                        if (tempsAQuai == monElementTrain->train.tempsAQuai) {
+                        if (tempsAQuai == monElementTrain->train.tempsAQuai - 5) {
                             for (int i = monElementTrain->train.posx; i >= 0; i--) {
-                                if (monElementTrain->train.custom[1][monElementTrain->train.longueur - i] == 'f') {
+                                if (monElementTrain->train.custom[2][monElementTrain->train.longueur - i] == 'f') {
                                     printf("\033[%d;%dH%c\n", lDoor, monElementTrain->train.posx-i-1, ' ');
                                 }
                             }
                         }
-                        else if (tempsAQuai == 0) {
+                        else if (tempsAQuai-5 == 0) {
                             for (int i = monElementTrain->train.posx; i >= 0; i--) {
-                                if (monElementTrain->train.custom[1][monElementTrain->train.longueur - i] == 'f') {
+                                if (monElementTrain->train.custom[2][monElementTrain->train.longueur - i] == 'f') {
                                     printf("\033[%d;%dH%s%s%s\n", lDoor, monElementTrain->train.posx-i-1, DOORCOLOR, "-", DEFAULT_COLOR);
                                 }
                             }
+                        }
+                        else if (tempsAQuai == 0) {
                             monElementTrain->train.etat = 'p';
                         }
+
                         tempsAQuai--;
                         break;
 
                         case 'p' :
                         for (int i = monElementTrain->train.longueur; i >= 0; i--) {
-                            if (monElementTrain->train.posx - i <= 62) {
-                                afficherCarTrain(monElementTrain->train.custom[0][monElementTrain->train.longueur - i], lDoor - 1, monElementTrain->train.posx-i);
-                                afficherCarTrain(monElementTrain->train.custom[1][monElementTrain->train.longueur - i], lDoor, monElementTrain->train.posx-i);
+                            if (monElementTrain->train.posx - i <= LONGUEUR-1) {
+                                afficherCarTrain(monElementTrain->train.custom[0][monElementTrain->train.longueur - i], lDoor-2, monElementTrain->train.posx-i);
+                                afficherCarTrain(monElementTrain->train.custom[1][monElementTrain->train.longueur - i], lDoor-1, monElementTrain->train.posx-i);
+                                afficherCarTrain(monElementTrain->train.custom[2][monElementTrain->train.longueur - i], lDoor, monElementTrain->train.posx-i);
                             }
                         }
-                        printf("\033[%d;%dH%s\n", lDoor - 1, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
                         printf("\033[%d;%dH%s\n", lDoor, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                        printf("\033[%d;%dH%s\n", lDoor - 1, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                        printf("\033[%d;%dH%s\n", lDoor - 2, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
                         monElementTrain->train.posx++;
-                        if(monElementTrain->train.posx == monElementTrain->train.longueur + 1 + 62 + 1){
+                        if(monElementTrain->train.posx == monElementTrain->train.longueur + 1 + LONGUEUR){
                             monElementTrain->train.etat = 'r';
                         }
 
@@ -196,7 +205,7 @@ int main() {
                 }
 
                 else{
-                    lDoor = 7;
+                    lDoor = 12;
                     switch (monElementTrain->train.etat){
                         case 'd': //dehors
                         if (monElementTrain->train.tempsAttente == 0){
@@ -208,33 +217,37 @@ int main() {
                         break;
 
                         case 'e':
-                        for (int i = monElementTrain->train.posx; i <= 62; i++) {
+                        for (int i = monElementTrain->train.posx; i <= LONGUEUR -1 ; i++) {
                             afficherCarTrain(monElementTrain->train.custom[0][i - monElementTrain->train.posx], lDoor, i);
                             afficherCarTrain(monElementTrain->train.custom[1][i - monElementTrain->train.posx], lDoor + 1, i);
+                            afficherCarTrain(monElementTrain->train.custom[2][i - monElementTrain->train.posx], lDoor + 2, i);
                         }
-                        if (monElementTrain->train.posx < 11) {
+                        if (monElementTrain->train.posx < 30) {
                             printf("\033[%d;%dH%s\n", lDoor, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
                             printf("\033[%d;%dH%s\n", lDoor + 1, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+                            printf("\033[%d;%dH%s\n", lDoor + 2, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
                         }
                         monElementTrain->train.posx--;
-                        if(monElementTrain->train.posx == 6){
+                        if(monElementTrain->train.posx == 25){
                             monElementTrain->train.etat = 's';
                         }
                         break;
                         case 's' :
-                        if (tempsAQuai == monElementTrain->train.tempsAQuai) {
+                        if (tempsAQuai == monElementTrain->train.tempsAQuai - 5) {
                             for (int i = monElementTrain->train.posx; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
                                 if (monElementTrain->train.custom[0][monElementTrain->train.longueur - i] == 'd') {
                                     printf("\033[%d;%dH%c\n", lDoor, monElementTrain->train.posx+i, ' ');
                                 }
                             }
                         }
-                        else if (tempsAQuai == 0) {
+                        else if (tempsAQuai-5 == 0) {
                             for (int i = monElementTrain->train.posx; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
                                 if (monElementTrain->train.custom[0][monElementTrain->train.longueur - i] == 'd') {
                                     printf("\033[%d;%dH%s%s%s\n", lDoor, monElementTrain->train.posx+i, DOORCOLOR, "-", DEFAULT_COLOR);
                                 }
                             }
+                        }
+                        else if (tempsAQuai == 0) {
                             monElementTrain->train.etat = 'p';
                         }
                         tempsAQuai--;
@@ -245,10 +258,12 @@ int main() {
                             if (monElementTrain->train.posx + i >= 0) {
                                 afficherCarTrain(monElementTrain->train.custom[0][i], lDoor, monElementTrain->train.posx+i);
                                 afficherCarTrain(monElementTrain->train.custom[1][i], lDoor + 1, monElementTrain->train.posx+i);
+                                afficherCarTrain(monElementTrain->train.custom[2][i], lDoor + 2, monElementTrain->train.posx+i);
                             }
                         }
                         printf("\033[%d;%dH%s\n", lDoor, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
                         printf("\033[%d;%dH%s\n", lDoor + 1, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+                        printf("\033[%d;%dH%s\n", lDoor + 2, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
                         monElementTrain->train.posx--;
                         if(monElementTrain->train.posx == -monElementTrain->train.longueur){
                             monElementTrain->train.etat = 'r';
@@ -295,7 +310,6 @@ int main() {
                 // printf("Coordonees : %d %d\n", monvoyageur->posX, monvoyageur->posY );
                 printf("\033[%d;%dHCoordonees : %d %d", 30, 20, monvoyageur->posX, monvoyageur->posY);
             }
-
         }
         fclose(gare);
     }

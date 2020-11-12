@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include "gare.h"
 
-#define LONGUEUR 62
-#define LARGEUR 17
+#define LONGUEUR 125
+#define LARGEUR 29
 
 #define BLACK           "\033[1;30m"
 #define RED             "\033[1;31m"

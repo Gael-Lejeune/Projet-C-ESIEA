@@ -4,8 +4,8 @@
 #include <string.h>
 #include "train.h"
 
-#define LARGT 2
-#define LONGT 52
+#define LARGT 3
+#define LONGT 96
 
 #define PURPLE          "\033[1;35m"
 #define CYAN            "\033[1;36m"
@@ -19,22 +19,22 @@ TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 	TRAIN montrain;
 	montrain.direction = direction;
 	if (direction == 'e') {montrain.posx=0;}
-	else {montrain.posx=62;}
+	else {montrain.posx=124;}
 	montrain.longueur=LONGT;
 	montrain.posy=montrain.posx-LONGT;
-	montrain.vitesse= 10000000;
+	montrain.vitesse= 1000000;
 	montrain.etat='d'; //dehors
 	montrain.portes=0; //fermées
 	montrain.tempsAttente=tempsAttente;
-	montrain.tempsAQuai=15;
+	montrain.tempsAQuai=25;
 
-	montrain.custom = (char **)malloc(2*sizeof(char *));
-	for(int i =0; i<2;i++) {
+	montrain.custom = (char **)malloc(LARGT*sizeof(char *));
+	for(int i =0; i<LARGT;i++) {
 		montrain.custom[i] = (char *)malloc(LONGT*sizeof(char));
 	}
 
 	char c;
-	for(int i=0; i<2; i++){
+	for(int i=0; i<LARGT; i++){
 		for(int j=0; j<LONGT; j++){
 			c = fgetc(fichier);
 			montrain.custom[i][j] = c;

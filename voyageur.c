@@ -3,8 +3,8 @@
 #include "gare.h"
 #include "voyageur.h"
 
-#define LONGUEUR 64
-#define LARGEUR 17
+#define LONGUEUR 126
+#define LARGEUR 29
 
 #define BLACK    "\033[1;30m"
 #define RED      "\033[1;31m"
@@ -65,6 +65,7 @@ void mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
     if (posDep == ' ') {
         magare.custom[monvoyageur->posX][monvoyageur->posY] = ' ';
         printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
+
         monvoyageur->posX = posX;
         monvoyageur->posY = posY;
         magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
