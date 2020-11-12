@@ -1,34 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "train.c"
+#include "listeChainee.h"
 
-
-#define LARGT 2
-#define LONGT 52
-
-typedef struct  Element ELEMENT;
-struct Element{
-    TRAIN train;
-    ELEMENT *precedent;
-    ELEMENT *suivant; //permet de lier les éléments entre eux
-};
-
-typedef struct Liste LISTE  ;
-struct Liste
-{
-    ELEMENT *premier;
-    ELEMENT *dernier;
-};
-
-void Init(LISTE *l)
+void init_liste(LISTE *l)
 {
     l->premier = NULL;
     l->dernier = NULL;
 }
 
-void Ajoutf(LISTE *l, TRAIN t) //ajout d'élément en fin de liste
+void ajoutF(LISTE *l, TRAIN t) //ajout d'élément en fin de liste
 {
-    ELEMENT * nouv = (ELEMENT*)malloc(sizeof(ELEMENT*));
+    ELEMENT * nouv = (ELEMENT*)malloc(sizeof(ELEMENT));
     if(!nouv) exit(EXIT_FAILURE);
     nouv->train = t;
     nouv->precedent = l->dernier;
@@ -38,9 +18,9 @@ void Ajoutf(LISTE *l, TRAIN t) //ajout d'élément en fin de liste
     l->dernier = nouv;
 }
 
-void Ajoutd(LISTE *l, TRAIN t) //ajoute au début
+void ajoutD(LISTE *l, TRAIN t) //ajoute au début
 {
-    ELEMENT * nouv = (ELEMENT*)malloc(sizeof(ELEMENT*));
+    ELEMENT * nouv = (ELEMENT*)malloc(sizeof(ELEMENT));
     if(!nouv) exit(EXIT_FAILURE);
     nouv->train = t;
     nouv->suivant = l->premier;
@@ -92,29 +72,29 @@ void Clear(LISTE *l)
     l->dernier = NULL;
 }
 
-int main(){
-    LISTE MaListe;
-    FILE * train = fopen("txt/train_test.txt", "r");
-    TRAIN montrain1 = init_train(train, 'e');
-    TRAIN montrain2 = init_train(train, 'o');
-    Init(&MaListe);
-    Ajoutd(&MaListe,montrain1);
-    Ajoutf(&MaListe,montrain2);
-    Ajoutf(&MaListe,montrain1);
-    Ajoutd(&MaListe,montrain2);
-    View(MaListe);
-    printf("__________\n");
-    Suppd(&MaListe);
-    Suppd(&MaListe);
-    Suppf(&MaListe);
-    View(MaListe);
-    printf("\n__________");
-    Ajoutf(&MaListe,montrain2);
-    Suppd(&MaListe);
-    Suppd(&MaListe);
-    View(MaListe);
-    printf("\n__________");
-    Clear(&MaListe);
-    View(MaListe);
-    return 0;
-}
+// int main(){
+//     LISTE MaListe;
+//     FILE * train = fopen("txt/train_test.txt", "r");
+//     TRAIN montrain1 = init_train(train, 'e');
+//     TRAIN montrain2 = init_train(train, 'o');
+//     Init(&MaListe);
+//     Ajoutd(&MaListe,montrain1);
+//     Ajoutf(&MaListe,montrain2);
+//     Ajoutf(&MaListe,montrain1);
+//     Ajoutd(&MaListe,montrain2);
+//     View(MaListe);
+//     printf("__________\n");
+//     Suppd(&MaListe);
+//     Suppd(&MaListe);
+//     Suppf(&MaListe);
+//     View(MaListe);
+//     printf("\n__________");
+//     Ajoutf(&MaListe,montrain2);
+//     Suppd(&MaListe);
+//     Suppd(&MaListe);
+//     View(MaListe);
+//     printf("\n__________");
+//     Clear(&MaListe);
+//     View(MaListe);
+//     return 0;
+// }
