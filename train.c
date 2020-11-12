@@ -15,7 +15,7 @@
 
 
 
-TRAIN init_train(FILE * fichier, char direction){
+TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 	TRAIN montrain;
 	montrain.direction = direction;
 	if (direction == 'e') {montrain.posx=0;}
@@ -25,7 +25,7 @@ TRAIN init_train(FILE * fichier, char direction){
 	montrain.vitesse= 10000000;
 	montrain.etat='d'; //dehors
 	montrain.portes=0; //fermées
-	montrain.tempsAttente=5;
+	montrain.tempsAttente=tempsAttente;
 	montrain.tempsAQuai=15;
 
 	montrain.custom = (char **)malloc(2*sizeof(char *));

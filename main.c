@@ -5,6 +5,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <time.h>
 // #include <ncurses.h>
 #include "train.h"
 #include "gare.h"
@@ -107,8 +108,10 @@ int main() {
         afficher_gare(magare);
         FILE * train = fopen("txt/train_test2.txt", "r");
         LISTE maListe; init_liste(&maListe);
-        ajoutD(&maListe,init_train(train, 'o'));
-        ajoutD(&maListe,init_train(train, 'e'));
+        srand(time(NULL));
+        ajoutD(&maListe,init_train(train, 'o', rand() % 25));
+        fseek(train, 0, 0);
+        ajoutD(&maListe,init_train(train, 'e', rand() % 50));
         printf("test\n");
         View(maListe);
         // TRAIN monElementTrain->train = init_train(train, 'o');

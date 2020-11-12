@@ -18,7 +18,7 @@ struct train{
     int tempsAQuai;
 };
 
-TRAIN init_train(FILE * fichier, char direction);
+TRAIN init_train(FILE * fichier, char direction, int tempsAttente);
 
 void deplacementTrain(TRAIN montrain, int rail, int col, int time, int posX, int posY, int posArret);
 
