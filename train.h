@@ -4,15 +4,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct train TRAIN;
-struct train{
-    char direction ;    /*n => Nord, s => Sud, e => EST, o => OUEST*/
+
+typedef struct TRAIN train;
+struct TRAIN{
+    char direction ;    /*N => Nord, S => Sud, E => EST, O => OUEST*/
     int posx;           /*Position courante x de la tête du train*/
     int posy;           /*Position courante y de l'arrière du train*/
     int vitesse;        /*Vitesse du train*/
-    char ** custom;     /*Contient le train customisé, il faut choisir la bonne taille de votre tableau*/
-    char etat;          /*État du train => d dehors, e entrant, s stationné, p partant*/
-    int portes;         /*Portes ouvertes ou fermées*/
+
+    char ** custom;   /*Contient le train customisé, il faut choisir la bonne taille de votre tableau*/
+    char etat;          /*État du train => dehors, entrant, stationné, sortant, sorti*/
+    int portes;        /*Portes ouvertes ou fermées*/
     int longueur;       /*Longueur du train*/
     int tempsAttente;
     int tempsAQuai;
