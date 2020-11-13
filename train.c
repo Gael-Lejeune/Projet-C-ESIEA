@@ -19,10 +19,10 @@ TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 	TRAIN montrain;
 	montrain.direction = direction;
 	if (direction == 'e') {montrain.posx=0;}
-	else {montrain.posx=124;}
+	else {montrain.posx=126;}
 	montrain.longueur=LONGT;
 	montrain.posy=montrain.posx-LONGT;
-	montrain.vitesse= 1000000;
+	montrain.vitesse= 3000000;
 	montrain.etat='d'; //dehors
 	montrain.portes=0; //fermées
 	montrain.tempsAttente=tempsAttente;
