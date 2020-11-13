@@ -1,11 +1,11 @@
 CC=gcc
-CFLAGS= -Wall
+CFLAGS= -Wall -finput-charset="UTF-8" -fexec-charset="UTF-8"
 LDFLAGS=
 EXEC=main.out
 
 all: $(EXEC) execute
 
-main: gare.o main.c
+main: voyageur.o gare.o train.o	listeChainee.o main.c
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c
@@ -18,4 +18,4 @@ clean:
 	rm main.out
 
 execute:
-	./main.out
+	./$(EXEC)
