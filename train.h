@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 
-typedef struct TRAIN train;
-struct TRAIN{
+typedef struct train TRAIN;
+struct train{
     char direction ;    /*N => Nord, S => Sud, E => EST, O => OUEST*/
     int posx;           /*Position courante x de la tête du train*/
     int posy;           /*Position courante y de l'arrière du train*/

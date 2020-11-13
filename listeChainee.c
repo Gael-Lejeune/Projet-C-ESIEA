@@ -30,7 +30,7 @@ void ajoutD(LISTE *l, TRAIN t) //ajoute au début
     l->premier = nouv;
 }
 
-void Suppf(LISTE *l) //supprime le dernier
+void suppF(LISTE *l) //supprime le dernier
 {
     ELEMENT *tmp = l->dernier;
     l->dernier = tmp->precedent;
@@ -39,7 +39,7 @@ void Suppf(LISTE *l) //supprime le dernier
     free(tmp);
 }
 
-void Suppd(LISTE *l) //supprime le premier
+void suppD(LISTE *l) //supprime le premier
 {
     ELEMENT *tmp = l->premier;
     l->premier = tmp->suivant;

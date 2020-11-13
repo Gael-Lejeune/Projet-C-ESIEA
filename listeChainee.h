@@ -29,9 +29,9 @@ void ajoutF(LISTE *l, TRAIN t); //ajout d'élément en fin de liste
 
 void ajoutD(LISTE *l, TRAIN t); //ajoute au début
 
-void Suppf(LISTE *l); //supprime le dernier
+void suppF(LISTE *l); //supprime le dernier
 
-void Suppd(LISTE *l); //supprime le premier
+void suppD(LISTE *l); //supprime le premier
 
 void View(LISTE l);
 
