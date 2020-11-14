@@ -72,20 +72,20 @@ int main() {
     // system("setterm -cursor off");
     afficher_fichier("txt/menu_projet.txt");
     char c;
-    char option = '1';
+    char option = 1;
     printf("\033[%d;%dH%s≫%s", 14, 10, "\033[0;m", "\033[0;m");
     printf("\033[%d;%dH%s≫%s", 13, 10, "\033[1;5m", "\033[0;m");
     printf("\033[%d;%dH", 25, 0);
     while(1){
         c = key_pressed();
         if (c == 'z') {
-            option = '1';
+            option = 1;
             printf("\033[%d;%dH%s≫%s", 14, 10, "\033[0;m", "\033[0;m");
             printf("\033[%d;%dH%s≫%s", 13, 10, "\033[1;5m", "\033[0;m");
             printf("\033[%d;%dH", 25, 0);
         }
         else if (c == 's') {
-            option = '2';
+            option = 2;
             printf("\033[%d;%dH%s≫%s", 13, 10, "\033[0;m", "\033[0;m");
             printf("\033[%d;%dH%s≫%s", 14, 10, "\033[1;5m", "\033[0;m");
             printf("\033[%d;%dH", 25, 0);
@@ -105,9 +105,9 @@ int main() {
 
     FILE * gare = fopen("txt/gare_test.txt", "r");
     GARE magare = init_gare(gare);
+    afficher_gare(magare);
 
-    if (option == '1') {
-        afficher_gare(magare);
+    if (option == 1) {
         FILE * train = fopen("txt/train_test2.txt", "r");
         LISTE maListe; init_liste(&maListe);
         srand(time(NULL));
@@ -126,8 +126,14 @@ int main() {
         int tempsAQuai = monElementTrain->train.tempsAQuai;
         int tempsAQuaiP = maListe.premier->train.tempsAQuai;
         int tempsAQuaiD = maListe.dernier->train.tempsAQuai;
+        char c = 1;
 
         while(1){
+            // c = key_pressed();
+            // if (c == 'p'){
+            //     system("clear");
+            //     break;
+            // }
             // printf("\033[%d;%dHTime : %d", 30, 20, time);
             if(time == 500){
                 printf("\033[%d;%dH%s\n", 2, 2, "   ");
@@ -304,28 +310,45 @@ int main() {
                 printf("\033[%d;%dHCoordonees : %d", 30, 20,tempsAQuai);
                 printf("\033[%d;%dHCoordonees : %d", 31, 20,tempsAQuaiD);
                 printf("\033[%d;%dHCoordonees : %d", 32, 20,tempsAQuaiP);
+                if (monElementTrain->suivant == NULL) {
+                    monElementTrain = maListe.premier;
+                    tempsAQuaiD = tempsAQuai;
+                    tempsAQuai = tempsAQuaiP;
+                }
+                else{
+                    monElementTrain = maListe.dernier;
+                    tempsAQuaiP = tempsAQuai;
+                    tempsAQuai = tempsAQuaiD;
+                }
             }
-            if (monElementTrain->suivant == NULL) {
-                monElementTrain = maListe.premier;
-                tempsAQuaiD = tempsAQuai;
-                tempsAQuai = tempsAQuaiP;
-                time=(time+1)%monElementTrain->train.vitesse;
-            }
-            else{
-                monElementTrain = maListe.dernier;
-                tempsAQuaiP = tempsAQuai;
-                tempsAQuai = tempsAQuaiD;
-            }
+            time=(time+1)%monElementTrain->train.vitesse;
 
         }
         fclose(gare);
     }
-    else if (option == '2'){
-        VOYAGEUR monvoyageur = init_voyageur(0, 14, '*', magare);
+    else if (option == 2){
+        VOYAGEUR monvoyageur = init_voyageur(0, 30, '*', magare);
         char movPlayer = 0;
+        FILE * train = fopen("txt/train_test2.txt", "r");
+        LISTE maListe; init_liste(&maListe);
+        srand(time(NULL));
+        ajoutD(&maListe,init_train(train, 'o', rand() % 600));
+        fseek(train, 0, 0);
+        ajoutD(&maListe,init_train(train, 'e', rand() % 600));
+        // printf("test\n");
+        //View(maListe);
+        // TRAIN monElementTrain->train = init_train(train, 'o');
 
-        afficher_gare(magare);
-        printf("\033[%d;%dHCoordonees : %d %d", 30, 20, monvoyageur->posX, monvoyageur->posY);
+        int time = 0;
+        //int posX, posY;
+        //char* rail = "─";
+        int lDoor;
+        ELEMENT* monElementTrain = maListe.premier;
+        int tempsAQuai = monElementTrain->train.tempsAQuai;
+        int tempsAQuaiP = maListe.premier->train.tempsAQuai;
+        int tempsAQuaiD = maListe.dernier->train.tempsAQuai;
+        char c = 1;
+
         while(1){
             movPlayer = key_pressed();
             if (movPlayer != 0) {
@@ -333,6 +356,194 @@ int main() {
                 // printf("Coordonees : %d %d\n", monvoyageur->posX, monvoyageur->posY );
                 printf("\033[%d;%dHCoordonees : %d %d", 30, 20, monvoyageur->posX, monvoyageur->posY);
             }
+            /* if(time == 500){
+                printf("\033[%d;%dH%s\n", 2, 2, "   ");
+                printf("\033[%d;%dH%s\n", 2, 122, "   ");
+                printf("\033[%d;%dH%d\n", 2, 2, maListe.dernier->train.tempsAttente);
+                printf("\033[%d;%dH%d\n", 2, 122, maListe.dernier->train.tempsAttente);
+                printf("\033[%d;%dH%s\n", 28, 2, "   ");
+                printf("\033[%d;%dH%s\n", 28, 122, "   ");
+                printf("\033[%d;%dH%d\n", 28, 2, maListe.premier->train.tempsAttente);
+                printf("\033[%d;%dH%d\n", 28, 122, maListe.premier->train.tempsAttente);
+                // printf("\033[%d;%dH%s\n", lDoor - 2, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                if (monElementTrain->train.direction == 'e') {
+                    lDoor = 18;
+                    // printf("test\n");
+                    switch (monElementTrain->train.etat){
+                        case 'd': //dehors
+                        if (monElementTrain->train.tempsAttente == 0){
+                            monElementTrain->train.etat='e';
+                        }
+                        else{
+                            monElementTrain->train.tempsAttente--;
+                        }
+                        break;
+
+                        case 'e':
+                        for (int i = monElementTrain->train.posx; i >= 0; i--) {
+                            afficherCarTrain(monElementTrain->train.custom[0][monElementTrain->train.longueur - i], lDoor-2, monElementTrain->train.posx-i);
+                            afficherCarTrain(monElementTrain->train.custom[1][monElementTrain->train.longueur - i], lDoor-1, monElementTrain->train.posx-i);
+                            afficherCarTrain(monElementTrain->train.custom[2][monElementTrain->train.longueur - i], lDoor, monElementTrain->train.posx-i);
+                        }
+                        if (monElementTrain->train.posx > 96) {
+                            printf("\033[%d;%dH%s\n", lDoor, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                            printf("\033[%d;%dH%s\n", lDoor - 1, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                            printf("\033[%d;%dH%s\n", lDoor - 2, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                        }
+                        monElementTrain->train.posx++;
+                        if(monElementTrain->train.posx == 102){
+                            monElementTrain->train.etat = 's';
+                        }
+                        break;
+
+                        case 's' :
+                        if (tempsAQuai == monElementTrain->train.tempsAQuai - 5) {
+                            for (int i = monElementTrain->train.posx; i >= 0; i--) {
+                                if (monElementTrain->train.custom[2][monElementTrain->train.longueur - i] == 'f') {
+                                    printf("\033[%d;%dH%c\n", lDoor, monElementTrain->train.posx-i-1, ' ');
+                                }
+                            }
+                        }
+                        else if (tempsAQuai-5 == 0) {
+                            for (int i = monElementTrain->train.posx; i >= 0; i--) {
+                                if (monElementTrain->train.custom[2][monElementTrain->train.longueur - i] == 'f') {
+                                    printf("\033[%d;%dH%s%s%s\n", lDoor, monElementTrain->train.posx-i-1, DOORCOLOR, "-", DEFAULT_COLOR);
+                                }
+                            }
+                        }
+                        else if (tempsAQuai == 0) {
+                            monElementTrain->train.etat = 'p';
+                        }
+
+                        tempsAQuai--;
+                        break;
+
+                        case 'p' :
+                        for (int i = monElementTrain->train.longueur; i >= 0; i--) {
+                            if (monElementTrain->train.posx - i <= LONGUEUR-1) {
+                                afficherCarTrain(monElementTrain->train.custom[0][monElementTrain->train.longueur - i], lDoor-2, monElementTrain->train.posx-i);
+                                afficherCarTrain(monElementTrain->train.custom[1][monElementTrain->train.longueur - i], lDoor-1, monElementTrain->train.posx-i);
+                                afficherCarTrain(monElementTrain->train.custom[2][monElementTrain->train.longueur - i], lDoor, monElementTrain->train.posx-i);
+                            }
+                        }
+                        printf("\033[%d;%dH%s\n", lDoor, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                        printf("\033[%d;%dH%s\n", lDoor - 1, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                        printf("\033[%d;%dH%s\n", lDoor - 2, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                        monElementTrain->train.posx++;
+                        if(monElementTrain->train.posx == monElementTrain->train.longueur + 1 + LONGUEUR){
+                            //monElementTrain->train.etat = 'r';
+                            suppD(&maListe);
+                            fseek(train, 0, 0);
+                            ajoutD(&maListe, init_train(train, 'e', rand() % 600));
+                            tempsAQuaiP = maListe.premier->train.tempsAQuai;
+                            tempsAQuai = maListe.premier->train.tempsAQuai;
+                        }
+
+                        break;
+
+                        // printf("test\n");
+                    }
+                }
+
+                else{
+                    lDoor = 12;
+                    switch (monElementTrain->train.etat){
+                        case 'd': //dehors
+                        if (monElementTrain->train.tempsAttente == 0){
+                            monElementTrain->train.etat='e';
+                        }
+                        else{
+                            monElementTrain->train.tempsAttente--;
+                        }
+                        break;
+
+                        case 'e':
+                        for (int i = monElementTrain->train.posx; i <= LONGUEUR -1 ; i++) {
+                            afficherCarTrain(monElementTrain->train.custom[0][i - monElementTrain->train.posx], lDoor, i);
+                            afficherCarTrain(monElementTrain->train.custom[1][i - monElementTrain->train.posx], lDoor + 1, i);
+                            afficherCarTrain(monElementTrain->train.custom[2][i - monElementTrain->train.posx], lDoor + 2, i);
+                        }
+                        if (monElementTrain->train.posx < 30) {
+                            printf("\033[%d;%dH%s\n", lDoor, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+                            printf("\033[%d;%dH%s\n", lDoor + 1, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+                            printf("\033[%d;%dH%s\n", lDoor + 2, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+                        }
+                        monElementTrain->train.posx--;
+                        if(monElementTrain->train.posx == 25){
+                            monElementTrain->train.etat = 's';
+                        }
+                        break;
+                        case 's' :
+                        if (tempsAQuai == monElementTrain->train.tempsAQuai - 5) {
+                            printf("\033[%d;%dHCoordonees :           ", 36, 20);
+                            printf("\033[%d;%dHCoordonees : %d", 36, 20,monElementTrain->train.posx);
+
+                            for (int i = 0; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
+                                if (monElementTrain->train.custom[0][i-1] == 'd') {
+                                    printf("\033[%d;%dH%c\n", lDoor, monElementTrain->train.posx+i, ' ');
+                                }
+                            }
+                        }
+                        else if (tempsAQuai-5 == 0) {
+                            for (int i = monElementTrain->train.posx; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
+                                if (monElementTrain->train.custom[0][i-1] == 'd') {
+                                    printf("\033[%d;%dH%s%s%s\n", lDoor, monElementTrain->train.posx+i, DOORCOLOR, "-", DEFAULT_COLOR);
+                                }
+                            }
+                        }
+                        else if (tempsAQuai == 0) {
+                            monElementTrain->train.etat = 'p';
+                        }
+                        tempsAQuai--;
+                        break;
+
+                        case 'p' :
+                        for (int i = monElementTrain->train.longueur; i >= 0; i--) {
+                            if (monElementTrain->train.posx + i >= 0) {
+                                afficherCarTrain(monElementTrain->train.custom[0][i], lDoor, monElementTrain->train.posx+i);
+                                afficherCarTrain(monElementTrain->train.custom[1][i], lDoor + 1, monElementTrain->train.posx+i);
+                                afficherCarTrain(monElementTrain->train.custom[2][i], lDoor + 2, monElementTrain->train.posx+i);
+                            }
+                        }
+                        printf("\033[%d;%dH%s\n", lDoor, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+                        printf("\033[%d;%dH%s\n", lDoor + 1, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+                        printf("\033[%d;%dH%s\n", lDoor + 2, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+                        monElementTrain->train.posx--;
+                        if(monElementTrain->train.posx == -monElementTrain->train.longueur){
+                            // monElementTrain->train.etat = ' ';
+                                suppF(&maListe);
+                                fseek(train, 0, 0);
+                                ajoutF(&maListe, init_train(train, 'o', rand() % 600));
+                                tempsAQuaiD = maListe.dernier->train.tempsAQuai;
+                                tempsAQuai = maListe.dernier->train.tempsAQuai;
+                                //tempsAQuai = monElementTrain->train.tempsAQuai;
+                        }
+
+                        break;
+
+                    }
+                }
+
+                printf("\033[%d;%dHCoordonees :           ", 30, 20);
+                printf("\033[%d;%dHCoordonees :           ", 31, 20);
+                printf("\033[%d;%dHCoordonees :           ", 32, 20);
+                // printf("\033[%d;%dHCoordonees : %c %d", 30, 20, monElementTrain->train.etat, monElementTrain->train.posx);
+                printf("\033[%d;%dHCoordonees : %d", 30, 20,tempsAQuai);
+                printf("\033[%d;%dHCoordonees : %d", 31, 20,tempsAQuaiD);
+                printf("\033[%d;%dHCoordonees : %d", 32, 20,tempsAQuaiP);
+                if (monElementTrain->suivant == NULL) {
+                    monElementTrain = maListe.premier;
+                    tempsAQuaiD = tempsAQuai;
+                    tempsAQuai = tempsAQuaiP;
+                }
+                else{
+                    monElementTrain = maListe.dernier;
+                    tempsAQuaiP = tempsAQuai;
+                    tempsAQuai = tempsAQuaiD;
+                }
+            } */
+            // time=(time+1)%monElementTrain->train.vitesse;
+
         }
         fclose(gare);
     }

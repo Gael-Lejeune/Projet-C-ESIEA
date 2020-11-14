@@ -15,7 +15,7 @@ struct element{
     ELEMENT *suivant; //permet de lier les éléments entre eux
 };
 
-typedef struct liste LISTE  ;
+typedef struct liste LISTE;
 struct liste
 {
     ELEMENT *premier;

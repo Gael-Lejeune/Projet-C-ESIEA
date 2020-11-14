@@ -4,3 +4,4 @@ a.out
 gare.h.gch
 train.h.gch
 gare.h.gch
+*.o

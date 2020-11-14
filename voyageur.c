@@ -40,36 +40,35 @@ void mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
     // mvt = 'z';
     switch (mvt){
         case 'z' :
-            posDep = magare.custom[monvoyageur->posX-1][monvoyageur->posY];
-            posX = monvoyageur->posX-1;
-            posY = monvoyageur->posY;
-            // printf("haut\n");
+        posX = monvoyageur->posX-1;
+        posY = monvoyageur->posY;
+        // printf("haut\n");
         break;
         case 'q' :
-            posDep = magare.custom[monvoyageur->posX][monvoyageur->posY-1];
-            posX = monvoyageur->posX;
-            posY = monvoyageur->posY-1;
-            // printf("gauche\n");
+        posX = monvoyageur->posX;
+        posY = monvoyageur->posY-1;
+        // printf("gauche\n");
         break;
         case 's' :
-            posDep = magare.custom[monvoyageur->posX+1][monvoyageur->posY];
-            posX = monvoyageur->posX+1;
-            posY = monvoyageur->posY;
+        posX = monvoyageur->posX+1;
+        posY = monvoyageur->posY;
         break;
         case 'd' :
-            posDep = magare.custom[monvoyageur->posX][monvoyageur->posY+1];
-            posX = monvoyageur->posX;
-            posY = monvoyageur->posY+1;
+        posX = monvoyageur->posX;
+        posY = monvoyageur->posY+1;
         break;
     }
-    if (posDep == ' ') {
-        magare.custom[monvoyageur->posX][monvoyageur->posY] = ' ';
-        printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
+    if (posX >=0 && posY >= 0) {
+        posDep = magare.custom[posX][posY];
+        if (posDep == ' ') {
+            magare.custom[monvoyageur->posX][monvoyageur->posY] = ' ';
+            printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
 
-        monvoyageur->posX = posX;
-        monvoyageur->posY = posY;
-        magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
-        printf("\033[%d;%dH%s%c%s", monvoyageur->posX+1, monvoyageur->posY+1, CYAN, monvoyageur->carvoy, DEFAULT_COLOR);
+            monvoyageur->posX = posX;
+            monvoyageur->posY = posY;
+            magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
+            printf("\033[%d;%dH%s%c%s", monvoyageur->posX+1, monvoyageur->posY+1, CYAN, monvoyageur->carvoy, DEFAULT_COLOR);
+        }
     }
     // printf("Coordonees : %d %d\n", monvoyageur.posX, monvoyageur.posY );
     // afficher_voyageur(monvoyageur);
