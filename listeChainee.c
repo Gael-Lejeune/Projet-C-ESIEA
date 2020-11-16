@@ -1,6 +1,6 @@
 #include "listeChainee.h"
 
-void init_liste(LISTE *l)
+void init_liste(LISTE *l) //Initialisation de la liste chainée
 {
     l->premier = NULL;
     l->dernier = NULL;
@@ -58,7 +58,7 @@ void View(LISTE l)
     }
 }
 
-void Clear(LISTE *l)
+void Clear(LISTE *l) //Vide la liste
 {
     ELEMENT *tmp;
     ELEMENT *pelem = l->premier;

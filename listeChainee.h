@@ -22,7 +22,7 @@ struct liste
     ELEMENT *dernier;
 };
 
-void init_liste(LISTE *l);
+void init_liste(LISTE *l); //Initialisation de la liste chainée
 
 void ajoutF(LISTE *l, TRAIN t); //ajout d'élément en fin de liste
 
@@ -34,7 +34,7 @@ void suppD(LISTE *l); //supprime le premier
 
 void View(LISTE l);
 
-void Clear(LISTE *l);
+void Clear(LISTE *l); //Vide la liste
 
 
 

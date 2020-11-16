@@ -19,77 +19,78 @@
 #define RAILCOLOR GREY
 #define PLAYERCOLOR CYAN
 
-GARE init_gare(FILE * fichier){
+GARE init_gare(FILE * fichier){ //Initialisation de la gare via fichier txt
     GARE magare;
     magare.custom = (char **)malloc(LARGEUR*sizeof(char *));
     for(int i =0; i<LARGEUR; i++) {
         magare.custom[i] = (char *)malloc(LONGUEUR*sizeof(char));
-    }
+    } //Allocation de l'espace mémoire pour la gare.
     char c;
     for(int i=0; i<LARGEUR; i++){
         for(int j=0; j<LONGUEUR; j++){
-            c = fgetc(fichier); //possiblement utiliser fscanf
+            c = fgetc(fichier);
             magare.custom[i][j] = c;
         }
         fgetc(fichier);
-    }
-    return magare;
-}
+    } //Remplissage de la gare en lisant le fichier txt correspondant.
 
-void afficher_gare (GARE magare){
-    system("clear");
-    for(int i=0; i<LARGEUR; i++){
-        for(int j=0; j<LONGUEUR; j++){
-            switch (magare.custom[i][j]) {
-                case '=':
+    return magare;
+} //init_gare()
+
+void afficher_gare (GARE magare){ //affichage de la gare
+    system("clear"); //clear du terminal
+    for(int i=0; i<LARGEUR; i++){ //Pour la largeur de la gare
+        for(int j=0; j<LONGUEUR; j++){ //Pour la longueur de la gare
+            switch (magare.custom[i][j]) { //On affiche la gare en ascii etendu à partir du fichier écrit en ascii simple
+                case '=': //mur
                 printf("%s%s%s", WALLCOLOR, "═", DEFAULT_COLOR);
                 break;
-                case 'a':
+                case 'a': //mur
                 printf("%s%s%s", WALLCOLOR, "╔", DEFAULT_COLOR);
                 break;
-                case 'c':
+                case 'c': //mur
                 printf("%s%s%s", WALLCOLOR, "╝", DEFAULT_COLOR);
                 break;
-                case 'w':
+                case 'w': //mur
                 printf("%s%s%s", WALLCOLOR, "╚", DEFAULT_COLOR);
                 break;
-                case 'e':
+                case 'e': //mur
                 printf("%s%s%s", WALLCOLOR, "╗", DEFAULT_COLOR);
                 break;
-                case '_':
+                case '_': //bord du quai
                 printf("%s%s%s", GREY, "■", DEFAULT_COLOR);
                 break;
-                case '|':
+                case '|': //mur
                 printf("%s%s%s", WALLCOLOR, "║", DEFAULT_COLOR);
                 break;
                 case 'l':
                 printf("%s%s%s", WALLCOLOR, "═", DEFAULT_COLOR);
                 break;
-                case '-':
+                case '-': //rails
                 printf("%s%s%s", RAILCOLOR, "─", DEFAULT_COLOR);
                 break;
-                case '*':
+                case '*': //voyageur
                 printf("%s%s%s", PLAYERCOLOR, "*", DEFAULT_COLOR);
                 break;
-                case '#':
+                case '#': //bord du compteur
                 printf("%s%s%s", RAILCOLOR, "│", DEFAULT_COLOR);
                 break;
-                case 'u':
+                case 'u': //bord du compteur
                 printf("%s%s%s", RAILCOLOR, "┘", DEFAULT_COLOR);
                 break;
-                case 'i':
+                case 'i': //bord du compteur
                 printf("%s%s%s", RAILCOLOR, "└", DEFAULT_COLOR);
                 break;
-                case 'j':
+                case 'j': //bord du compteur
                 printf("%s%s%s", RAILCOLOR, "┐", DEFAULT_COLOR);
                 break;
-                case 'k':
+                case 'k': //bord du compteur
                 printf("%s%s%s", RAILCOLOR, "┌", DEFAULT_COLOR);
                 break;
-                case '+':
+                case '+': //bord du compteur
                 printf("%s%s%s", RAILCOLOR, "─", DEFAULT_COLOR);
                 break;
-                default:
+                default: //Si le caractère n'est pas reconnu
                 printf("%c", magare.custom[i][j]);
                 break;
             }

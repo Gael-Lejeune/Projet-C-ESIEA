@@ -9,8 +9,8 @@ struct gare{
     char ** custom;   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
 };
 
-GARE init_gare(FILE * fichier);
+GARE init_gare(FILE * fichier); //Initialisation de la gare via fichier txt
 
-void afficher_gare (GARE magare);
+void afficher_gare (GARE magare); //affichage de la gare
 
 #endif
