@@ -249,7 +249,7 @@ int main() {
     afficher_gare(magare);
 
     if (option == 1) {
-        FILE * train = fopen("txt/train_test2.txt", "r");
+        FILE * train = fopen("txt/train.txt", "r");
         LISTE maListe; init_liste(&maListe);
         srand(time(NULL));
         ajoutD(&maListe,init_train(train, 'o', rand() % 600));
@@ -292,7 +292,7 @@ int main() {
     else if (option == 2){
         VOYAGEUR monvoyageur = init_voyageur(0, 30, '*', magare);
         char movPlayer = 0;
-        FILE * train = fopen("txt/train_test2.txt", "r");
+        FILE * train = fopen("txt/train.txt", "r");
         LISTE maListe; init_liste(&maListe);
         srand(time(NULL));
         ajoutD(&maListe,init_train(train, 'o', rand() % 600));
