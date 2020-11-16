@@ -22,16 +22,6 @@ struct train{
 
 TRAIN init_train(FILE * fichier, char direction, int tempsAttente);
 
-void deplacementTrain(TRAIN montrain, int rail, int col, int time, int posX, int posY, int posArret);
-
-void afficherSortTrain(TRAIN montrain, int rail, int posX, int premierwagon, int val, int i);
-
-void entreeTrain(TRAIN montrain, int posX, int time);
-
-void afficherSortTrain(TRAIN montrain, int rail, int posX, int premierwagon, int val, int i);
-
-void sortieTrain(TRAIN montrain, int rail, int posX, int time, int vitesse, char direction);
-
 void afficherCarTrain(char c, int x, int y);
 
 #endif

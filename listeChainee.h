@@ -26,7 +26,6 @@ void init_liste(LISTE *l);
 
 void ajoutF(LISTE *l, TRAIN t); //ajout d'élément en fin de liste
 
-
 void ajoutD(LISTE *l, TRAIN t); //ajoute au début
 
 void suppF(LISTE *l); //supprime le dernier

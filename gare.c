@@ -21,7 +21,6 @@
 
 GARE init_gare(FILE * fichier){
     GARE magare;
-    // magare.custom = ALLOCATION_MAT_DYN(LARGEUR,LONGUEUR);
     magare.custom = (char **)malloc(LARGEUR*sizeof(char *));
     for(int i =0; i<LARGEUR; i++) {
         magare.custom[i] = (char *)malloc(LONGUEUR*sizeof(char));
@@ -34,7 +33,6 @@ GARE init_gare(FILE * fichier){
         }
         fgetc(fichier);
     }
-    // printf("\n");
     return magare;
 }
 
@@ -98,5 +96,4 @@ void afficher_gare (GARE magare){
         }
         printf("\n");
     }
-    // printf("\n");
 }

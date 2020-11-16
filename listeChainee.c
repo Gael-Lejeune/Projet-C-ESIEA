@@ -71,30 +71,3 @@ void Clear(LISTE *l)
     l->premier = NULL;
     l->dernier = NULL;
 }
-
-// int main(){
-//     LISTE MaListe;
-//     FILE * train = fopen("txt/train_test.txt", "r");
-//     TRAIN montrain1 = init_train(train, 'e');
-//     TRAIN montrain2 = init_train(train, 'o');
-//     Init(&MaListe);
-//     Ajoutd(&MaListe,montrain1);
-//     Ajoutf(&MaListe,montrain2);
-//     Ajoutf(&MaListe,montrain1);
-//     Ajoutd(&MaListe,montrain2);
-//     View(MaListe);
-//     printf("__________\n");
-//     Suppd(&MaListe);
-//     Suppd(&MaListe);
-//     Suppf(&MaListe);
-//     View(MaListe);
-//     printf("\n__________");
-//     Ajoutf(&MaListe,montrain2);
-//     Suppd(&MaListe);
-//     Suppd(&MaListe);
-//     View(MaListe);
-//     printf("\n__________");
-//     Clear(&MaListe);
-//     View(MaListe);
-//     return 0;
-// }
