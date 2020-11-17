@@ -357,12 +357,16 @@ int main() {
 
                     printf("\033[%d;%dH%s\n", 2, 2, "   ");
                     printf("\033[%d;%dH%s\n", 2, 122, "   ");
-                    printf("\033[%d;%dH%d\n", 2, 2, maListe.dernier->train.tempsAttente);
-                    printf("\033[%d;%dH%d\n", 2, 122, maListe.dernier->train.tempsAttente);
+                    if (maListe.dernier->train.tempsAttente/60 != 0) {
+                        printf("\033[%d;%dH%dm\n", 2, 2, maListe.dernier->train.tempsAttente/60);
+                        printf("\033[%d;%dH%dm\n", 2, 122, maListe.dernier->train.tempsAttente/60);
+                    }
                     printf("\033[%d;%dH%s\n", 28, 2, "   ");
                     printf("\033[%d;%dH%s\n", 28, 122, "   ");
-                    printf("\033[%d;%dH%d\n", 28, 2, maListe.premier->train.tempsAttente);
-                    printf("\033[%d;%dH%d\n", 28, 122, maListe.premier->train.tempsAttente);
+                    if (maListe.premier->train.tempsAttente/60 != 0) {
+                        printf("\033[%d;%dH%dm\n", 28, 2, maListe.premier->train.tempsAttente/60);
+                        printf("\033[%d;%dH%dm\n", 28, 122, maListe.premier->train.tempsAttente/60);
+                    }
 
                     deplacer_train(monElementTrain, maListe, tempsAQuai, train);
 

@@ -50,10 +50,10 @@ INDVOYAGEUR init_voyageurInd(int car, GARE magare, char destination){
   //détermination des positions d'attente du train
   if(voyageurInd->posX ==0 && voyageurInd->posY > 62){
     voyageurInd->attenteY = rand()%60+62;
-    voyageurInd->attenteX = rand()%10+2;
+    voyageurInd->attenteX = rand()%9+2;
   } else if(voyageurInd->posX ==0 && voyageurInd->posY < 62){
     voyageurInd->attenteY = rand()%60+2;
-    voyageurInd->attenteX = rand()%10+2;
+    voyageurInd->attenteX = rand()%9+2;
   } else if(voyageurInd->posX ==24 && voyageurInd->posY > 62){
     voyageurInd->attenteY = rand()%60+62;
     voyageurInd->attenteX = rand()%9+19;
