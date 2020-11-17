@@ -73,6 +73,24 @@ void afficher_gare (GARE magare){
                 case '*':
                 printf("%s%s%s", PLAYERCOLOR, "*", DEFAULT_COLOR);
                 break;
+                case '#':
+                printf("%s%s%s", RAILCOLOR, "│", DEFAULT_COLOR);
+                break;
+                case 'u':
+                printf("%s%s%s", RAILCOLOR, "┘", DEFAULT_COLOR);
+                break;
+                case 'i':
+                printf("%s%s%s", RAILCOLOR, "└", DEFAULT_COLOR);
+                break;
+                case 'j':
+                printf("%s%s%s", RAILCOLOR, "┐", DEFAULT_COLOR);
+                break;
+                case 'k':
+                printf("%s%s%s", RAILCOLOR, "┌", DEFAULT_COLOR);
+                break;
+                case '+':
+                printf("%s%s%s", RAILCOLOR, "─", DEFAULT_COLOR);
+                break;
                 default:
                 printf("%c", magare.custom[i][j]);
                 break;

@@ -5,7 +5,7 @@ EXEC=main.out
 
 all: $(EXEC) execute
 
-main: voyageur.o gare.o train.o	listeChainee.o main.c
+main: voyageur.o voyageurind.o gare.o train.o	listeChainee.o main.c
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c
