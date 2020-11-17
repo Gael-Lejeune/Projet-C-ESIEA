@@ -19,7 +19,9 @@
 #define RAILCOLOR GREY
 #define PLAYERCOLOR CYAN
 
-GARE init_gare(FILE * fichier){ //Initialisation de la gare via fichier txt
+GARE init_gare(char * fichier){
+    //Initialisation de la gare via fichier txt
+    FILE * gare = fopen(fichier, "r"); //Fichier de l'affichage de la gare
     GARE magare;
     magare.custom = (char **)malloc(LARGEUR*sizeof(char *));
     for(int i =0; i<LARGEUR; i++) {
@@ -28,12 +30,12 @@ GARE init_gare(FILE * fichier){ //Initialisation de la gare via fichier txt
     char c;
     for(int i=0; i<LARGEUR; i++){
         for(int j=0; j<LONGUEUR; j++){
-            c = fgetc(fichier);
+            c = fgetc(gare);
             magare.custom[i][j] = c;
         }
-        fgetc(fichier);
+        fgetc(gare);
     } //Remplissage de la gare en lisant le fichier txt correspondant.
-
+    fclose(gare);
     return magare;
 } //init_gare()
 
