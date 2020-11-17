@@ -10,6 +10,7 @@ struct voyageur{
     char carvoy;
     int posX;
     int posY;
+    char carpos;
 };
 
 VOYAGEUR init_voyageur(int posX, int posY, int car, GARE magare);
