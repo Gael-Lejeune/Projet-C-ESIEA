@@ -10,6 +10,7 @@
 #include "gare.h"
 #include "voyageur.h"
 #include "listeChainee.h"
+#include "voyageurind.h"
 
 #define PURPLE          "\033[1;35m"
 #define CYAN            "\033[1;36m"
@@ -256,6 +257,11 @@ int main() {
             else if (c == 'o'){
                 break;
             }
+            else if (c == 'k'){
+              system("clear");
+              printf("\n\n\n\n\n\n\n\n\n\n\tMerci d'avoir utilisé notre simulateur. À bientôt !\n\n\n\n\n\n\n\n\n\n" );
+              return 0;
+            }
             else {
                 printf("\033[%d;%dH ", 40, 0);
             }
@@ -315,8 +321,9 @@ int main() {
             }
             fclose(train);
         }
+
         else if (option == 2){
-            VOYAGEUR monvoyageur = init_voyageur(0, 30, '*', magare);
+            VOYAGEUR monvoyageur = init_voyageur(0, 93, '*', magare);
             char movPlayer = 0;
             FILE * train = fopen("txt/train.txt", "r");
             LISTE maListe; init_liste(&maListe);
@@ -325,13 +332,23 @@ int main() {
             fseek(train, 0, 0);
             ajoutD(&maListe,init_train(train, 'e', 180 + rand() % 500));
 
-            int time = 0;
+            INDVOYAGEUR voyageurInd1 = init_voyageurInd('*', magare, 'g');
+            char movPlayerInd1 = 0;
+            INDVOYAGEUR voyageurInd2 = init_voyageurInd('*', magare, 'd');
+            char movPlayerInd2 = 0;
+            INDVOYAGEUR voyageurInd3 = init_voyageurInd('*', magare, 'r');
+            char movPlayerInd3 = 0;
+            INDVOYAGEUR voyageurInd4 = init_voyageurInd('*', magare, 't');
+            char movPlayerInd4 = 0;
+
+            int timer = 0;
+            int timeInd = 0;
 
             ELEMENT* monElementTrain = maListe.premier;
             int tempsAQuai = monElementTrain->train.tempsAQuai;
 
             while(1){
-                if(time == 500){
+                if(timer == 500){
                     movPlayer = key_pressed();
                     if (movPlayer != 0) {
                         mvtVoy(monvoyageur, magare, movPlayer);
@@ -360,7 +377,19 @@ int main() {
                         monElementTrain = maListe.dernier;
                     }
                 }
-                time=(time+1)%monElementTrain->train.vitesse;
+                timer=(timer+1)%monElementTrain->train.vitesse;
+                if(timeInd == 100000){
+                  movPlayerInd1 = mvtAleatoireVoy(voyageurInd1, 1);
+                  mvtVoyInd(voyageurInd1, magare, movPlayerInd1);
+                  movPlayerInd2 = mvtAleatoireVoy(voyageurInd2, 1);
+                  mvtVoyInd(voyageurInd2, magare, movPlayerInd2);
+                  movPlayerInd3 = mvtAleatoireVoy(voyageurInd3, 1);
+                  mvtVoyInd(voyageurInd3, magare, movPlayerInd3);
+                  movPlayerInd4 = mvtAleatoireVoy(voyageurInd4, 1);
+                  mvtVoyInd(voyageurInd4, magare, movPlayerInd4);
+                  printf("\033[%d;%dHCoordonees : %d %d", 30, 20, monvoyageur->posX, monvoyageur->posY);
+                }
+                timeInd = (timeInd +1)%30000000;
             }
             fclose(train);
         }

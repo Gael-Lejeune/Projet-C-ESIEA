@@ -22,6 +22,7 @@ VOYAGEUR init_voyageur(int posX, int posY, int car, GARE magare){
     monvoyageur->posX = posX;
     monvoyageur->posY = posY;
     monvoyageur->carvoy = car;
+    monvoyageur->carpos = ' ';
     magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
     return monvoyageur;
 }
@@ -58,18 +59,31 @@ void mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
         posY = monvoyageur->posY+1;
         break;
     }
-    if (posX >=0 && posY >= 0) {
-        posDep = magare.custom[posX][posY];
-        if (posDep == ' ') {
-            magare.custom[monvoyageur->posX][monvoyageur->posY] = ' ';
-            printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
-
-            monvoyageur->posX = posX;
-            monvoyageur->posY = posY;
-            magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
-            printf("\033[%d;%dH%s%c%s", monvoyageur->posX+1, monvoyageur->posY+1, CYAN, monvoyageur->carvoy, DEFAULT_COLOR);
+    if (posDep == ' ' || posDep == '_') {
+      if(posX == 0 || posY == 0 || posY == 124){ //positions de sortie de gare
+        printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
+        monvoyageur->carpos = posDep;
+        magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carpos;
+        printf("Bravo, vous êtes sorti !");
+      } else{
+        if(monvoyageur->carpos== ' '){
+          printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
+        } else if(monvoyageur->carpos== '_'){
+          printf("\033[%d;%dH%s%s%s", monvoyageur->posX+1, monvoyageur->posY+1, GREY, "■", DEFAULT_COLOR);
         }
+        magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carpos;
+        monvoyageur->carpos = posDep;
+        monvoyageur->posX = posX;
+        monvoyageur->posY = posY;
+        magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
+        printf("\033[%d;%dH%s%c%s", monvoyageur->posX+1, monvoyageur->posY+1, CYAN, monvoyageur->carvoy, DEFAULT_COLOR);
+      }
     }
     // printf("Coordonees : %d %d\n", monvoyageur.posX, monvoyageur.posY );
     // afficher_voyageur(monvoyageur);
 }
+
+//Pour que le voyageur arrive par la porte en haut à gauche : 0 ; 31
+//Pour que le voyageur arrive par la porte en haut à droite : 0 ; 93
+//Pour que le voyageur arrive par la porte en bas à gauche : 24 ; 0
+//Pour que le voyageur arrive par la porte en bas à droite : 24 ; 124
