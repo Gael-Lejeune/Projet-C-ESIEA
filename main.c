@@ -88,7 +88,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                 afficherCarTrain(monElementTrain->train.custom[2][monElementTrain->train.longueur - i], monElementTrain->train.lPortes, monElementTrain->train.posx-i);
                 //Afficher les trois lignes du train
             }
-            if (monElementTrain->train.posx > 96) {
+            if (monElementTrain->train.posx > 116) {
                 //Si le train est entièrement en gare
                 printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
                 printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 1, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
@@ -96,7 +96,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                 //Afficher des rails derrière lui
             }
             monElementTrain->train.posx++; //Incrémenté la position du train
-            if(monElementTrain->train.posx == 102){
+            if(monElementTrain->train.posx == 122){
                 //Si le train a atteint sa destination de stationnement
                 monElementTrain->train.etat = 's'; //Passer son état à "stationné"
             }
@@ -171,13 +171,13 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                 afficherCarTrain(monElementTrain->train.custom[1][i - monElementTrain->train.posx], monElementTrain->train.lPortes + 1, i);
                 afficherCarTrain(monElementTrain->train.custom[2][i - monElementTrain->train.posx], monElementTrain->train.lPortes + 2, i);
             }
-            if (monElementTrain->train.posx < 30) {
+            if (monElementTrain->train.posx < 10) {
                 printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
                 printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 1, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
                 printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 2, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
             }
             monElementTrain->train.posx--;
-            if(monElementTrain->train.posx == 25){
+            if(monElementTrain->train.posx == 5){
                 monElementTrain->train.etat = 's';
             }
             break;
@@ -383,24 +383,31 @@ int main() {
 
                     deplacer_train(monElementTrain, maListe, tempsAQuai, train);
                     if (monElementTrain->train.etat == 's') {
+                        monElementVoy = maListeV.premier;
                         if (monElementTrain->train.direction == 'e') {
-                            monElementVoy = maListeV.premier;
-                            while (1) {
+                            while (monElementVoy) {
                                 if (monElementVoy->voyageur->quai == 'b') {
-                                    /* code */
-                                    //changer destination
+                                    monElementVoy->voyageur->destinationX = 18;
+                                    for (int i = 0; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
+                                        if (monElementTrain->train.custom[0][i-1] == 'd' && abs(i - monElementVoy->voyageur->posY) < abs(monElementVoy->voyageur->destinationY - monElementVoy->voyageur->posY) ) {
+                                            monElementVoy->voyageur->destinationY = i;
+                                        }
+                                    }
                                 }
-                                if (monElementVoy->suivant == NULL)
-                                break;
                                 monElementVoy = monElementVoy->suivant;
                             }
                         }
                         else {
-                            monElementVoy = maListeV.premier;
-                            while (1) {
+                            while (monElementVoy) {
                                 if (monElementVoy->voyageur->quai == 'h') {
-                                    /* code */
-                                    //changer destination
+                                    monElementVoy->voyageur->destinationX = 10;
+                                    monElementVoy->voyageur->destinationX = 62;
+
+                                    for (int i = monElementTrain->train.posx; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
+                                        if (monElementTrain->train.custom[0][i-1] == 'd' && abs(i - monElementVoy->voyageur->posY) < abs(monElementVoy->voyageur->destinationY - monElementVoy->voyageur->posY) ) {
+                                            monElementVoy->voyageur->destinationY = i;
+                                        }
+                                    }
                                 }
                                 if (monElementVoy->suivant == NULL)
                                 break;
@@ -423,7 +430,7 @@ int main() {
                         if (monElementVoy->voyageur->tempsAttente == 0) {
                             if (abs(monElementVoy->voyageur->posX-monElementVoy->voyageur->destinationX) > abs(monElementVoy->voyageur->posY-monElementVoy->voyageur->destinationY)) {
                                 if (monElementVoy->voyageur->posX > monElementVoy->voyageur->destinationX) {
-                                    if (!mvtVoy(monElementVoy->voyageur, magare, 'z') == 0) {
+                                    if (mvtVoy(monElementVoy->voyageur, magare, 'z') == 0) {
                                         mvtVoy(monElementVoy->voyageur, magare, 'd');
                                     }
                                 }
