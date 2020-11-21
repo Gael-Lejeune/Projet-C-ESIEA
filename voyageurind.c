@@ -64,10 +64,6 @@ INDVOYAGEUR init_voyageurInd(int car, GARE magare, char destination){
   return voyageurInd;
 }
 
-void afficher_voyageurInd(INDVOYAGEUR voyageurInd){
-  printf("\033[%d;%dH%c", voyageurInd->posX, voyageurInd->posY, voyageurInd->carvoy);
-}
-
 char mvtAleatoireVoy(INDVOYAGEUR voyageurInd, int aQuai){
   if(aQuai == 0){
     if(voyageurInd->posY == voyageurInd->destinationY && voyageurInd->quai == 'h'){

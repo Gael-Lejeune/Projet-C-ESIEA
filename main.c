@@ -10,7 +10,8 @@
 #include "gare.h"
 #include "voyageur.h"
 #include "listeChainee.h"
-#include "voyageurind.h"
+#include "listeChaineeVoy.h"
+// #include "voyageurind.h"
 
 #define PURPLE          "\033[1;35m"
 #define CYAN            "\033[1;36m"
@@ -258,9 +259,9 @@ int main() {
                 break;
             }
             else if (c == 'k'){
-              system("clear");
-              printf("\n\n\n\n\n\n\n\n\n\n\tMerci d'avoir utilisé notre simulateur. À bientôt !\n\n\n\n\n\n\n\n\n\n" );
-              return 0;
+                system("clear");
+                printf("\n\n\n\n\n\n\n\n\n\n\tMerci d'avoir utilisé notre simulateur. À bientôt !\n\n\n\n\n\n\n\n\n\n" );
+                return 0;
             }
             else {
                 printf("\033[%d;%dH ", 40, 0);
@@ -323,23 +324,25 @@ int main() {
         }
 
         else if (option == 2){
-            VOYAGEUR monvoyageur = init_voyageur(0, 93, '*', magare);
+            VOYAGEUR monvoyageur = init_voyageur(2, 93, '*', magare);
+
+            LISTEV maListeV; init_listeV(&maListeV);
+            srand(time(NULL));
+            ajoutVD(&maListeV, init_voyageurInd('*', magare, 1));
+            printf("\033[%d;%dH%d", 40, 40, maListeV.premier->voyageur->tempsAttente);
+            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 5));
+            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 10));
+            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 15));
+            ELEMENTV * monElementVoy = maListeV.premier;
+            // afficher_voyageur(monvoyageur);
+
             char movPlayer = 0;
             FILE * train = fopen("txt/train.txt", "r");
             LISTE maListe; init_liste(&maListe);
-            srand(time(NULL));
+            // srand(time(NULL));
             ajoutD(&maListe,init_train(train, 'o', 180 + rand() % 500));
             fseek(train, 0, 0);
             ajoutD(&maListe,init_train(train, 'e', 180 + rand() % 500));
-
-            INDVOYAGEUR voyageurInd1 = init_voyageurInd('*', magare, 'g');
-            char movPlayerInd1 = 0;
-            INDVOYAGEUR voyageurInd2 = init_voyageurInd('*', magare, 'd');
-            char movPlayerInd2 = 0;
-            INDVOYAGEUR voyageurInd3 = init_voyageurInd('*', magare, 'r');
-            char movPlayerInd3 = 0;
-            INDVOYAGEUR voyageurInd4 = init_voyageurInd('*', magare, 't');
-            char movPlayerInd4 = 0;
 
             int timer = 0;
             int timeInd = 0;
@@ -349,10 +352,20 @@ int main() {
 
             while(1){
                 if(timer == 500){
+                    if (movPlayer == 'k') {
+                        break;
+                    }
                     movPlayer = key_pressed();
                     if (movPlayer != 0) {
+                        // printf("test\n");
                         mvtVoy(monvoyageur, magare, movPlayer);
-                        printf("\033[%d;%dHCoordonees : %d %d", 30, 20, monvoyageur->posX, monvoyageur->posY);
+                        printf("\033[%d;%dHCoordonees : %d %d", 36, 20, monvoyageur->posX, monvoyageur->posY);
+                        if(monvoyageur->posX == 0 || monvoyageur->posY == 0 || monvoyageur->posY == 124){ //positions de sortie de gare
+                            // printf("\033[%d;%dHBravo, vous êtes sorti !", 20, 20);
+                            // system("clear");
+                            // usleep(1000000);
+                            movPlayer = 'k';
+                        }
                     }
 
                     printf("\033[%d;%dH%s\n", 2, 2, "   ");
@@ -369,11 +382,32 @@ int main() {
                     }
 
                     deplacer_train(monElementTrain, maListe, tempsAQuai, train);
-
-                    printf("\033[%d;%dHCoordonees :           ", 31, 20);
-                    printf("\033[%d;%dHCoordonees :           ", 32, 20);
-                    printf("\033[%d;%dHCoordonees : %d", 31, 20, maListe.dernier->train.tempsAQuai);
-                    printf("\033[%d;%dHCoordonees : %d", 32, 20,maListe.premier->train.tempsAQuai);
+                    if (monElementTrain->train.etat == 's') {
+                        if (monElementTrain->train.direction == 'e') {
+                            monElementVoy = maListeV.premier;
+                            while (1) {
+                                if (monElementVoy->voyageur->quai == 'b') {
+                                    /* code */
+                                    //changer destination
+                                }
+                                if (monElementVoy->suivant == NULL)
+                                break;
+                                monElementVoy = monElementVoy->suivant;
+                            }
+                        }
+                        else {
+                            monElementVoy = maListeV.premier;
+                            while (1) {
+                                if (monElementVoy->voyageur->quai == 'h') {
+                                    /* code */
+                                    //changer destination
+                                }
+                                if (monElementVoy->suivant == NULL)
+                                break;
+                                monElementVoy = monElementVoy->suivant;
+                            }
+                        }
+                    }
                     if (monElementTrain->suivant == NULL) {
                         monElementTrain = maListe.premier;
                     }
@@ -382,16 +416,46 @@ int main() {
                     }
                 }
                 timer=(timer+1)%monElementTrain->train.vitesse;
-                if(timeInd == 100000){
-                  movPlayerInd1 = mvtAleatoireVoy(voyageurInd1, 1);
-                  mvtVoyInd(voyageurInd1, magare, movPlayerInd1);
-                  movPlayerInd2 = mvtAleatoireVoy(voyageurInd2, 1);
-                  mvtVoyInd(voyageurInd2, magare, movPlayerInd2);
-                  movPlayerInd3 = mvtAleatoireVoy(voyageurInd3, 1);
-                  mvtVoyInd(voyageurInd3, magare, movPlayerInd3);
-                  movPlayerInd4 = mvtAleatoireVoy(voyageurInd4, 1);
-                  mvtVoyInd(voyageurInd4, magare, movPlayerInd4);
-                  printf("\033[%d;%dHCoordonees : %d %d", 30, 20, monvoyageur->posX, monvoyageur->posY);
+                if(timeInd == 5000){
+                    monElementVoy = maListeV.premier;
+                    int i = 1;
+                    while (monElementVoy) {
+                        if (monElementVoy->voyageur->tempsAttente == 0) {
+                            if (abs(monElementVoy->voyageur->posX-monElementVoy->voyageur->destinationX) > abs(monElementVoy->voyageur->posY-monElementVoy->voyageur->destinationY)) {
+                                if (monElementVoy->voyageur->posX > monElementVoy->voyageur->destinationX) {
+                                    if (!mvtVoy(monElementVoy->voyageur, magare, 'z') == 0) {
+                                        mvtVoy(monElementVoy->voyageur, magare, 'd');
+                                    }
+                                }
+                                else if(monElementVoy->voyageur->posX < monElementVoy->voyageur->destinationX){
+                                    if(mvtVoy(monElementVoy->voyageur, magare, 's') == 0){
+                                        mvtVoy(monElementVoy->voyageur, magare, 'q');
+                                    }
+                                }
+                            }
+                            else {
+                                if (monElementVoy->voyageur->posY < monElementVoy->voyageur->destinationY) {
+                                    if(mvtVoy(monElementVoy->voyageur, magare, 'd') == 0){
+                                        mvtVoy(monElementVoy->voyageur, magare, 's');
+                                    }
+                                }
+                                else if(monElementVoy->voyageur->posY > monElementVoy->voyageur->destinationY){
+                                    if(mvtVoy(monElementVoy->voyageur, magare, 'q') == 0){
+                                        mvtVoy(monElementVoy->voyageur, magare, 's');
+                                    }
+                                }
+                            }
+                        }
+                        else if (monElementVoy->voyageur->tempsAttente == 1) {
+                            ajoutVD(&maListeV, init_voyageurInd('*', magare, monElementVoy->voyageur->tempsAttente));
+                            monElementVoy->voyageur->tempsAttente -= 1;
+                        }
+                        else{
+                            monElementVoy->voyageur->tempsAttente -= 1;
+                        }
+                        monElementVoy = monElementVoy->suivant;
+                    }
+                    i++;
                 }
                 timeInd = (timeInd +1)%30000000;
             }

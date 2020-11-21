@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
+// #include <unistd.h>
 #include "gare.h"
 #include "voyageur.h"
 
@@ -24,20 +26,69 @@ VOYAGEUR init_voyageur(int posX, int posY, int car, GARE magare){
     monvoyageur->carvoy = car;
     monvoyageur->carpos = ' ';
     magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
+    // printf("\033[%d;%dH%c", monvoyageur->posX, monvoyageur->posY, monvoyageur->carvoy);
     return monvoyageur;
+}
+
+VOYAGEUR init_voyageurInd(char car, GARE magare, int tempsAttente){
+  VOYAGEUR voyageurInd = (VOYAGEUR)malloc(sizeof(struct voyageur));
+  // srand(time(NULL));
+  if (rand()%2 == 0) {
+      voyageurInd->quai = 'h';
+      voyageurInd->posX = 0;
+  }
+  else {
+      voyageurInd->quai ='b';
+  }
+  if (rand()%2 == 0) {
+      if (voyageurInd->quai == 'h') {
+          voyageurInd->posY = 33;
+      }
+      else {
+          voyageurInd->posY = 0;
+          voyageurInd->posX = 24;
+      }
+  }
+  else {
+      if (voyageurInd->quai == 'h') {
+          voyageurInd->posY = 93;
+      }
+      else {
+          voyageurInd->posY = 124;
+          voyageurInd->posX = 24;
+      }
+    }
+  voyageurInd->carvoy = car;
+  voyageurInd->carpos = ' ';
+  voyageurInd->tempsAttente = tempsAttente + 1 + rand()%5;
+  magare.custom[voyageurInd->posX][voyageurInd->posY] = voyageurInd->carvoy;
+  //détermination des positions d'attente du train
+  if(voyageurInd->posX ==0 && voyageurInd->posY > 62){
+    voyageurInd->destinationY = rand()%60+62;
+    voyageurInd->destinationX = rand()%8+2;
+  } else if(voyageurInd->posX ==0 && voyageurInd->posY < 62){
+    voyageurInd->destinationY = rand()%60+2;
+    voyageurInd->destinationX = rand()%8+2;
+  } else if(voyageurInd->posX ==24 && voyageurInd->posY > 62){
+    voyageurInd->destinationY = rand()%60+62;
+    voyageurInd->destinationX = rand()%8+20;
+  } else if(voyageurInd->posX ==24 && voyageurInd->posY < 62){
+    voyageurInd->destinationY = rand()%60+2;
+    voyageurInd->destinationX = rand()%8+20;
+  }
+  // printf("\033[%d;%dH%c", voyageurInd->posX, voyageurInd->posY, voyageurInd->carvoy);
+  return voyageurInd;
 }
 
 void afficher_voyageur(VOYAGEUR monvoyageur){
     printf("\033[%d;%dH%c", monvoyageur->posX, monvoyageur->posY, monvoyageur->carvoy);
 }
 
-
-void mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
+char mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
     char posDep = 0;
     int posX;
     int posY;
     // printf("%d\n", monvoyageur.posX);
-    // printf("coucou\n");
     // mvt = 'z';
     switch (mvt){
         case 'z' :
@@ -58,18 +109,17 @@ void mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
         posX = monvoyageur->posX;
         posY = monvoyageur->posY+1;
         break;
+        default:
+        return 0;
     }
+    posDep = magare.custom[posX][posY];
     if (posDep == ' ' || posDep == '_') {
-      if(posX == 0 || posY == 0 || posY == 124){ //positions de sortie de gare
-        printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
-        monvoyageur->carpos = posDep;
-        magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carpos;
-        printf("Bravo, vous êtes sorti !");
-      } else{
+        // printf("coucou\n");
         if(monvoyageur->carpos== ' '){
-          printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
-        } else if(monvoyageur->carpos== '_'){
-          printf("\033[%d;%dH%s%s%s", monvoyageur->posX+1, monvoyageur->posY+1, GREY, "■", DEFAULT_COLOR);
+            printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
+        }
+        else if(monvoyageur->carpos== '_'){
+            printf("\033[%d;%dH%s%s%s", monvoyageur->posX+1, monvoyageur->posY+1, GREY, "■", DEFAULT_COLOR);
         }
         magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carpos;
         monvoyageur->carpos = posDep;
@@ -77,13 +127,8 @@ void mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
         monvoyageur->posY = posY;
         magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
         printf("\033[%d;%dH%s%c%s", monvoyageur->posX+1, monvoyageur->posY+1, CYAN, monvoyageur->carvoy, DEFAULT_COLOR);
-      }
+        return 1;
     }
-    // printf("Coordonees : %d %d\n", monvoyageur.posX, monvoyageur.posY );
-    // afficher_voyageur(monvoyageur);
+    else
+    return 0;
 }
-
-//Pour que le voyageur arrive par la porte en haut à gauche : 0 ; 31
-//Pour que le voyageur arrive par la porte en haut à droite : 0 ; 93
-//Pour que le voyageur arrive par la porte en bas à gauche : 24 ; 0
-//Pour que le voyageur arrive par la porte en bas à droite : 24 ; 124
