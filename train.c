@@ -18,11 +18,11 @@ TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 	else {montrain.posx=126;}
 	if (direction == 'e') {
 		montrain.posx=0;
-		montrain.lPortes = 18;
+		montrain.lPortes = 17;
 	}
 	else {
 		montrain.posx=126;
-		montrain.lPortes = 12;
+		montrain.lPortes = 11;
 	}
 	montrain.longueur=LONGT;
 	montrain.posy=montrain.posx-LONGT;
@@ -47,6 +47,8 @@ TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 } //init_train()
 
 void afficherCarTrain(char c, int x, int y){
+	x += 1;
+	y += 1;
 	switch (c) {
 		case 'a':
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎛", DEFAULT_COLOR);
@@ -57,7 +59,7 @@ void afficherCarTrain(char c, int x, int y){
 		case '-':
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "▔", DEFAULT_COLOR);
 		break;
-		case '_':
+		case '=':
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "▁", DEFAULT_COLOR);
 		break;
 		case 'e':

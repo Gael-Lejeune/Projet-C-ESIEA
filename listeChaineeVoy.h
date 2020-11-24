@@ -29,6 +29,8 @@ void suppVF(LISTEV *l); //supprime le dernier
 
 void suppVD(LISTEV *l); //supprime le premier
 
+void suppV(LISTEV*l, ELEMENTV * element); //supprime un élément quelconque
+
 void ClearV(LISTEV *l); //Vide la listeV
 
 

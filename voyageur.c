@@ -129,6 +129,13 @@ char mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
         printf("\033[%d;%dH%s%c%s", monvoyageur->posX+1, monvoyageur->posY+1, CYAN, monvoyageur->carvoy, DEFAULT_COLOR);
         return 1;
     }
-    else
+    else if (posDep == 'f' || posDep == 'd') {
+        printf("\033[%d;%dH%s%s%s", monvoyageur->posX+1, monvoyageur->posY+1, GREY, "■", DEFAULT_COLOR);
+        magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carpos;
+        monvoyageur->carpos = posDep;
+        monvoyageur->posX = posX;
+        monvoyageur->posY = posY;
+        return 1;
+    }
     return 0;
 }

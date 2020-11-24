@@ -64,7 +64,7 @@ void afficher_fichier(char * nomfic){
 } //afficher_fichier()
 
 
-void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FILE * train) {
+void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FILE * train, GARE magare) {
     if (monElementTrain->train.direction == 'e') {
         //Si le train va vers l'est
         switch (monElementTrain->train.etat){
@@ -86,13 +86,20 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                 afficherCarTrain(monElementTrain->train.custom[0][monElementTrain->train.longueur - i], monElementTrain->train.lPortes-2, monElementTrain->train.posx-i);
                 afficherCarTrain(monElementTrain->train.custom[1][monElementTrain->train.longueur - i], monElementTrain->train.lPortes-1, monElementTrain->train.posx-i);
                 afficherCarTrain(monElementTrain->train.custom[2][monElementTrain->train.longueur - i], monElementTrain->train.lPortes, monElementTrain->train.posx-i);
+                magare.custom[monElementTrain->train.lPortes-2][monElementTrain->train.posx - i] = monElementTrain->train.custom[0][monElementTrain->train.longueur - i];
+                magare.custom[monElementTrain->train.lPortes-1][monElementTrain->train.posx - i] = monElementTrain->train.custom[1][monElementTrain->train.longueur - i];
+                magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx - i] = monElementTrain->train.custom[2][monElementTrain->train.longueur - i];
                 //Afficher les trois lignes du train
             }
             if (monElementTrain->train.posx > 116) {
                 //Si le train est entièrement en gare
-                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
-                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 1, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
-                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 2, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
+                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 1+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
+                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 2+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
+                magare.custom[monElementTrain->train.lPortes-2][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
+                magare.custom[monElementTrain->train.lPortes-1][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
+                magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
+
                 //Afficher des rails derrière lui
             }
             monElementTrain->train.posx++; //Incrémenté la position du train
@@ -109,7 +116,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                     //Pour la longueurdu train
                     if (monElementTrain->train.custom[2][monElementTrain->train.longueur - i] == 'f') {
                         //Si le caractère est une porte
-                        printf("\033[%d;%dH%c\n", monElementTrain->train.lPortes, monElementTrain->train.posx-i-1, ' '); //Remplacer l'affichage de ce caractère par un espace vide
+                        printf("\033[%d;%dH%c\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx-i, ' '); //Remplacer l'affichage de ce caractère par un espace vide
                     }
                 }
             }
@@ -117,7 +124,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                 //Si le train part dans 5, fermer les portes
                 for (int i = monElementTrain->train.posx; i >= 0; i--) {
                     if (monElementTrain->train.custom[2][monElementTrain->train.longueur - i] == 'f') {
-                        printf("\033[%d;%dH%s%s%s\n", monElementTrain->train.lPortes, monElementTrain->train.posx-i-1, DOORCOLOR, "-", DEFAULT_COLOR);
+                        printf("\033[%d;%dH%s%s%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx-i-1, DOORCOLOR, "-", DEFAULT_COLOR);
                     }
                 }
             }
@@ -131,16 +138,22 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             case 'p' : //Partant
             for (int i = monElementTrain->train.longueur; i >= 0; i--) {
                 //Pour la longeur du train
-                if (monElementTrain->train.posx - i <= LONGUEUR-1) {
+                if (monElementTrain->train.posx - i < LONGUEUR-1) {
                     afficherCarTrain(monElementTrain->train.custom[0][monElementTrain->train.longueur - i], monElementTrain->train.lPortes-2, monElementTrain->train.posx-i);
                     afficherCarTrain(monElementTrain->train.custom[1][monElementTrain->train.longueur - i], monElementTrain->train.lPortes-1, monElementTrain->train.posx-i);
                     afficherCarTrain(monElementTrain->train.custom[2][monElementTrain->train.longueur - i], monElementTrain->train.lPortes, monElementTrain->train.posx-i);
+                    magare.custom[monElementTrain->train.lPortes-2][monElementTrain->train.posx - i] = monElementTrain->train.custom[0][monElementTrain->train.longueur - i];
+                    magare.custom[monElementTrain->train.lPortes-1][monElementTrain->train.posx - i] = monElementTrain->train.custom[1][monElementTrain->train.longueur - i];
+                    magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx - i] = monElementTrain->train.custom[2][monElementTrain->train.longueur - i];
                     //Afficher la partie du train encore en gare
                 }
             }
-            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
-            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 1, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
-            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 2, monElementTrain->train.posx - monElementTrain->train.longueur - 1, "─");
+            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
+            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 1+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
+            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 2+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
+            magare.custom[monElementTrain->train.lPortes-2][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
+            magare.custom[monElementTrain->train.lPortes-1][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
+            magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
             // Afficher des rails derrière le train.
             monElementTrain->train.posx++; //Incrémenter la position du train
             if(monElementTrain->train.posx == monElementTrain->train.longueur + 1 + LONGUEUR){
@@ -166,15 +179,21 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             break;
 
             case 'e': //Entrant
-            for (int i = monElementTrain->train.posx; i <= LONGUEUR -1 ; i++) {
+            for (int i = monElementTrain->train.posx; i < LONGUEUR-1; i++) {
                 afficherCarTrain(monElementTrain->train.custom[0][i - monElementTrain->train.posx], monElementTrain->train.lPortes, i);
                 afficherCarTrain(monElementTrain->train.custom[1][i - monElementTrain->train.posx], monElementTrain->train.lPortes + 1, i);
                 afficherCarTrain(monElementTrain->train.custom[2][i - monElementTrain->train.posx], monElementTrain->train.lPortes + 2, i);
+                magare.custom[monElementTrain->train.lPortes][i] = monElementTrain->train.custom[0][i - monElementTrain->train.posx];
+                magare.custom[monElementTrain->train.lPortes+1][i] = monElementTrain->train.custom[1][i - monElementTrain->train.posx];
+                magare.custom[monElementTrain->train.lPortes+2][i] = monElementTrain->train.custom[2][i - monElementTrain->train.posx];
             }
-            if (monElementTrain->train.posx < 10) {
-                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
-                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 1, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
-                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 2, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+            if (monElementTrain->train.posx < 9) {
+                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
+                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 1+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
+                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 2+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
+                magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
+                magare.custom[monElementTrain->train.lPortes+1][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
+                magare.custom[monElementTrain->train.lPortes+2][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
             }
             monElementTrain->train.posx--;
             if(monElementTrain->train.posx == 5){
@@ -183,19 +202,19 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             break;
             case 's' : //Stationné
             if (tempsAQuai - 5 == monElementTrain->train.tempsAQuai) {
-                printf("\033[%d;%dHCoordonees :           ", 36, 20);
-                printf("\033[%d;%dHCoordonees : %d", 36, 20,monElementTrain->train.posx);
+                // printf("\033[%d;%dHCoordonees :           ", 36, 20);
+                // printf("\033[%d;%dHCoordonees : %d", 36, 20,monElementTrain->train.posx);
 
                 for (int i = 0; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
-                    if (monElementTrain->train.custom[0][i-1] == 'd') {
-                        printf("\033[%d;%dH%c\n", monElementTrain->train.lPortes, monElementTrain->train.posx+i, ' ');
+                    if (monElementTrain->train.custom[0][i] == 'd') {
+                        printf("\033[%d;%dH%c\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx+i, ' ');
                     }
                 }
             }
             else if (monElementTrain->train.tempsAQuai-5 == 0) {
                 for (int i = monElementTrain->train.posx; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
-                    if (monElementTrain->train.custom[0][i-1] == 'd') {
-                        printf("\033[%d;%dH%s%s%s\n", monElementTrain->train.lPortes, monElementTrain->train.posx+i, DOORCOLOR, "-", DEFAULT_COLOR);
+                    if (monElementTrain->train.custom[0][i] == 'd') {
+                        printf("\033[%d;%dH%s%s%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx+i, DOORCOLOR, "-", DEFAULT_COLOR);
                     }
                 }
             }
@@ -213,9 +232,12 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                     afficherCarTrain(monElementTrain->train.custom[2][i], monElementTrain->train.lPortes + 2, monElementTrain->train.posx+i);
                 }
             }
-            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
-            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 1, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
-            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 2, monElementTrain->train.posx + monElementTrain->train.longueur, "─");
+            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
+            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 1+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
+            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 2+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
+            magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
+            magare.custom[monElementTrain->train.lPortes+1][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
+            magare.custom[monElementTrain->train.lPortes+2][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
             monElementTrain->train.posx--;
             if(monElementTrain->train.posx == -monElementTrain->train.longueur){
                 suppF(&maListe);
@@ -305,7 +327,7 @@ int main() {
                         printf("\033[%d;%dH%dm\n", 28, 122, maListe.premier->train.tempsAttente/60);
                     }
 
-                    deplacer_train(monElementTrain, maListe, tempsAQuai, train);
+                    deplacer_train(monElementTrain, maListe, tempsAQuai, train, magare);
 
                     printf("\033[%d;%dHCoordonees :           ", 31, 20);
                     printf("\033[%d;%dHCoordonees :           ", 32, 20);
@@ -381,15 +403,16 @@ int main() {
                         printf("\033[%d;%dH%dm\n", 28, 122, maListe.premier->train.tempsAttente/60);
                     }
 
-                    deplacer_train(monElementTrain, maListe, tempsAQuai, train);
+                    deplacer_train(monElementTrain, maListe, tempsAQuai, train, magare);
                     if (monElementTrain->train.etat == 's') {
                         monElementVoy = maListeV.premier;
                         if (monElementTrain->train.direction == 'e') {
                             while (monElementVoy) {
                                 if (monElementVoy->voyageur->quai == 'b') {
-                                    monElementVoy->voyageur->destinationX = 18;
-                                    for (int i = 0; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
-                                        if (monElementTrain->train.custom[0][i-1] == 'd' && abs(i - monElementVoy->voyageur->posY) < abs(monElementVoy->voyageur->destinationY - monElementVoy->voyageur->posY) ) {
+                                    monElementVoy->voyageur->destinationX = monElementTrain->train.lPortes;
+                                    monElementVoy->voyageur->destinationY = 62;
+                                    for (int i = 0; i <= LONGUEUR; i++) {
+                                        if (magare.custom[monElementTrain->train.lPortes][i] == 'f' && abs(i - monElementVoy->voyageur->posY) < abs(monElementVoy->voyageur->destinationY - monElementVoy->voyageur->posY) ) {
                                             monElementVoy->voyageur->destinationY = i;
                                         }
                                     }
@@ -400,11 +423,11 @@ int main() {
                         else {
                             while (monElementVoy) {
                                 if (monElementVoy->voyageur->quai == 'h') {
-                                    monElementVoy->voyageur->destinationX = 10;
-                                    monElementVoy->voyageur->destinationX = 62;
+                                    monElementVoy->voyageur->destinationX = monElementTrain->train.lPortes;
+                                    monElementVoy->voyageur->destinationY = 62;
 
-                                    for (int i = monElementTrain->train.posx; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
-                                        if (monElementTrain->train.custom[0][i-1] == 'd' && abs(i - monElementVoy->voyageur->posY) < abs(monElementVoy->voyageur->destinationY - monElementVoy->voyageur->posY) ) {
+                                    for (int i = 0; i <= LONGUEUR; i++) {
+                                        if (magare.custom[monElementTrain->train.lPortes][i] == 'd' && abs(i - monElementVoy->voyageur->posY) < abs(monElementVoy->voyageur->destinationY - monElementVoy->voyageur->posY) ) {
                                             monElementVoy->voyageur->destinationY = i;
                                         }
                                     }
@@ -451,6 +474,10 @@ int main() {
                                         mvtVoy(monElementVoy->voyageur, magare, 's');
                                     }
                                 }
+                            }
+                            if(monElementVoy->voyageur->carpos == 'd' || monElementVoy->voyageur->carpos == 'f'){
+                                // printf("TEST\n");
+                                suppV(&maListeV, monElementVoy);
                             }
                         }
                         else if (monElementVoy->voyageur->tempsAttente == 1) {

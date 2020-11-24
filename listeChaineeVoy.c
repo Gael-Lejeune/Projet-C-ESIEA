@@ -48,6 +48,28 @@ void suppVD(LISTEV *l) //supprime le premier
     free(tmp);
 }
 
+void suppV(LISTEV *l, ELEMENTV *voy) //supprime un élément quelle que soit sa position dans la liste
+{
+    if (voy->precedent == NULL) {
+        suppVD(l);
+    }
+    else if (voy->suivant == NULL){
+        suppVF(l);
+    }
+    else{
+        ELEMENTV *tmp = l->premier;
+        while(tmp){
+            if(tmp == voy){
+                tmp->precedent->suivant = tmp->suivant;
+                tmp->suivant->precedent = tmp->precedent;
+                break;
+            }
+            tmp = tmp->suivant;
+        }
+        free(tmp);
+    }
+}
+
 void ClearV(LISTEV *l) //Vide la liste
 {
     ELEMENTV *tmp;
