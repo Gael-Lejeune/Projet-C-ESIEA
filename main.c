@@ -156,7 +156,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
             // Afficher des rails derrière le train.
             monElementTrain->train.posx++; //Incrémenter la position du train
-            if(monElementTrain->train.posx == monElementTrain->train.longueur + 1 + LONGUEUR){
+            if(monElementTrain->train.posx == monElementTrain->train.longueur + LONGUEUR){
                 //Si le train est entièrement sorti
                 suppD(&maListe); //Le supprimer de la liste
                 fseek(train, 0, 0); //Placer le pointeur au debut du fichier train
@@ -206,15 +206,15 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                 // printf("\033[%d;%dHCoordonees : %d", 36, 20,monElementTrain->train.posx);
 
                 for (int i = 0; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
-                    if (monElementTrain->train.custom[0][i] == 'd') {
-                        printf("\033[%d;%dH%c\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx+i, ' ');
+                    if (monElementTrain->train.custom[0][i-1] == 'd') {
+                        printf("\033[%d;%dH%c\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx+i+1, ' ');
                     }
                 }
             }
             else if (monElementTrain->train.tempsAQuai-5 == 0) {
                 for (int i = monElementTrain->train.posx; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
                     if (monElementTrain->train.custom[0][i] == 'd') {
-                        printf("\033[%d;%dH%s%s%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx+i, DOORCOLOR, "-", DEFAULT_COLOR);
+                        printf("\033[%d;%dH%s%s%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx+i+1, DOORCOLOR, "-", DEFAULT_COLOR);
                     }
                 }
             }
@@ -239,7 +239,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             magare.custom[monElementTrain->train.lPortes+1][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
             magare.custom[monElementTrain->train.lPortes+2][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
             monElementTrain->train.posx--;
-            if(monElementTrain->train.posx == -monElementTrain->train.longueur){
+            if(monElementTrain->train.posx == -(monElementTrain->train.longueur+1)){
                 suppF(&maListe);
                 fseek(train, 0, 0);
                 ajoutF(&maListe, init_train(train, 'o', 180 +  rand() % 500));
@@ -297,6 +297,7 @@ int main() {
 
         if (option == 1) {
             FILE * train = fopen("txt/train.txt", "r");
+
             LISTE maListe; init_liste(&maListe);
             srand(time(NULL));
             ajoutD(&maListe,init_train(train, 'o', 180 + rand() % 500));
@@ -346,7 +347,7 @@ int main() {
         }
 
         else if (option == 2){
-            VOYAGEUR monvoyageur = init_voyageur(2, 93, '*', magare);
+            VOYAGEUR monvoyageur = init_voyageur(0, 93, '*', magare);
 
             LISTEV maListeV; init_listeV(&maListeV);
             srand(time(NULL));
@@ -379,15 +380,18 @@ int main() {
                     }
                     movPlayer = key_pressed();
                     if (movPlayer != 0) {
+                        if((monvoyageur->posX == 0 && movPlayer == 'z') || (monvoyageur->posY == 0 && movPlayer == 'q') || (monvoyageur->posY == 124 && movPlayer == 'd')){ //positions de sortie de gare
+                            movPlayer = 'k';
+                        }
                         // printf("test\n");
                         mvtVoy(monvoyageur, magare, movPlayer);
+                        if (monvoyageur->carpos == 'd' || monvoyageur->carpos == 'f') {
+                            movPlayer = 'k';
+                        }
                         printf("\033[%d;%dHCoordonees : %d %d", 36, 20, monvoyageur->posX, monvoyageur->posY);
-                        if(monvoyageur->posX == 0 || monvoyageur->posY == 0 || monvoyageur->posY == 124){ //positions de sortie de gare
                             // printf("\033[%d;%dHBravo, vous êtes sorti !", 20, 20);
                             // system("clear");
                             // usleep(1000000);
-                            movPlayer = 'k';
-                        }
                     }
 
                     printf("\033[%d;%dH%s\n", 2, 2, "   ");
@@ -408,7 +412,7 @@ int main() {
                         monElementVoy = maListeV.premier;
                         if (monElementTrain->train.direction == 'e') {
                             while (monElementVoy) {
-                                if (monElementVoy->voyageur->quai == 'b') {
+                                if (monElementVoy->voyageur->quai == 'b' && monElementVoy->voyageur->destinationX != monElementTrain->train.lPortes) {
                                     monElementVoy->voyageur->destinationX = monElementTrain->train.lPortes;
                                     monElementVoy->voyageur->destinationY = 62;
                                     for (int i = 0; i <= LONGUEUR; i++) {
@@ -422,7 +426,7 @@ int main() {
                         }
                         else {
                             while (monElementVoy) {
-                                if (monElementVoy->voyageur->quai == 'h') {
+                                if (monElementVoy->voyageur->quai == 'h' && monElementVoy->voyageur->destinationX != monElementTrain->train.lPortes) {
                                     monElementVoy->voyageur->destinationX = monElementTrain->train.lPortes;
                                     monElementVoy->voyageur->destinationY = 62;
 
@@ -438,6 +442,35 @@ int main() {
                             }
                         }
                     }
+                    else if (monElementTrain->train.etat == 'p') {
+                        monElementVoy = maListeV.premier;
+                        while(monElementVoy){
+                            if (monElementVoy->voyageur->destinationX == monElementTrain->train.lPortes) {
+                                if (monElementVoy->voyageur->quai == 'h') {
+                                    if(monElementVoy->voyageur->posY > 62){
+                                        monElementVoy->voyageur->destinationY = rand()%60+62;
+                                        monElementVoy->voyageur->destinationX = rand()%8+2;
+                                    }
+                                    else if(monElementVoy->voyageur->posY < 62){
+                                        monElementVoy->voyageur->destinationY = rand()%60+2;
+                                        monElementVoy->voyageur->destinationX = rand()%8+2;
+                                    }
+                                }
+                                else {
+                                    if(monElementVoy->voyageur->posY > 62){
+                                        monElementVoy->voyageur->destinationY = rand()%60+62;
+                                        monElementVoy->voyageur->destinationX = rand()%8+20;
+                                    }
+                                    else if(monElementVoy->voyageur->posY < 62){
+                                        monElementVoy->voyageur->destinationY = rand()%60+2;
+                                        monElementVoy->voyageur->destinationX = rand()%8+20;
+                                    }
+                                }
+                            }
+                            monElementVoy = monElementVoy->suivant;
+                        }
+                    }
+
                     if (monElementTrain->suivant == NULL) {
                         monElementTrain = maListe.premier;
                     }
