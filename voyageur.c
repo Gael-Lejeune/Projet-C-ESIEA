@@ -26,6 +26,7 @@ VOYAGEUR init_voyageur(int posX, int posY, int car, GARE magare){
   monvoyageur->carvoy = car;
   monvoyageur->carpos = ' ';
   magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
+  monvoyageur->couleur = YELLOW;
   // printf("\033[%d;%dH%c", monvoyageur->posX, monvoyageur->posY, monvoyageur->carvoy);
   return monvoyageur;
 }
@@ -74,26 +75,43 @@ VOYAGEUR init_voyageurInd(char car, GARE magare, int tempsAttente, char entree){
       voyageurInd->destinationX = rand()%8+20;
     }
     // printf("\033[%d;%dH%c", voyageurInd->posX, voyageurInd->posY, voyageurInd->carvoy);
+    voyageurInd->carpos = ' ';
+    voyageurInd->tempsAttente = tempsAttente + 1 + rand()%5;
+    voyageurInd->couleur = GREEN;
   } else if(entree == 'h'){
-    voyageurInd->posX = 11; //lportehaut
-    int nbporte =rand()%24+1;
+    voyageurInd->posX = 10; //lportehaut
+    int nbporte =rand()%29+1;
     int coY=0;
     while(nbporte > 0){
-      if(magare.custom[12][coY] == 'd'){
+      coY++;
+      if(magare.custom[11][coY] == 'd'){
         nbporte--;
       }
-      coY++;
     }
     voyageurInd->posY = coY;
-    voyageurInd->destinationX = 0;
-    voyageurInd->destinationY = 1; //à changer
+    voyageurInd->destinationX = -1;
+    voyageurInd->destinationY = 93; //à changer
+    voyageurInd->tempsAttente = tempsAttente;
+    voyageurInd->carpos = '_';
+    voyageurInd->couleur = BLUE;
   } else {
-
+    voyageurInd->posX = 18; //lportehaut
+    int nbporte =rand()%29+1;
+    int coY=0;
+    while(nbporte > 0){
+      coY++;
+      if(magare.custom[17][coY] == 'f'){
+        nbporte--;
+      }
+    }
+    voyageurInd->posY = coY;
+    voyageurInd->destinationX = 23;
+    voyageurInd->destinationY = 125; //à changer
+    voyageurInd->tempsAttente = tempsAttente;
+    voyageurInd->carpos = '_';
+    voyageurInd->couleur = BLUE;
   }
-
   voyageurInd->carvoy = car;
-  voyageurInd->carpos = ' ';
-  voyageurInd->tempsAttente = tempsAttente + 1 + rand()%5;
   magare.custom[voyageurInd->posX][voyageurInd->posY] = voyageurInd->carvoy;
   return voyageurInd;
 
@@ -131,6 +149,14 @@ char mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
     default:
     return 0;
   }
+  if (posX < 0 || posY < 0 || posY > 124) {
+      printf("\033[%d;%dH%s", monvoyageur->posX+1, monvoyageur->posY+1, " ");
+      magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carpos;
+      monvoyageur->carpos = 'd';
+      monvoyageur->posX = posX;
+      monvoyageur->posY = posY;
+      return 1;
+    }
   posDep = magare.custom[posX][posY];
   if (posDep == ' ' || posDep == '_') {
     // printf("coucou\n");
@@ -145,7 +171,7 @@ char mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
     monvoyageur->posX = posX;
     monvoyageur->posY = posY;
     magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
-    printf("\033[%d;%dH%s%c%s", monvoyageur->posX+1, monvoyageur->posY+1, CYAN, monvoyageur->carvoy, DEFAULT_COLOR);
+    printf("\033[%d;%dH%s%c%s", monvoyageur->posX+1, monvoyageur->posY+1, monvoyageur->couleur, monvoyageur->carvoy, DEFAULT_COLOR);
     return 1;
   }
   else if (posDep == 'f' || posDep == 'd') {

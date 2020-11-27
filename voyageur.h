@@ -15,6 +15,7 @@ struct voyageur{
     int destinationY;
     char quai; //h ou b
     int tempsAttente;
+    char* couleur;
 };
 
 VOYAGEUR init_voyageur(int posX, int posY, int car, GARE magare);

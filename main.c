@@ -349,11 +349,6 @@ int main() {
         else if (option == 2){
             VOYAGEUR monvoyageur = init_voyageur(0, 93, '*', magare);
 
-            LISTEV maListeVTh; init_listeV(&maListeVTh);
-            LISTEV maListeVTb; init_listeV(&maListeVTb);
-            //liste voyageurs du train
-            ELEMENTV * monElementVoyTbas;
-            ELEMENTV * monElementVoyThaut;
             LISTEV maListeV; init_listeV(&maListeV);
             srand(time(NULL));
             ajoutVD(&maListeV, init_voyageurInd('*', magare, 1, 0));
@@ -429,24 +424,26 @@ int main() {
                     deplacer_train(monElementTrain, maListe, tempsAQuai, train, magare);
 
 
-
                     if (monElementTrain->train.etat == 's') {
                       if(monElementTrain->train.vide == 'v' && monElementTrain->train.direction == 'o'){
                         monElementTrain->train.vide = 'p';
-                        int nbvoytrain = rand()%16+10;
+                        int nbvoytrain = rand()%16+2;
                         for(int i = nbvoytrain; i>0; i--){
-                          ajoutVF(&maListeVTh, init_voyageurInd('+', magare, 0, 'h'));
+                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'h'));
                         }
-                      } else if(monElementTrain->train.etat == 'p'&& monElementTrain->train.direction == 'o'){
-                        ClearV(&maListeVTh);
                       } else if(monElementTrain->train.vide == 'v' && monElementTrain->train.direction == 'e'){
                         monElementTrain->train.vide = 'p';
-                        int nbvoytrain = rand()%16+10;
+                        int nbvoytrain = rand()%16+2;
                         for(int i = nbvoytrain; i>0; i--){
-                          ajoutVF(&maListeVTb, init_voyageurInd('+', magare, 0, 'b'));
+                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'b'));
                         }
-                      } else if(monElementTrain->train.etat == 'p'&& monElementTrain->train.direction == 'e'){
-                        ClearV(&maListeVTb);
+                      }
+                      if(monElementTrain->train.tempsAQuai > 110 && (monElementTrain->train.tempsAQuai%5)==0){
+                        if(monElementTrain->train.direction == 'o'){
+                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'h'));
+                        } else if(monElementTrain->train.direction == 'e'){
+                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'b'));
+                        }
                       }
                         monElementVoy = maListeV.premier;
                         if (monElementTrain->train.direction == 'e') {
@@ -537,8 +534,8 @@ int main() {
                             }
                             else {
                                 if (monElementVoy->voyageur->posY < monElementVoy->voyageur->destinationY) {
-                                    if(mvtVoy(monElementVoy->voyageur, magare, 'd') == 0){
-                                        mvtVoy(monElementVoy->voyageur, magare, 's');
+                                    if(mvtVoy(monElementVoy->voyageur, magare, 'd') == 0 && mvtVoy(monElementVoy->voyageur, magare, 's') == 0){
+                                        mvtVoy(monElementVoy->voyageur, magare, 'z');
                                     }
                                 }
                                 else if(monElementVoy->voyageur->posY > monElementVoy->voyageur->destinationY){
