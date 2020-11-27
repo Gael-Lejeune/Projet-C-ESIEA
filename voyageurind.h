@@ -13,8 +13,6 @@ struct voyageurInd{
     char carpos; //contenu de la case sur laquelle le voyageur est allé
     int destinationX;
     int destinationY;
-    int attenteX;
-    int attenteY;
     char quai; //h ou b
 };
 
