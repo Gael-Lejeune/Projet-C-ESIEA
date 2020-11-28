@@ -90,7 +90,8 @@ VOYAGEUR init_voyageurInd(char car, GARE magare, int tempsAttente, char entree){
     }
     voyageurInd->posY = coY;
     voyageurInd->destinationX = -1;
-    voyageurInd->destinationY = 93; //à changer
+    if(voyageurInd->posY>62){voyageurInd->destinationY = 93;}
+    else{voyageurInd->destinationY = 33;}
     voyageurInd->tempsAttente = tempsAttente;
     voyageurInd->carpos = '_';
     voyageurInd->couleur = BLUE;
@@ -106,7 +107,8 @@ VOYAGEUR init_voyageurInd(char car, GARE magare, int tempsAttente, char entree){
     }
     voyageurInd->posY = coY;
     voyageurInd->destinationX = 23;
-    voyageurInd->destinationY = 125; //à changer
+    if(voyageurInd->posY>62){voyageurInd->destinationY = 125;}
+    else{voyageurInd->destinationY = -1;}
     voyageurInd->tempsAttente = tempsAttente;
     voyageurInd->carpos = '_';
     voyageurInd->couleur = BLUE;

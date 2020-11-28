@@ -305,6 +305,7 @@ int main() {
             ajoutD(&maListe,init_train(train, 'e', 180 + rand() % 200));
 
             int time = 0;
+            int vitesse = 1;
             ELEMENT* monElementTrain = maListe.premier;
             int tempsAQuai = monElementTrain->train.tempsAQuai;
             char c=0;
@@ -314,6 +315,10 @@ int main() {
                     c = key_pressed();
                     if (c == 'k') {
                         break;
+                    } else if (c == '+') {
+                      vitesse +=1;
+                    } else if (c == '-' && vitesse > 1) {
+                      vitesse -=1;
                     }
                     printf("\033[%d;%dH%s\n", 2, 2, "   ");
                     printf("\033[%d;%dH%s\n", 2, 122, "   ");
@@ -341,7 +346,7 @@ int main() {
                         monElementTrain = maListe.dernier;
                     }
                 }
-                time=(time+1)%monElementTrain->train.vitesse;
+                time=(time+1)%(monElementTrain->train.vitesse/vitesse);
             }
             fclose(train);
         }
@@ -368,6 +373,7 @@ int main() {
             ajoutD(&maListe,init_train(train, 'e', 180 + rand() % 500));
 
             int timer = 0;
+            int vitesse = 1;
             int timeInd = 0;
 
             ELEMENT* monElementTrain = maListe.premier;
@@ -377,6 +383,10 @@ int main() {
                 if(timer == 500){
                     if (movPlayer == 'k') {
                         break;
+                    } else if (movPlayer == '+') {
+                      vitesse +=1;
+                    } else if (movPlayer == '-' && vitesse > 1) {
+                      vitesse -=1;
                     }
                     movPlayer = key_pressed();
                     if (movPlayer != 0) {
@@ -514,7 +524,7 @@ int main() {
                         monElementTrain = maListe.dernier;
                     }
                 }
-                timer=(timer+1)%monElementTrain->train.vitesse;
+                timer=(timer+1)%(monElementTrain->train.vitesse/vitesse);
                 if(timeInd == 5000){
                     monElementVoy = maListeV.premier;
                     int i = 1;
@@ -523,7 +533,7 @@ int main() {
                             if (abs(monElementVoy->voyageur->posX-monElementVoy->voyageur->destinationX) > abs(monElementVoy->voyageur->posY-monElementVoy->voyageur->destinationY)) {
                                 if (monElementVoy->voyageur->posX > monElementVoy->voyageur->destinationX) {
                                     if (mvtVoy(monElementVoy->voyageur, magare, 'z') == 0) {
-                                        mvtVoy(monElementVoy->voyageur, magare, 'd');
+                                        mvtVoy(monElementVoy->voyageur, magare, 'q');
                                     }
                                 }
                                 else if(monElementVoy->voyageur->posX < monElementVoy->voyageur->destinationX){
@@ -539,8 +549,8 @@ int main() {
                                     }
                                 }
                                 else if(monElementVoy->voyageur->posY > monElementVoy->voyageur->destinationY){
-                                    if(mvtVoy(monElementVoy->voyageur, magare, 'q') == 0){
-                                        mvtVoy(monElementVoy->voyageur, magare, 's');
+                                    if(mvtVoy(monElementVoy->voyageur, magare, 'q') == 0 && mvtVoy(monElementVoy->voyageur, magare, 's') == 0){
+                                        mvtVoy(monElementVoy->voyageur, magare, 'z');
                                     }
                                 }
                             }
@@ -560,7 +570,7 @@ int main() {
                     }
                     i++;
                 }
-                timeInd = (timeInd +1)%30000000;
+                timeInd = (timeInd +1)%(30000000/vitesse);
             }
             fclose(train);
         }
