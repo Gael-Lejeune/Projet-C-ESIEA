@@ -109,7 +109,7 @@ VOYAGEUR init_voyageurInd(char car, GARE magare, int tempsAttente, char entree){
 }
 
 void afficher_voyageur(VOYAGEUR monvoyageur){
-  printf("\033[%d;%dH%c", monvoyageur->posX, monvoyageur->posY, monvoyageur->carvoy);
+  printf("\033[%d;%dH%c\n", monvoyageur->posX, monvoyageur->posY, monvoyageur->carvoy);
 }
 
 char mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
@@ -141,7 +141,7 @@ char mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
     return 0;
   }
   if (posX < 0 || posY < 0 || posY > LONGUEUR-1) {
-      printf("\033[%d;%dH%s", monvoyageur->posX+1, monvoyageur->posY+1, " ");
+      printf("\033[%d;%dH%s\n", monvoyageur->posX+1, monvoyageur->posY+1, " ");
       magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carpos;
       monvoyageur->carpos = 'd';
       monvoyageur->posX = posX;
@@ -152,21 +152,21 @@ char mvtVoy(VOYAGEUR monvoyageur, GARE magare, char mvt){
   if (posDep == ' ' || posDep == '_') {
     // printf("coucou\n");
     if(monvoyageur->carpos== ' '){
-      printf("\033[%d;%dH%c", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
+      printf("\033[%d;%dH%c\n", monvoyageur->posX+1, monvoyageur->posY+1, ' ');
     }
     else if(monvoyageur->carpos== '_'){
-      printf("\033[%d;%dH%s%s%s", monvoyageur->posX+1, monvoyageur->posY+1, GREY, "■", DEFAULT_COLOR);
+      printf("\033[%d;%dH%s%s%s\n", monvoyageur->posX+1, monvoyageur->posY+1, GREY, "■", DEFAULT_COLOR);
     }
     magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carpos;
     monvoyageur->carpos = posDep;
     monvoyageur->posX = posX;
     monvoyageur->posY = posY;
     magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carvoy;
-    printf("\033[%d;%dH%s%c%s", monvoyageur->posX+1, monvoyageur->posY+1, monvoyageur->couleur, monvoyageur->carvoy, DEFAULT_COLOR);
+    printf("\033[%d;%dH%s%c%s\n", monvoyageur->posX+1, monvoyageur->posY+1, monvoyageur->couleur, monvoyageur->carvoy, DEFAULT_COLOR);
     return 1;
   }
   else if (posDep == 'f' || posDep == 'd') {
-    printf("\033[%d;%dH%s%s%s", monvoyageur->posX+1, monvoyageur->posY+1, GREY, "■", DEFAULT_COLOR);
+    printf("\033[%d;%dH%s%s%s\n", monvoyageur->posX+1, monvoyageur->posY+1, GREY, "■", DEFAULT_COLOR);
     magare.custom[monvoyageur->posX][monvoyageur->posY] = monvoyageur->carpos;
     monvoyageur->carpos = posDep;
     monvoyageur->posX = posX;

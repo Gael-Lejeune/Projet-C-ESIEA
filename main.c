@@ -40,7 +40,7 @@ void afficher_fichier(char * nomfic){
     FILE *fichier = fopen(nomfic, "r+"); // Récupère le fichier et l'ouvre en mode lecture .
     if (fichier == NULL){
         // Le fichier doit exister.
-        printf("Le fichier menu_projet.txt n'a pas pu être ouvert\n");
+        printf("Le fichier menu.txt n'a pas pu être ouvert\n");
         // return EXIT_FAILURE;
     } // Teste l'existence du fichier.
 
@@ -63,7 +63,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
         switch (monElementTrain->train.etat){
             //Suivant l'etat du train
             case 'd': //dehors
-            printf("TEST\n");
+            // printf("TEST\n");
             if (monElementTrain->train.tempsAttente == 0){
                 //Si le train a assez attendu hors gare
                 monElementTrain->train.etat='e'; //Passage à l'état entrant
@@ -153,7 +153,6 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             if(monElementTrain->train.posx == monElementTrain->train.longueur + LONGUEUR+1){
                 //Si le train est entièrement sorti
                 suppD(&maListe); //Le supprimer de la liste
-                fseek(train, 0, 0); //Placer le pointeur au debut du fichier train
                 ajoutD(&maListe, init_train(train, 'e', 180 +  rand() % 200)); //Ajouter un autre train à la place
             }
             break;
@@ -235,7 +234,6 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             monElementTrain->train.posx--;
             if(monElementTrain->train.posx == -(monElementTrain->train.longueur+1)){
                 suppF(&maListe);
-                fseek(train, 0, 0);
                 ajoutF(&maListe, init_train(train, 'o', 180 +  rand() % 200));
             }
 
@@ -247,34 +245,34 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
 
 
 int main() {
+    srand(time(NULL));
     while(1){
-        char c;
-        // system("setterm -cursor on");
-        // system("setterm -cursor off");
+        system("play -q --no-show-progres sound/test.mp3 &");
         system("clear");
-        afficher_fichier("txt/menu_projet2.txt");
-        char option = 1;
+        char c;
+        afficher_fichier(FICMENU); //Affichage du menu de choix de mode
+        char option = 1; //Mode choisi
         printf("\033[%d;%dH%s %s", 12, 60, "\033[0;m", "\033[0;m");
         printf("\033[%d;%dH%s▼%s", 12, 25, "\033[1;5m", "\033[0;m");
-        printf("\033[%d;%dH", 40, 0);
+        printf("\033[%d;%dH", 40, 0); //Affichage de la fleche de selection
         while(1){
             c = key_pressed();
-            if (c == 'q') {
+            if (c == 'q') { //Deplacer la fleche à gauche
                 option = 1;
                 printf("\033[%d;%dH%s %s", 12, 60, "\033[0;m", "\033[0;m");
                 printf("\033[%d;%dH%s▼%s", 12, 25, "\033[1;5m", "\033[0;m");
                 printf("\033[%d;%dH", 40, 0);
             }
-            else if (c == 'd') {
+            else if (c == 'd') { //Deplacer la fleche à droite
                 option = 2;
                 printf("\033[%d;%dH%s %s", 12, 25, "\033[0;m", "\033[0;m");
                 printf("\033[%d;%dH%s▼%s", 12, 60, "\033[1;5m", "\033[0;m");
                 printf("\033[%d;%dH", 40, 0);
             }
-            else if (c == 'o'){
+            else if (c == 'o'){ //Demarrer la simulation
                 break;
             }
-            else if (c == 'k'){
+            else if (c == 'k'){ //Quitter la simulation
                 system("clear");
                 printf("\n\n\n\n\n\n\n\n\n\n\tMerci d'avoir utilisé notre simulateur. À bientôt !\n\n\n\n\n\n\n\n\n\n" );
                 return 0;
@@ -284,60 +282,67 @@ int main() {
             }
         }
 
-        printf("Vous avez choisi l'option %c\n", option);
+        GARE magare = init_gare(FICGARE); //Initialisation de la gare
+        afficher_gare(magare); //Affichage de la gare
 
-        GARE magare = init_gare("txt/gare_test.txt");
-        afficher_gare(magare);
 
-        if (option == 1) {
-            FILE * train = fopen("txt/train.txt", "r");
+        if (option == 1) { //Si le mode choisi est le premier
+            FILE * train = fopen(FICTRAIN, "r"); //Charger le fichier contenant le train
 
-            LISTE maListe; init_liste(&maListe);
-            srand(time(NULL));
-            ajoutD(&maListe,init_train(train, 'o', 180 + rand() % 200));
-            fseek(train, 0, 0);
-            ajoutD(&maListe,init_train(train, 'e', 180 + rand() % 200));
 
-            int time = 0;
-            int vitesse = 1;
-            ELEMENT* monElementTrain = maListe.premier;
-            int tempsAQuai = monElementTrain->train.tempsAQuai;
-            char c=0;
+            LISTE maListeTrain; init_liste(&maListeTrain); //Création de la liste de train
+            ajoutD(&maListeTrain,init_train(train, 'o', 180 + rand() % 200));
+            ajoutD(&maListeTrain,init_train(train, 'e', 180 + rand() % 200)); //Ajout des deux trains
+
+            printf("\033[%d;%dH%dm\n", 2, 2, maListeTrain.dernier->train.tempsAttente/60);
+            printf("\033[%d;%dH%dm\n", 2, 122, maListeTrain.dernier->train.tempsAttente/60);
+            printf("\033[%d;%dH%dm\n", 28, 2, maListeTrain.premier->train.tempsAttente/60);
+            printf("\033[%d;%dH%dm\n", 28, 122, maListeTrain.premier->train.tempsAttente/60); //Affichage des temps d'attente
+
+            int time = 0; //Temps
+            int vitesse = 1; //Multiplicateur de vitesse de la simulation
+            ELEMENT* monElementTrain = maListeTrain.premier; //Train
+            char c=0; //Commande utilisateur
 
             while(1){
                 if(time == 500){
                     c = key_pressed();
-                    if (c == 'k') {
+                    if (c == 'k') { //Quitter la simulation
                         break;
-                    } else if (c == '+') {
-                      vitesse +=1;
-                    } else if (c == '-' && vitesse > 1) {
-                      vitesse -=1;
+                    } else if (c == '+') { //Augmenter la vitesse
+                        vitesse +=1;
+                    } else if (c == '-' && vitesse > 1) { //Reduire la vitesse
+                        vitesse -=1;
                     }
-                    printf("\033[%d;%dH%s\n", 2, 2, "   ");
-                    printf("\033[%d;%dH%s\n", 2, 122, "   ");
-                    if (maListe.dernier->train.tempsAttente/60 != 0) {
-                        printf("\033[%d;%dH%dm\n", 2, 2, maListe.dernier->train.tempsAttente/60);
-                        printf("\033[%d;%dH%dm\n", 2, 122, maListe.dernier->train.tempsAttente/60);
+                    if (maListeTrain.dernier->train.tempsAttente%60 == 59) {
+                        if(maListeTrain.dernier->train.tempsAttente/60 == 0) {
+                            printf("\033[%d;%dH%s\n", 2, 2, "   ");
+                            printf("\033[%d;%dH%s\n", 2, 122, "   ");
+                        }
+                        else{
+                            printf("\033[%d;%dH%dm\n", 2, 2, maListeTrain.dernier->train.tempsAttente/60);
+                            printf("\033[%d;%dH%dm\n", 2, 122, maListeTrain.dernier->train.tempsAttente/60);
+                        }
                     }
-                    printf("\033[%d;%dH%s\n", 28, 2, "   ");
-                    printf("\033[%d;%dH%s\n", 28, 122, "   ");
-                    if (maListe.premier->train.tempsAttente/60 != 0) {
-                        printf("\033[%d;%dH%dm\n", 28, 2, maListe.premier->train.tempsAttente/60);
-                        printf("\033[%d;%dH%dm\n", 28, 122, maListe.premier->train.tempsAttente/60);
+                    if (maListeTrain.premier->train.tempsAttente%60 == 59) {
+                        if(maListeTrain.premier->train.tempsAttente/60 == 0) {
+                            printf("\033[%d;%dH%s\n", 28, 2, "   ");
+                            printf("\033[%d;%dH%s\n", 28, 122, "   ");
+                        }
+                        else {
+                            printf("\033[%d;%dH%dm\n", 28, 2, maListeTrain.premier->train.tempsAttente/60);
+                            printf("\033[%d;%dH%dm\n", 28, 122, maListeTrain.premier->train.tempsAttente/60);
+                        }
                     }
 
-                    deplacer_train(monElementTrain, maListe, tempsAQuai, train, magare);
 
-                    printf("\033[%d;%dHCoordonees :           ", 31, 20);
-                    printf("\033[%d;%dHCoordonees :           ", 32, 20);
-                    printf("\033[%d;%dHCoordonees : %d", 31, 20, maListe.dernier->train.tempsAQuai);
-                    printf("\033[%d;%dHCoordonees : %d", 32, 20,maListe.premier->train.tempsAQuai);
+                    deplacer_train(monElementTrain, maListeTrain, TEMPSAQUAI, train, magare);
+
                     if (monElementTrain->suivant == NULL) {
-                        monElementTrain = maListe.premier;
+                        monElementTrain = maListeTrain.premier;
                     }
                     else{
-                        monElementTrain = maListe.dernier;
+                        monElementTrain = maListeTrain.dernier;
                     }
                 }
                 time=(time+1)%(monElementTrain->train.vitesse/vitesse);
@@ -349,38 +354,35 @@ int main() {
             VOYAGEUR monvoyageur = init_voyageur(0, 93, '*', magare);
 
             LISTEV maListeV; init_listeV(&maListeV);
-            srand(time(NULL));
+
             ajoutVD(&maListeV, init_voyageurInd('*', magare, 1, 0));
             printf("\033[%d;%dH%d", 40, 40, maListeV.premier->voyageur->tempsAttente);
-            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 5, 0));
-            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 10, 0));
-            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 15, 0));
             ELEMENTV * monElementVoy = maListeV.premier;
-            // afficher_voyageur(monvoyageur);
 
             char movPlayer = 0;
-            FILE * train = fopen("txt/train.txt", "r");
-            LISTE maListe; init_liste(&maListe);
-            // srand(time(NULL));
-            ajoutD(&maListe,init_train(train, 'o', 180 + rand() % 500));
-            fseek(train, 0, 0);
-            ajoutD(&maListe,init_train(train, 'e', 180 + rand() % 500));
+            FILE * train = fopen(FICTRAIN, "r");
+            LISTE maListeTrain; init_liste(&maListeTrain);
+            ajoutD(&maListeTrain,init_train(train, 'o', 180 + rand() % 500));
+            ajoutD(&maListeTrain,init_train(train, 'e', 180 + rand() % 500));
+            printf("\033[%d;%dH%dm\n", 2, 2, maListeTrain.dernier->train.tempsAttente/60);
+            printf("\033[%d;%dH%dm\n", 2, 122, maListeTrain.dernier->train.tempsAttente/60);
+            printf("\033[%d;%dH%dm\n", 28, 2, maListeTrain.premier->train.tempsAttente/60);
+            printf("\033[%d;%dH%dm\n", 28, 122, maListeTrain.premier->train.tempsAttente/60);
 
             int timer = 0;
             int vitesse = 1;
             int timeInd = 0;
 
-            ELEMENT* monElementTrain = maListe.premier;
-            int tempsAQuai = monElementTrain->train.tempsAQuai;
+            ELEMENT* monElementTrain = maListeTrain.premier;
 
             while(1){
                 if(timer == 500){
                     if (movPlayer == 'k') {
                         break;
                     } else if (movPlayer == '+') {
-                      vitesse +=1;
+                        vitesse +=1;
                     } else if (movPlayer == '-' && vitesse > 1) {
-                      vitesse -=1;
+                        vitesse -=1;
                     }
                     movPlayer = key_pressed();
                     if (movPlayer != 0) {
@@ -388,18 +390,18 @@ int main() {
                             movPlayer = 'k';
                         }
                         else if(monvoyageur->posX == 0 && monvoyageur->posY > 62 && movPlayer == 'z'){ //positions de changement de quai vers le bas
-                          printf("\033[%d;%dH%c",monvoyageur->posX, monvoyageur->posY+1, ' ');
-                          monvoyageur->posX = 24;
-                          monvoyageur->posY = 0;
-                          printf("\033[%d;%dHVous venez de changer de quai.",32, 80);
-                          printf("\033[%d;%dHSortez de la gare à droite ou montez dans un train.",33, 80);
+                            printf("\033[%d;%dH%c",monvoyageur->posX, monvoyageur->posY+1, ' ');
+                            monvoyageur->posX = 24;
+                            monvoyageur->posY = 0;
+                            printf("\033[%d;%dHVous venez de changer de quai.",32, 80);
+                            printf("\033[%d;%dHSortez de la gare à droite ou montez dans un train.",33, 80);
                         }
                         else if (monvoyageur->posY == 0 && movPlayer == 'q'){ //positions de changement de quai vers le haut
-                          printf("\033[%d;%dH%c",monvoyageur->posX+1, monvoyageur->posY, ' ');
-                          monvoyageur->posX = 0;
-                          monvoyageur->posY = 93;
-                          printf("\033[%d;%dHVous venez de changer de quai.",32, 80);
-                          printf("\033[%d;%dHSortez de la gare à gauche ou montez dans un train.",33, 80);
+                            printf("\033[%d;%dH%c",monvoyageur->posX+1, monvoyageur->posY, ' ');
+                            monvoyageur->posX = 0;
+                            monvoyageur->posY = 93;
+                            printf("\033[%d;%dHVous venez de changer de quai.",32, 80);
+                            printf("\033[%d;%dHSortez de la gare à gauche ou montez dans un train.",33, 80);
                         }
                         // printf("test\n");
                         mvtVoy(monvoyageur, magare, movPlayer);
@@ -407,48 +409,57 @@ int main() {
                             movPlayer = 'k';
                         }
                         printf("\033[%d;%dHCoordonees : %d %d", 36, 20, monvoyageur->posX, monvoyageur->posY);
-                            // printf("\033[%d;%dHBravo, vous êtes sorti !", 20, 20);
-                            // system("clear");
-                            // usleep(1000000);
+                        // printf("\033[%d;%dHBravo, vous êtes sorti !", 20, 20);
+                        // system("clear");
+                        // usleep(1000000);
                     }
 
-                    printf("\033[%d;%dH%s\n", 2, 2, "   ");
-                    printf("\033[%d;%dH%s\n", 2, 122, "   ");
-                    if (maListe.dernier->train.tempsAttente/60 != 0) {
-                        printf("\033[%d;%dH%dm\n", 2, 2, maListe.dernier->train.tempsAttente/60);
-                        printf("\033[%d;%dH%dm\n", 2, 122, maListe.dernier->train.tempsAttente/60);
+
+                    if (maListeTrain.dernier->train.tempsAttente%60 == 59) {
+                        if(maListeTrain.dernier->train.tempsAttente/60 == 0) {
+                            printf("\033[%d;%dH%s\n", 2, 2, "   ");
+                            printf("\033[%d;%dH%s\n", 2, 122, "   ");
+                        }
+                        else{
+                            printf("\033[%d;%dH%dm\n", 2, 2, maListeTrain.dernier->train.tempsAttente/60);
+                            printf("\033[%d;%dH%dm\n", 2, 122, maListeTrain.dernier->train.tempsAttente/60);
+                        }
                     }
-                    printf("\033[%d;%dH%s\n", 28, 2, "   ");
-                    printf("\033[%d;%dH%s\n", 28, 122, "   ");
-                    if (maListe.premier->train.tempsAttente/60 != 0) {
-                        printf("\033[%d;%dH%dm\n", 28, 2, maListe.premier->train.tempsAttente/60);
-                        printf("\033[%d;%dH%dm\n", 28, 122, maListe.premier->train.tempsAttente/60);
+                    if (maListeTrain.premier->train.tempsAttente%60 == 59) {
+                        if(maListeTrain.premier->train.tempsAttente/60 == 0) {
+                            printf("\033[%d;%dH%s\n", 28, 2, "   ");
+                            printf("\033[%d;%dH%s\n", 28, 122, "   ");
+                        }
+                        else {
+                            printf("\033[%d;%dH%dm\n", 28, 2, maListeTrain.premier->train.tempsAttente/60);
+                            printf("\033[%d;%dH%dm\n", 28, 122, maListeTrain.premier->train.tempsAttente/60);
+                        }
                     }
 
-                    deplacer_train(monElementTrain, maListe, tempsAQuai, train, magare);
+                    deplacer_train(monElementTrain, maListeTrain, TEMPSAQUAI, train, magare);
 
 
                     if (monElementTrain->train.etat == 's') {
-                      if(monElementTrain->train.vide == 'v' && monElementTrain->train.direction == 'o'){
-                        monElementTrain->train.vide = 'p';
-                        int nbvoytrain = rand()%16+2;
-                        for(int i = nbvoytrain; i>0; i--){
-                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'h'));
+                        if(monElementTrain->train.vide == 'v' && monElementTrain->train.direction == 'o'){
+                            monElementTrain->train.vide = 'p';
+                            int nbvoytrain = rand()%16+2;
+                            for(int i = nbvoytrain; i>0; i--){
+                                ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'h'));
+                            }
+                        } else if(monElementTrain->train.vide == 'v' && monElementTrain->train.direction == 'e'){
+                            monElementTrain->train.vide = 'p';
+                            int nbvoytrain = rand()%16+2;
+                            for(int i = nbvoytrain; i>0; i--){
+                                ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'b'));
+                            }
                         }
-                      } else if(monElementTrain->train.vide == 'v' && monElementTrain->train.direction == 'e'){
-                        monElementTrain->train.vide = 'p';
-                        int nbvoytrain = rand()%16+2;
-                        for(int i = nbvoytrain; i>0; i--){
-                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'b'));
+                        if(monElementTrain->train.tempsAQuai > 110 && (monElementTrain->train.tempsAQuai%5)==0){
+                            if(monElementTrain->train.direction == 'o'){
+                                ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'h'));
+                            } else if(monElementTrain->train.direction == 'e'){
+                                ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'b'));
+                            }
                         }
-                      }
-                      if(monElementTrain->train.tempsAQuai > 110 && (monElementTrain->train.tempsAQuai%5)==0){
-                        if(monElementTrain->train.direction == 'o'){
-                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'h'));
-                        } else if(monElementTrain->train.direction == 'e'){
-                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'b'));
-                        }
-                      }
                         monElementVoy = maListeV.premier;
                         if (monElementTrain->train.direction == 'e') {
                             while (monElementVoy) {
@@ -512,10 +523,10 @@ int main() {
                     }
 
                     if (monElementTrain->suivant == NULL) {
-                        monElementTrain = maListe.premier;
+                        monElementTrain = maListeTrain.premier;
                     }
                     else{
-                        monElementTrain = maListe.dernier;
+                        monElementTrain = maListeTrain.dernier;
                     }
                 }
                 timer=(timer+1)%(monElementTrain->train.vitesse/vitesse);

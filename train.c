@@ -7,6 +7,8 @@
 
 
 TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
+	fseek(fichier, 0, 0); //Retour au début du fichier contenant le train
+
 	TRAIN montrain;
 	montrain.direction = direction;
 	if (direction == 'e') {

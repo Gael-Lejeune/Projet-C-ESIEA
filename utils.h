@@ -2,7 +2,6 @@
 #define H_UTILS
 
 #define LONGUEUR 125
-// #define LONGUEUR 126
 #define LARGEUR 29
 
 #define BLACK           "\033[1;30m"
@@ -23,11 +22,11 @@
 
 #define TEMPSAQUAI      250
 
-// #define LARGT 2
-#define LARGT 3
-// #define LONGT 52
-#define LONGT 116
+#define LARGT           3
+#define LONGT           116
 
-// #define CARVOY  '*'
+#define FICTRAIN        "txt/train.txt"
+#define FICGARE         "txt/gare.txt"
+#define FICMENU         "txt/menu.txt"
 
 #endif
