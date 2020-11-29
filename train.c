@@ -26,11 +26,12 @@ TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 	}
 	montrain.longueur=LONGT;
 	montrain.posy=montrain.posx-LONGT;
-	montrain.vitesse= 1000000;
+	montrain.vitesse= 5000000;
 	montrain.etat='d'; //dehors
 	montrain.portes=0; //fermées
 	montrain.tempsAttente=tempsAttente;
-	montrain.tempsAQuai=500;
+	montrain.tempsAQuai=250;
+	montrain.vide='v';
 	montrain.custom = (char **)malloc(LARGT*sizeof(char *));
 	for(int i =0; i<LARGT;i++) {
 		montrain.custom[i] = (char *)malloc(LONGT*sizeof(char));

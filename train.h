@@ -18,6 +18,7 @@ struct train{
     int longueur;       /*Longueur du train*/
     int tempsAttente;
     int tempsAQuai;
+    char vide; //v vide, p plein
 };
 
 TRAIN init_train(FILE * fichier, char direction, int tempsAttente);

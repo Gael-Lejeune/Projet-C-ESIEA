@@ -160,7 +160,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                 //Si le train est entièrement sorti
                 suppD(&maListe); //Le supprimer de la liste
                 fseek(train, 0, 0); //Placer le pointeur au debut du fichier train
-                ajoutD(&maListe, init_train(train, 'e', 180 +  rand() % 500)); //Ajouter un autre train à la place
+                ajoutD(&maListe, init_train(train, 'e', 180 +  rand() % 200)); //Ajouter un autre train à la place
             }
             break;
         }
@@ -242,7 +242,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             if(monElementTrain->train.posx == -(monElementTrain->train.longueur+1)){
                 suppF(&maListe);
                 fseek(train, 0, 0);
-                ajoutF(&maListe, init_train(train, 'o', 180 +  rand() % 500));
+                ajoutF(&maListe, init_train(train, 'o', 180 +  rand() % 200));
             }
 
             break;
@@ -300,11 +300,12 @@ int main() {
 
             LISTE maListe; init_liste(&maListe);
             srand(time(NULL));
-            ajoutD(&maListe,init_train(train, 'o', 180 + rand() % 500));
+            ajoutD(&maListe,init_train(train, 'o', 180 + rand() % 200));
             fseek(train, 0, 0);
-            ajoutD(&maListe,init_train(train, 'e', 180 + rand() % 500));
+            ajoutD(&maListe,init_train(train, 'e', 180 + rand() % 200));
 
             int time = 0;
+            int vitesse = 1;
             ELEMENT* monElementTrain = maListe.premier;
             int tempsAQuai = monElementTrain->train.tempsAQuai;
             char c=0;
@@ -314,6 +315,10 @@ int main() {
                     c = key_pressed();
                     if (c == 'k') {
                         break;
+                    } else if (c == '+') {
+                      vitesse +=1;
+                    } else if (c == '-' && vitesse > 1) {
+                      vitesse -=1;
                     }
                     printf("\033[%d;%dH%s\n", 2, 2, "   ");
                     printf("\033[%d;%dH%s\n", 2, 122, "   ");
@@ -341,7 +346,7 @@ int main() {
                         monElementTrain = maListe.dernier;
                     }
                 }
-                time=(time+1)%monElementTrain->train.vitesse;
+                time=(time+1)%(monElementTrain->train.vitesse/vitesse);
             }
             fclose(train);
         }
@@ -351,11 +356,11 @@ int main() {
 
             LISTEV maListeV; init_listeV(&maListeV);
             srand(time(NULL));
-            ajoutVD(&maListeV, init_voyageurInd('*', magare, 1));
+            ajoutVD(&maListeV, init_voyageurInd('*', magare, 1, 0));
             printf("\033[%d;%dH%d", 40, 40, maListeV.premier->voyageur->tempsAttente);
-            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 5));
-            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 10));
-            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 15));
+            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 5, 0));
+            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 10, 0));
+            // ajoutVD(&maListeV, init_voyageurInd('*', magare, 15, 0));
             ELEMENTV * monElementVoy = maListeV.premier;
             // afficher_voyageur(monvoyageur);
 
@@ -368,6 +373,7 @@ int main() {
             ajoutD(&maListe,init_train(train, 'e', 180 + rand() % 500));
 
             int timer = 0;
+            int vitesse = 1;
             int timeInd = 0;
 
             ELEMENT* monElementTrain = maListe.premier;
@@ -377,11 +383,29 @@ int main() {
                 if(timer == 500){
                     if (movPlayer == 'k') {
                         break;
+                    } else if (movPlayer == '+') {
+                      vitesse +=1;
+                    } else if (movPlayer == '-' && vitesse > 1) {
+                      vitesse -=1;
                     }
                     movPlayer = key_pressed();
                     if (movPlayer != 0) {
-                        if((monvoyageur->posX == 0 && movPlayer == 'z') || (monvoyageur->posY == 0 && movPlayer == 'q') || (monvoyageur->posY == 124 && movPlayer == 'd')){ //positions de sortie de gare
+                        if( (monvoyageur->posX == 0 && monvoyageur->posY < 62 && movPlayer == 'z') || (monvoyageur->posY == 124 && movPlayer == 'd') ){ //positions de sortie de gare
                             movPlayer = 'k';
+                        }
+                        else if(monvoyageur->posX == 0 && monvoyageur->posY > 62 && movPlayer == 'z'){ //positions de changement de quai vers le bas
+                          printf("\033[%d;%dH%c",monvoyageur->posX, monvoyageur->posY+1, ' ');
+                          monvoyageur->posX = 24;
+                          monvoyageur->posY = 0;
+                          printf("\033[%d;%dHVous venez de changer de quai.",32, 80);
+                          printf("\033[%d;%dHSortez de la gare à droite ou montez dans un train.",33, 80);
+                        }
+                        else if (monvoyageur->posY == 0 && movPlayer == 'q'){ //positions de changement de quai vers le haut
+                          printf("\033[%d;%dH%c",monvoyageur->posX+1, monvoyageur->posY, ' ');
+                          monvoyageur->posX = 0;
+                          monvoyageur->posY = 93;
+                          printf("\033[%d;%dHVous venez de changer de quai.",32, 80);
+                          printf("\033[%d;%dHSortez de la gare à gauche ou montez dans un train.",33, 80);
                         }
                         // printf("test\n");
                         mvtVoy(monvoyageur, magare, movPlayer);
@@ -408,13 +432,35 @@ int main() {
                     }
 
                     deplacer_train(monElementTrain, maListe, tempsAQuai, train, magare);
+
+
                     if (monElementTrain->train.etat == 's') {
+                      if(monElementTrain->train.vide == 'v' && monElementTrain->train.direction == 'o'){
+                        monElementTrain->train.vide = 'p';
+                        int nbvoytrain = rand()%16+2;
+                        for(int i = nbvoytrain; i>0; i--){
+                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'h'));
+                        }
+                      } else if(monElementTrain->train.vide == 'v' && monElementTrain->train.direction == 'e'){
+                        monElementTrain->train.vide = 'p';
+                        int nbvoytrain = rand()%16+2;
+                        for(int i = nbvoytrain; i>0; i--){
+                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'b'));
+                        }
+                      }
+                      if(monElementTrain->train.tempsAQuai > 110 && (monElementTrain->train.tempsAQuai%5)==0){
+                        if(monElementTrain->train.direction == 'o'){
+                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'h'));
+                        } else if(monElementTrain->train.direction == 'e'){
+                          ajoutVD(&maListeV, init_voyageurInd('*', magare, 0, 'b'));
+                        }
+                      }
                         monElementVoy = maListeV.premier;
                         if (monElementTrain->train.direction == 'e') {
                             while (monElementVoy) {
                                 if (monElementVoy->voyageur->quai == 'b' && monElementVoy->voyageur->destinationX != monElementTrain->train.lPortes) {
                                     monElementVoy->voyageur->destinationX = monElementTrain->train.lPortes;
-                                    monElementVoy->voyageur->destinationY = 62;
+                                    monElementVoy->voyageur->destinationY = 60;
                                     for (int i = 0; i <= LONGUEUR; i++) {
                                         if (magare.custom[monElementTrain->train.lPortes][i] == 'f' && abs(i - monElementVoy->voyageur->posY) < abs(monElementVoy->voyageur->destinationY - monElementVoy->voyageur->posY) ) {
                                             monElementVoy->voyageur->destinationY = i;
@@ -428,7 +474,7 @@ int main() {
                             while (monElementVoy) {
                                 if (monElementVoy->voyageur->quai == 'h' && monElementVoy->voyageur->destinationX != monElementTrain->train.lPortes) {
                                     monElementVoy->voyageur->destinationX = monElementTrain->train.lPortes;
-                                    monElementVoy->voyageur->destinationY = 62;
+                                    monElementVoy->voyageur->destinationY = 60;
 
                                     for (int i = 0; i <= LONGUEUR; i++) {
                                         if (magare.custom[monElementTrain->train.lPortes][i] == 'd' && abs(i - monElementVoy->voyageur->posY) < abs(monElementVoy->voyageur->destinationY - monElementVoy->voyageur->posY) ) {
@@ -478,7 +524,7 @@ int main() {
                         monElementTrain = maListe.dernier;
                     }
                 }
-                timer=(timer+1)%monElementTrain->train.vitesse;
+                timer=(timer+1)%(monElementTrain->train.vitesse/vitesse);
                 if(timeInd == 5000){
                     monElementVoy = maListeV.premier;
                     int i = 1;
@@ -487,7 +533,7 @@ int main() {
                             if (abs(monElementVoy->voyageur->posX-monElementVoy->voyageur->destinationX) > abs(monElementVoy->voyageur->posY-monElementVoy->voyageur->destinationY)) {
                                 if (monElementVoy->voyageur->posX > monElementVoy->voyageur->destinationX) {
                                     if (mvtVoy(monElementVoy->voyageur, magare, 'z') == 0) {
-                                        mvtVoy(monElementVoy->voyageur, magare, 'd');
+                                        mvtVoy(monElementVoy->voyageur, magare, 'q');
                                     }
                                 }
                                 else if(monElementVoy->voyageur->posX < monElementVoy->voyageur->destinationX){
@@ -498,13 +544,13 @@ int main() {
                             }
                             else {
                                 if (monElementVoy->voyageur->posY < monElementVoy->voyageur->destinationY) {
-                                    if(mvtVoy(monElementVoy->voyageur, magare, 'd') == 0){
-                                        mvtVoy(monElementVoy->voyageur, magare, 's');
+                                    if(mvtVoy(monElementVoy->voyageur, magare, 'd') == 0 && mvtVoy(monElementVoy->voyageur, magare, 's') == 0){
+                                        mvtVoy(monElementVoy->voyageur, magare, 'z');
                                     }
                                 }
                                 else if(monElementVoy->voyageur->posY > monElementVoy->voyageur->destinationY){
-                                    if(mvtVoy(monElementVoy->voyageur, magare, 'q') == 0){
-                                        mvtVoy(monElementVoy->voyageur, magare, 's');
+                                    if(mvtVoy(monElementVoy->voyageur, magare, 'q') == 0 && mvtVoy(monElementVoy->voyageur, magare, 's') == 0){
+                                        mvtVoy(monElementVoy->voyageur, magare, 'z');
                                     }
                                 }
                             }
@@ -514,7 +560,7 @@ int main() {
                             }
                         }
                         else if (monElementVoy->voyageur->tempsAttente == 1) {
-                            ajoutVD(&maListeV, init_voyageurInd('*', magare, monElementVoy->voyageur->tempsAttente));
+                            ajoutVD(&maListeV, init_voyageurInd('*', magare, monElementVoy->voyageur->tempsAttente, 0));
                             monElementVoy->voyageur->tempsAttente -= 1;
                         }
                         else{
@@ -524,7 +570,7 @@ int main() {
                     }
                     i++;
                 }
-                timeInd = (timeInd +1)%30000000;
+                timeInd = (timeInd +1)%(30000000/vitesse);
             }
             fclose(train);
         }
