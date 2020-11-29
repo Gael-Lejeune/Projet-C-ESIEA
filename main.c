@@ -6,20 +6,13 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
+#include "utils.h"
 #include "train.h"
 #include "gare.h"
 #include "voyageur.h"
 #include "listeChainee.h"
 #include "listeChaineeVoy.h"
 // #include "voyageurind.h"
-
-#define PURPLE          "\033[1;35m"
-#define CYAN            "\033[1;36m"
-#define TRAINCOLOR      PURPLE
-#define DOORCOLOR      	CYAN
-#define DEFAULT_COLOR   "\033[0;m"
-#define LONGUEUR 126
-#define LARGEUR 29
 
 
 char key_pressed(){
@@ -70,6 +63,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
         switch (monElementTrain->train.etat){
             //Suivant l'etat du train
             case 'd': //dehors
+            printf("TEST\n");
             if (monElementTrain->train.tempsAttente == 0){
                 //Si le train a assez attendu hors gare
                 monElementTrain->train.etat='e'; //Passage à l'état entrant
@@ -94,7 +88,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             if (monElementTrain->train.posx > 116) {
                 //Si le train est entièrement en gare
                 printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
-                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 1+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
+                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 1+1, monElementTrain->train.posx - monElementTrain->train.longueur, "|");
                 printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 2+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
                 magare.custom[monElementTrain->train.lPortes-2][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
                 magare.custom[monElementTrain->train.lPortes-1][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
@@ -138,7 +132,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             case 'p' : //Partant
             for (int i = monElementTrain->train.longueur; i >= 0; i--) {
                 //Pour la longeur du train
-                if (monElementTrain->train.posx - i < LONGUEUR-1) {
+                if (monElementTrain->train.posx - i < LONGUEUR) {
                     afficherCarTrain(monElementTrain->train.custom[0][monElementTrain->train.longueur - i], monElementTrain->train.lPortes-2, monElementTrain->train.posx-i);
                     afficherCarTrain(monElementTrain->train.custom[1][monElementTrain->train.longueur - i], monElementTrain->train.lPortes-1, monElementTrain->train.posx-i);
                     afficherCarTrain(monElementTrain->train.custom[2][monElementTrain->train.longueur - i], monElementTrain->train.lPortes, monElementTrain->train.posx-i);
@@ -149,14 +143,14 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                 }
             }
             printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
-            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 1+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
+            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 1+1, monElementTrain->train.posx - monElementTrain->train.longueur, "|");
             printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes - 2+1, monElementTrain->train.posx - monElementTrain->train.longueur, "─");
             magare.custom[monElementTrain->train.lPortes-2][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
             magare.custom[monElementTrain->train.lPortes-1][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
             magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx - monElementTrain->train.longueur] = '-';
             // Afficher des rails derrière le train.
             monElementTrain->train.posx++; //Incrémenter la position du train
-            if(monElementTrain->train.posx == monElementTrain->train.longueur + LONGUEUR){
+            if(monElementTrain->train.posx == monElementTrain->train.longueur + LONGUEUR+1){
                 //Si le train est entièrement sorti
                 suppD(&maListe); //Le supprimer de la liste
                 fseek(train, 0, 0); //Placer le pointeur au debut du fichier train
@@ -179,7 +173,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             break;
 
             case 'e': //Entrant
-            for (int i = monElementTrain->train.posx; i < LONGUEUR-1; i++) {
+            for (int i = monElementTrain->train.posx; i < LONGUEUR; i++) {
                 afficherCarTrain(monElementTrain->train.custom[0][i - monElementTrain->train.posx], monElementTrain->train.lPortes, i);
                 afficherCarTrain(monElementTrain->train.custom[1][i - monElementTrain->train.posx], monElementTrain->train.lPortes + 1, i);
                 afficherCarTrain(monElementTrain->train.custom[2][i - monElementTrain->train.posx], monElementTrain->train.lPortes + 2, i);
@@ -189,7 +183,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
             }
             if (monElementTrain->train.posx < 9) {
                 printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
-                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 1+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
+                printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 1+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "|");
                 printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 2+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
                 magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
                 magare.custom[monElementTrain->train.lPortes+1][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
@@ -233,7 +227,7 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                 }
             }
             printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
-            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 1+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
+            printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 1+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "|");
             printf("\033[%d;%dH%s\n", monElementTrain->train.lPortes + 2+1, monElementTrain->train.posx + monElementTrain->train.longueur+1, "─");
             magare.custom[monElementTrain->train.lPortes][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';
             magare.custom[monElementTrain->train.lPortes+1][monElementTrain->train.posx + monElementTrain->train.longueur] = '-';

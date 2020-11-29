@@ -1,23 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "utils.h"
 #include "gare.h"
-
-#define LONGUEUR 125
-#define LARGEUR 29
-
-#define BLACK           "\033[1;30m"
-#define RED             "\033[1;31m"
-#define GREEN           "\033[1;32m"
-#define YELLOW          "\033[1;33m"
-#define BLUE            "\033[1;34m"
-#define PURPLE          "\033[1;35m"
-#define CYAN            "\033[1;36m"
-#define GREY            "\033[1;37m"
-#define BLINK           "\033[1;5m"
-#define DEFAULT_COLOR   "\033[0;m"
-#define WALLCOLOR RED
-#define RAILCOLOR GREY
-#define PLAYERCOLOR CYAN
 
 GARE init_gare(char * fichier){
     //Initialisation de la gare via fichier txt
@@ -91,6 +75,9 @@ void afficher_gare (GARE magare){ //affichage de la gare
                 break;
                 case '+': //bord du compteur
                 printf("%s%s%s", RAILCOLOR, "─", DEFAULT_COLOR);
+                break;
+                case 'b': //bord du compteur
+                printf("%s%s%s", RAILCOLOR, "|", DEFAULT_COLOR);
                 break;
                 default: //Si le caractère n'est pas reconnu
                 printf("%c", magare.custom[i][j]);

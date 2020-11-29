@@ -3,25 +3,18 @@
 #include <unistd.h>
 #include <string.h>
 #include "train.h"
-#define LARGT 3
-#define LONGT 116
-#define PURPLE          "\033[1;35m"
-#define CYAN            "\033[1;36m"
-#define TRAINCOLOR      PURPLE
-#define DOORCOLOR      	CYAN
-#define DEFAULT_COLOR   "\033[0;m"
+#include "utils.h"
+
 
 TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 	TRAIN montrain;
 	montrain.direction = direction;
-	if (direction == 'e') {montrain.posx=0;}
-	else {montrain.posx=126;}
 	if (direction == 'e') {
 		montrain.posx=0;
 		montrain.lPortes = 17;
 	}
 	else {
-		montrain.posx=126;
+		montrain.posx=LONGUEUR+1;
 		montrain.lPortes = 11;
 	}
 	montrain.longueur=LONGT;
@@ -30,7 +23,7 @@ TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 	montrain.etat='d'; //dehors
 	montrain.portes=0; //fermées
 	montrain.tempsAttente=tempsAttente;
-	montrain.tempsAQuai=250;
+	montrain.tempsAQuai=TEMPSAQUAI;
 	montrain.vide='v';
 	montrain.custom = (char **)malloc(LARGT*sizeof(char *));
 	for(int i =0; i<LARGT;i++) {
@@ -62,6 +55,9 @@ void afficherCarTrain(char c, int x, int y){
 		break;
 		case '=':
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "▁", DEFAULT_COLOR);
+		break;
+		case '|':
+		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "|", DEFAULT_COLOR);
 		break;
 		case 'e':
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎞", DEFAULT_COLOR);
