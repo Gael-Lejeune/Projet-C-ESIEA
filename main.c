@@ -57,7 +57,7 @@ void afficher_fichier(char * nomfic){
 } //afficher_fichier()
 
 
-void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FILE * train, GARE magare) {
+void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FILE * train, GARE magare, int vitesse) {
     if (monElementTrain->train.direction == 'e') {
         //Si le train va vers l'est
         switch (monElementTrain->train.etat){
@@ -114,11 +114,14 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                     }
                 }
             }
-            else if (monElementTrain->train.tempsAQuai-5 == 0) {
+            else if (monElementTrain->train.tempsAQuai-10 == 0) {
+                if (vitesse == 1) {
+                    system("play -q --no-show-progres -v 0.08 sound/porte-metro.mp3 &");
+                }
                 //Si le train part dans 5, fermer les portes
                 for (int i = monElementTrain->train.posx; i >= 0; i--) {
                     if (monElementTrain->train.custom[2][monElementTrain->train.longueur - i] == 'f') {
-                        printf("\033[%d;%dH%s%s%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx-i-1, DOORCOLOR, "-", DEFAULT_COLOR);
+                        printf("\033[%d;%dH%s%s%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx-i, DOORCOLOR, "-", DEFAULT_COLOR);
                     }
                 }
             }
@@ -204,9 +207,12 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
                     }
                 }
             }
-            else if (monElementTrain->train.tempsAQuai-5 == 0) {
+            else if (monElementTrain->train.tempsAQuai-10 == 0) {
+                if (vitesse == 1) {
+                    system("play -q --no-show-progres -v 0.08 sound/porte-metro.mp3 &");
+                }
                 for (int i = monElementTrain->train.posx; i <= monElementTrain->train.posx + monElementTrain->train.longueur; i++) {
-                    if (monElementTrain->train.custom[0][i] == 'd') {
+                    if (monElementTrain->train.custom[0][i-1] == 'd') {
                         printf("\033[%d;%dH%s%s%s\n", monElementTrain->train.lPortes+1, monElementTrain->train.posx+i+1, DOORCOLOR, "-", DEFAULT_COLOR);
                     }
                 }
@@ -247,7 +253,6 @@ void deplacer_train(ELEMENT * monElementTrain, LISTE maListe, int tempsAQuai, FI
 int main() {
     srand(time(NULL));
     while(1){
-        system("play -q --no-show-progres sound/test.mp3 &");
         system("clear");
         char c;
         afficher_fichier(FICMENU); //Affichage du menu de choix de mode
@@ -277,6 +282,12 @@ int main() {
                 printf("\n\n\n\n\n\n\n\n\n\n\tMerci d'avoir utilisé notre simulateur. À bientôt !\n\n\n\n\n\n\n\n\n\n" );
                 return 0;
             }
+            else if (c == 'l'){ //Quitter la simulation
+                system("play -q --no-show-progres -v 0.08 sound/demo.mp3 &");
+            }
+            else if (c == 'm'){ //Quitter la simulation
+                system("killall play 2> /dev/null &");
+            }
             else {
                 printf("\033[%d;%dH ", 40, 0);
             }
@@ -299,6 +310,15 @@ int main() {
             printf("\033[%d;%dH%dm\n", 28, 2, maListeTrain.premier->train.tempsAttente/60);
             printf("\033[%d;%dH%dm\n", 28, 122, maListeTrain.premier->train.tempsAttente/60); //Affichage des temps d'attente
 
+            printf("\033[%d;%dH%s\n", 30, 0, "Commandes possibles :");
+            printf("\033[%d;%dH%s\n", 31, 0, "«k» -> menu");
+            printf("\033[%d;%dH%s\n", 32, 0, "«+» -> accélère la simulation");
+            printf("\033[%d;%dH%s\n", 33, 0, "«-» -> décélère la simulation");
+
+            printf("\033[%d;%dH%s\n", 31, 80, "Vitesse de la simulation :");
+            printf("\033[%d;%dHx1  \n", 32, 80);
+
+
             int time = 0; //Temps
             int vitesse = 1; //Multiplicateur de vitesse de la simulation
             ELEMENT* monElementTrain = maListeTrain.premier; //Train
@@ -311,8 +331,12 @@ int main() {
                         break;
                     } else if (c == '+') { //Augmenter la vitesse
                         vitesse +=1;
+                        printf("\033[%d;%dH%s%d  \n", 32, 80, "x", vitesse);
+
                     } else if (c == '-' && vitesse > 1) { //Reduire la vitesse
                         vitesse -=1;
+                        printf("\033[%d;%dH%s%d  \n", 32, 80, "x", vitesse);
+
                     }
                     if (maListeTrain.dernier->train.tempsAttente%60 == 59) {
                         if(maListeTrain.dernier->train.tempsAttente/60 == 0) {
@@ -336,7 +360,7 @@ int main() {
                     }
 
 
-                    deplacer_train(monElementTrain, maListeTrain, TEMPSAQUAI, train, magare);
+                    deplacer_train(monElementTrain, maListeTrain, TEMPSAQUAI, train, magare, vitesse);
 
                     if (monElementTrain->suivant == NULL) {
                         monElementTrain = maListeTrain.premier;
@@ -369,6 +393,19 @@ int main() {
             printf("\033[%d;%dH%dm\n", 28, 2, maListeTrain.premier->train.tempsAttente/60);
             printf("\033[%d;%dH%dm\n", 28, 122, maListeTrain.premier->train.tempsAttente/60);
 
+            printf("\033[%d;%dH%s\n", 30, 0, "Commandes possibles :");
+            printf("\033[%d;%dH%s\n", 31, 0, "«k» -> menu");
+            printf("\033[%d;%dH%s\n", 32, 0, "«+» -> accélère la simulation");
+            printf("\033[%d;%dH%s\n", 33, 0, "«-» -> décélère la simulation");
+            printf("\033[%d;%dH%s\n", 34, 0, "«z» -> le voyageur monte");
+            printf("\033[%d;%dH%s\n", 35, 0, "«s» -> le voyageur descend");
+            printf("\033[%d;%dH%s\n", 36, 0, "«d» -> le voyageur va à droite");
+            printf("\033[%d;%dH%s\n", 37, 0, "«q» -> le voyageur va à gauche");
+            printf("\033[%d;%dH%s\n", 31, 80, "Vitesse de la simulation :");
+            printf("\033[%d;%dHx1  \n", 32, 80);
+
+
+
             int timer = 0;
             int vitesse = 1;
             int timeInd = 0;
@@ -381,8 +418,10 @@ int main() {
                         break;
                     } else if (movPlayer == '+') {
                         vitesse +=1;
+                        printf("\033[%d;%dH%s%d  \n", 32, 80, "x", vitesse);
                     } else if (movPlayer == '-' && vitesse > 1) {
                         vitesse -=1;
+                        printf("\033[%d;%dH%s%d  \n", 32, 80, "x", vitesse);
                     }
                     movPlayer = key_pressed();
                     if (movPlayer != 0) {
@@ -436,7 +475,7 @@ int main() {
                         }
                     }
 
-                    deplacer_train(monElementTrain, maListeTrain, TEMPSAQUAI, train, magare);
+                    deplacer_train(monElementTrain, maListeTrain, TEMPSAQUAI, train, magare, vitesse);
 
 
                     if (monElementTrain->train.etat == 's') {
@@ -461,7 +500,7 @@ int main() {
                             }
                         }
                         monElementVoy = maListeV.premier;
-                        if (monElementTrain->train.direction == 'e') {
+                        if (monElementTrain->train.direction == 'e' && monElementTrain->train.tempsAQuai > 10) {
                             while (monElementVoy) {
                                 if (monElementVoy->voyageur->quai == 'b' && monElementVoy->voyageur->destinationX != monElementTrain->train.lPortes) {
                                     monElementVoy->voyageur->destinationX = monElementTrain->train.lPortes;
@@ -475,7 +514,7 @@ int main() {
                                 monElementVoy = monElementVoy->suivant;
                             }
                         }
-                        else {
+                        else if(monElementTrain->train.direction == 'o' && monElementTrain->train.tempsAQuai > 10){
                             while (monElementVoy) {
                                 if (monElementVoy->voyageur->quai == 'h' && monElementVoy->voyageur->destinationX != monElementTrain->train.lPortes) {
                                     monElementVoy->voyageur->destinationX = monElementTrain->train.lPortes;
