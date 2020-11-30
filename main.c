@@ -447,7 +447,7 @@ int main() {
                         if (monvoyageur->carpos == 'd' || monvoyageur->carpos == 'f') {
                             movPlayer = 'k';
                         }
-                        printf("\033[%d;%dHCoordonees : %d %d", 36, 20, monvoyageur->posX, monvoyageur->posY);
+                        // printf("\033[%d;%dHCoordonees : %d %d", 36, 20, monvoyageur->posX, monvoyageur->posY);
                         // printf("\033[%d;%dHBravo, vous êtes sorti !", 20, 20);
                         // system("clear");
                         // usleep(1000000);
@@ -572,9 +572,19 @@ int main() {
                 if(timeInd == 5000){
                     monElementVoy = maListeV.premier;
                     int i = 1;
+                    int mult = 1;
+                    int posX;
                     while (monElementVoy) {
+                        if (monElementVoy->voyageur->destinationX == -1 && monElementVoy->voyageur->posX < 6 && monElementVoy->voyageur->posX > 2) {
+                            mult = 5;
+                        } else if (monElementVoy->voyageur->destinationY == -1|| monElementVoy->voyageur->destinationY == LONGUEUR) {
+                            mult = 10;
+                        }
+                        else {
+                            mult = 1;
+                        }
                         if (monElementVoy->voyageur->tempsAttente == 0) {
-                            if (abs(monElementVoy->voyageur->posX-monElementVoy->voyageur->destinationX) > abs(monElementVoy->voyageur->posY-monElementVoy->voyageur->destinationY)) {
+                            if (abs(monElementVoy->voyageur->posX-monElementVoy->voyageur->destinationX)*mult > abs(monElementVoy->voyageur->posY-monElementVoy->voyageur->destinationY)) {
                                 if (monElementVoy->voyageur->posX > monElementVoy->voyageur->destinationX) {
                                     if (mvtVoy(monElementVoy->voyageur, magare, 'z') == 0) {
                                         mvtVoy(monElementVoy->voyageur, magare, 'q');
