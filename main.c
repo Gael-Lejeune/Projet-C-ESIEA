@@ -299,6 +299,13 @@ int main() {
             printf("\033[%d;%dH%dm\n", 28, 2, maListeTrain.premier->train.tempsAttente/60);
             printf("\033[%d;%dH%dm\n", 28, 122, maListeTrain.premier->train.tempsAttente/60); //Affichage des temps d'attente
 
+            printf("\033[%d;%dH%s\n", 30, 0, "Commandes possibles :");
+            printf("\033[%d;%dH%s\n", 31, 0, "«k» -> menu");
+            printf("\033[%d;%dH%s\n", 32, 0, "«+» -> accélère la simulation");
+            printf("\033[%d;%dH%s\n", 33, 0, "«-» -> décélère la simulation");
+
+            printf("\033[%d;%dH%s\n", 31, 80, "Vitesse de la simulation :");
+
             int time = 0; //Temps
             int vitesse = 1; //Multiplicateur de vitesse de la simulation
             ELEMENT* monElementTrain = maListeTrain.premier; //Train
@@ -306,6 +313,7 @@ int main() {
 
             while(1){
                 if(time == 500){
+                    printf("\033[%d;%dH%s%d  \n", 32, 80, "x", vitesse);
                     c = key_pressed();
                     if (c == 'k') { //Quitter la simulation
                         break;
@@ -375,6 +383,15 @@ int main() {
 
             ELEMENT* monElementTrain = maListeTrain.premier;
 
+            printf("\033[%d;%dH%s\n", 30, 0, "Commandes possibles :");
+            printf("\033[%d;%dH%s\n", 31, 0, "«k» -> menu");
+            printf("\033[%d;%dH%s\n", 32, 0, "«+» -> accélère la simulation");
+            printf("\033[%d;%dH%s\n", 33, 0, "«-» -> décélère la simulation");
+            printf("\033[%d;%dH%s\n", 34, 0, "«z» -> le voyageur monte");
+            printf("\033[%d;%dH%s\n", 35, 0, "«s» -> le voyageur descend");
+            printf("\033[%d;%dH%s\n", 36, 0, "«d» -> le voyageur va à droite");
+            printf("\033[%d;%dH%s\n", 37, 0, "«q» -> le voyageur va à gauche");
+
             while(1){
                 if(timer == 500){
                     if (movPlayer == 'k') {
@@ -390,28 +407,28 @@ int main() {
                             movPlayer = 'k';
                         }
                         else if(monvoyageur->posX == 0 && monvoyageur->posY > 62 && movPlayer == 'z'){ //positions de changement de quai vers le bas
-                            printf("\033[%d;%dH%c",monvoyageur->posX, monvoyageur->posY+1, ' ');
-                            monvoyageur->posX = 24;
-                            monvoyageur->posY = 0;
-                            printf("\033[%d;%dHVous venez de changer de quai.",32, 80);
-                            printf("\033[%d;%dHSortez de la gare à droite ou montez dans un train.",33, 80);
+                          printf("\033[%d;%dH%c",monvoyageur->posX, monvoyageur->posY+1, ' ');
+                          monvoyageur->posX = 24;
+                          monvoyageur->posY = 0;
+                          printf("\033[%d;%dHVous venez de changer de quai.", 33, 70);
+                          printf("\033[%d;%dHSortez de la gare à droite ou montez dans un train.", 34, 70);
                         }
                         else if (monvoyageur->posY == 0 && movPlayer == 'q'){ //positions de changement de quai vers le haut
-                            printf("\033[%d;%dH%c",monvoyageur->posX+1, monvoyageur->posY, ' ');
-                            monvoyageur->posX = 0;
-                            monvoyageur->posY = 93;
-                            printf("\033[%d;%dHVous venez de changer de quai.",32, 80);
-                            printf("\033[%d;%dHSortez de la gare à gauche ou montez dans un train.",33, 80);
+                          printf("\033[%d;%dH%c",monvoyageur->posX+1, monvoyageur->posY, ' ');
+                          monvoyageur->posX = 0;
+                          monvoyageur->posY = 93;
+                          printf("\033[%d;%dHVous venez de changer de quai.", 33, 70);
+                          printf("\033[%d;%dHSortez de la gare à gauche ou montez dans un train.", 34, 70);
                         }
                         // printf("test\n");
                         mvtVoy(monvoyageur, magare, movPlayer);
                         if (monvoyageur->carpos == 'd' || monvoyageur->carpos == 'f') {
                             movPlayer = 'k';
                         }
-                        printf("\033[%d;%dHCoordonees : %d %d", 36, 20, monvoyageur->posX, monvoyageur->posY);
-                        // printf("\033[%d;%dHBravo, vous êtes sorti !", 20, 20);
-                        // system("clear");
-                        // usleep(1000000);
+                        printf("\033[%d;%dHCoordonees : %d %d", 36, 60, monvoyageur->posX, monvoyageur->posY);
+                            // printf("\033[%d;%dHBravo, vous êtes sorti !", 20, 20);
+                            // system("clear");
+                            // usleep(1000000);
                     }
 
 
@@ -535,7 +552,7 @@ int main() {
                     int i = 1;
                     while (monElementVoy) {
                         if (monElementVoy->voyageur->tempsAttente == 0) {
-                            if (abs(monElementVoy->voyageur->posX-monElementVoy->voyageur->destinationX) > abs(monElementVoy->voyageur->posY-monElementVoy->voyageur->destinationY)) {
+                            if (abs(monElementVoy->voyageur->posX-monElementVoy->voyageur->destinationX)*5 > abs(monElementVoy->voyageur->posY-monElementVoy->voyageur->destinationY)) {
                                 if (monElementVoy->voyageur->posX > monElementVoy->voyageur->destinationX) {
                                     if (mvtVoy(monElementVoy->voyageur, magare, 'z') == 0) {
                                         mvtVoy(monElementVoy->voyageur, magare, 'q');
