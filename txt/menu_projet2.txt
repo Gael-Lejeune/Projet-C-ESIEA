@@ -6,7 +6,7 @@
       ╒══════════════════════════════════════════════════════════════════════╕
       ║                                                                      ║
       ║   Pour commencer la simulation, veuillez sélectionner un mode      ║
-      ║   de simulation :                                                  ║
+      ║   de simulation avec « d » ou « q ».                               ║
       ║                                                                      ║
       ╘══════════════════════════════════════════════════════════════════════╛
                         ▼                                  ▼
@@ -14,7 +14,7 @@
       ║              Mode 1 :            ║║             Mode 2 :             ║
       ║                                  ║║                                  ║
       ║                                  ║║  Des voyageurs se déplacent et   ║
-      ║  Seul les trains apparaissent    ║║    prennent le Metro, il est     ║
+      ║  Seuls les trains apparaissent   ║║    prennent le Métro, il est     ║
       ║           dans la gare.          ║║   aussi possible de prendre le   ║
       ║                                  ║║      contrôle d'un voyageur.     ║
       ║                                  ║║                                  ║
@@ -22,7 +22,10 @@
 
       ┌──────────────────────────────────────────────────────────────────────┐
       │                                                                      │
+      │             Appuyez sur « o » pour lancer la simulation.             │
       │             La simulation va débuter, amusez vous bien !             │
+      │                                                                      │
+      │             Pour quitter le simulateur, appuyez sur « k ».           │
       │                                                                      │
       ╘══════════════════════════════════════════════════════════════════════╛
 
