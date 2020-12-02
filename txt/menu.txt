@@ -9,15 +9,15 @@
       ║   de simulation avec « d » ou « q ».                               ║
       ║                                                                      ║
       ╘══════════════════════════════════════════════════════════════════════╛
-                        ▼                                  ▼
-      ╔══════════════════════════════════╗╔══════════════════════════════════╗
-      ║              Mode 1 :            ║║             Mode 2 :             ║
-      ║                                  ║║                                  ║
-      ║                                  ║║  Des voyageurs se déplacent et   ║
-      ║  Seuls les trains apparaissent   ║║    prennent le Métro, il est     ║
-      ║           dans la gare.          ║║   aussi possible de prendre le   ║
-      ║                                  ║║      contrôle d'un voyageur.     ║
-      ║                                  ║║                                  ║
+                        ▼                                  ▼                                _\|/_
+      ╔══════════════════════════════════╗╔══════════════════════════════════╗	            (o o)
+      ║              Mode 1 :            ║║             Mode 2 :             ║	    +----oOO-{_}-OOo----------------------+
+      ║                                  ║║                                  ║	    |   Ce simulateur utilise des sons.   |
+      ║                                  ║║  Des voyageurs se déplacent et   ║	    |    Veuillez ajuster votre volume    |
+      ║  Seuls les trains apparaissent   ║║    prennent le Métro, il est     ║	    |       à l'aide de cette démo.       |
+      ║           dans la gare.          ║║   aussi possible de prendre le   ║ 	    |             L : Lire                |
+      ║                                  ║║      contrôle d'un voyageur.     ║	    |             M : Arrêter             |
+      ║                                  ║║                                  ║      +-------------------------------------+
       ╚══════════════════════════════════╝╚══════════════════════════════════╝
 
       ┌──────────────────────────────────────────────────────────────────────┐
