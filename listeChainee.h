@@ -5,9 +5,6 @@
 #include <stdlib.h>
 #include "train.h"
 
-#define LARGT 2
-#define LONGT 52
-
 typedef struct  element ELEMENT;
 struct element{
     TRAIN train;
