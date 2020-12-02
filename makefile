@@ -18,8 +18,4 @@ clean:
 	rm main.out
 
 execute:
-	# setterm -cursor offs
-	stty -echo
 	./$(EXEC)
-	stty echo
-	# setterm -cursor on

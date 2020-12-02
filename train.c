@@ -3,31 +3,37 @@
 #include <unistd.h>
 #include <string.h>
 #include "train.h"
-#include "utils.h"
-
+#define LARGT 3
+#define LONGT 116
+#define PURPLE          "\033[1;35m"
+#define CYAN            "\033[1;36m"
+#define TRAINCOLOR      PURPLE
+#define DOORCOLOR      	CYAN
+#define DEFAULT_COLOR   "\033[0;m"
 
 TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
-	fseek(fichier, 0, 0); //Retour au début du fichier contenant le train
-
-	TRAIN montrain; //Declaration du train
-	montrain.direction = direction; //'o' pour ouest et 'e' pour est
-	if (direction == 'e') { //Si le train va vers l'est
-		montrain.posx=0; //Position de la tete du train
-		montrain.lPortes = 17; //Position des portes
+	TRAIN montrain;
+	montrain.direction = direction;
+	if (direction == 'e') {montrain.posx=0;}
+	else {montrain.posx=126;}
+	if (direction == 'e') {
+		montrain.posx=0;
+		montrain.lPortes = 17;
 	}
 	else {
-		montrain.posx=LONGUEUR+1;
+		montrain.posx=126;
 		montrain.lPortes = 11;
 	}
-	montrain.longueur=LONGT; //Longueur du train
-	montrain.vitesse= VITESSETRAIN; //Vitesse des trains
+	montrain.longueur=LONGT;
+	montrain.posy=montrain.posx-LONGT;
+	montrain.vitesse= 5000000;
 	montrain.etat='d'; //dehors
 	montrain.portes=0; //fermées
-	montrain.tempsAttente=tempsAttente; //Temps d'attente avant l'entrée en gare
-	montrain.tempsAQuai=TEMPSAQUAI; //Temps à attendre en quai
-	montrain.vide='v'; //Train vide
-	montrain.custom = (char **)malloc(LARGT*sizeof(char *)); //matrice du train
-	for(int i =0; i<LARGT;i++) { //Chargement de la matrice à partir du fichier
+	montrain.tempsAttente=tempsAttente;
+	montrain.tempsAQuai=250;
+	montrain.vide='v';
+	montrain.custom = (char **)malloc(LARGT*sizeof(char *));
+	for(int i =0; i<LARGT;i++) {
 		montrain.custom[i] = (char *)malloc(LONGT*sizeof(char));
 	}
 	char c;
@@ -41,7 +47,7 @@ TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 	return montrain;
 } //init_train()
 
-void afficherCarTrain(char c, int x, int y){ //Afficher le caractere du train en ascii etendu à partir de l'ascii non etendu
+void afficherCarTrain(char c, int x, int y){
 	x += 1;
 	y += 1;
 	switch (c) {
@@ -56,9 +62,6 @@ void afficherCarTrain(char c, int x, int y){ //Afficher le caractere du train en
 		break;
 		case '=':
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "▁", DEFAULT_COLOR);
-		break;
-		case '|':
-		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "|", DEFAULT_COLOR);
 		break;
 		case 'e':
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎞", DEFAULT_COLOR);
@@ -80,6 +83,7 @@ void afficherCarTrain(char c, int x, int y){ //Afficher le caractere du train en
 		break;
 		case 'd':
 		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "-", DEFAULT_COLOR);
+		// printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "¯", DEFAULT_COLOR);
 		break;
 		case 'f':
 		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "-", DEFAULT_COLOR);
