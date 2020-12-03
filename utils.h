@@ -34,4 +34,11 @@
 #define FICGARE         "txt/gare.txt"
 #define FICMENU         "txt/menu.txt"
 
+//SONS
+#define SONDEMO         "play -q --no-show-progres -v 0.08 sound/demo.mp3 &"
+#define SONDEPART       "play -q --no-show-progres -v 0.08 sound/depart_metro.mp3 &"
+#define SONFREINAGE     "play -q --no-show-progres -v 0.08 sound/freinage_metro.mp3 &"
+#define SONPORTES       "play -q --no-show-progres -v 0.08 sound/porte_metro.mp3 &"
+
+
 #endif
