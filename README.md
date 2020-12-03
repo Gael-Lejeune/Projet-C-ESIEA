@@ -18,7 +18,7 @@ Ce voyageur peut monter dans un train, changer de quai et sortir de la station.
 
 ### Commandes utilisables
 #### Dans le menu
-###### [Q,D]
+##### [Q,D]
 Permet de déplacer le curseur de sélection de mode vers la gauche ou la droite.
 ##### [ESPACE]
 Permet de lancer la simulation
@@ -28,9 +28,9 @@ Permet de lire et d'arrêter la démo sonore
 Permet de quitter le simulateur
 
 #### Dans la simulation
-###### [Z,Q,S,D] (uniquement dans le mode 2)
+##### [Z,Q,S,D] (uniquement dans le mode 2)
 Permet de déplacer le voyageur dans la gare.
-###### [+,-]
+##### [+,-]
 Permet d'accélérer ou de ralentir la simulation
-###### [K]
+##### [K]
 Permet de revenir au menu
