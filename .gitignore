@@ -3,3 +3,7 @@
 *.gch
 main
 Train.c
+*.o
+*.out
+*.o
+*.o
