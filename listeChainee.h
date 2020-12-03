@@ -9,7 +9,7 @@ typedef struct  element ELEMENT;
 struct element{
     TRAIN train;
     ELEMENT *precedent;
-    ELEMENT *suivant; //permet de lier les éléments entre eux
+    ELEMENT *suivant; //Permet de lier les éléments entre eux
 };
 
 typedef struct liste LISTE;
@@ -19,19 +19,17 @@ struct liste
     ELEMENT *dernier;
 };
 
-void init_liste(LISTE *l); //Initialisation de la liste chainée
+void init_liste_train(LISTE *l); //Initialisation de la liste chainée
 
-void ajoutF(LISTE *l, TRAIN t); //ajout d'élément en fin de liste
+void ajout_train_fin(LISTE *l, TRAIN t); //Ajout d'élément en fin de liste
 
-void ajoutD(LISTE *l, TRAIN t); //ajoute au début
+void ajout_train_debut(LISTE *l, TRAIN t); //Ajoute au début
 
-void suppF(LISTE *l); //supprime le dernier
+void supp_train_fin(LISTE *l); //Supprime le dernier
 
-void suppD(LISTE *l); //supprime le premier
+void supp_train_debut(LISTE *l); //Supprime le premier
 
-void View(LISTE l);
-
-void Clear(LISTE *l); //Vide la liste
+void clear_train(LISTE *l); //Vide la liste
 
 
 

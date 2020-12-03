@@ -1,12 +1,12 @@
 #include "listeChainee.h"
 
-void init_liste(LISTE *l) //Initialisation de la liste chainée
+void init_liste_train(LISTE *l) //Initialisation de la liste chainée
 {
     l->premier = NULL;
     l->dernier = NULL;
 }
 
-void ajoutF(LISTE *l, TRAIN t) //ajout d'élément en fin de liste
+void ajout_train_fin(LISTE *l, TRAIN t) //Ajout d'élément en fin de liste
 {
     ELEMENT * nouv = (ELEMENT*)malloc(sizeof(ELEMENT));
     if(!nouv) exit(EXIT_FAILURE);
@@ -18,7 +18,7 @@ void ajoutF(LISTE *l, TRAIN t) //ajout d'élément en fin de liste
     l->dernier = nouv;
 }
 
-void ajoutD(LISTE *l, TRAIN t) //ajoute au début
+void ajout_train_debut(LISTE *l, TRAIN t) //Ajoute au début
 {
     ELEMENT * nouv = (ELEMENT*)malloc(sizeof(ELEMENT));
     if(!nouv) exit(EXIT_FAILURE);
@@ -30,7 +30,7 @@ void ajoutD(LISTE *l, TRAIN t) //ajoute au début
     l->premier = nouv;
 }
 
-void suppF(LISTE *l) //supprime le dernier
+void supp_train_fin(LISTE *l) //Supprime le dernier
 {
     ELEMENT *tmp = l->dernier;
     l->dernier = tmp->precedent;
@@ -39,7 +39,7 @@ void suppF(LISTE *l) //supprime le dernier
     free(tmp);
 }
 
-void suppD(LISTE *l) //supprime le premier
+void supp_train_debut(LISTE *l) //Supprime le premier
 {
     ELEMENT *tmp = l->premier;
     l->premier = tmp->suivant;
@@ -48,17 +48,7 @@ void suppD(LISTE *l) //supprime le premier
     free(tmp);
 }
 
-void View(LISTE l)
-{
-    ELEMENT *pelem = l.premier;
-    while(pelem)
-    {
-        printf("%c\n",pelem->train.direction);
-        pelem = pelem->suivant;
-    }
-}
-
-void Clear(LISTE *l) //Vide la liste
+void clear_train(LISTE *l) //Vide la liste
 {
     ELEMENT *tmp;
     ELEMENT *pelem = l->premier;

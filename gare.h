@@ -6,11 +6,11 @@
 
 typedef struct gare GARE;
 struct gare{
-    char ** custom;   /*Contient le train customisé, il faut choisirla bonne taille de votre tableau*/
+    char ** custom; //Matrice stockant les caractères de la gare
 };
 
 GARE init_gare(char * fichier); //Initialisation de la gare via fichier txt
 
-void afficher_gare (GARE magare); //affichage de la gare
+void afficher_gare (GARE magare); //Affichage de la gare
 
 #endif

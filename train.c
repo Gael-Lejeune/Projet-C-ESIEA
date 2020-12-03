@@ -21,12 +21,12 @@ TRAIN init_train(FILE * fichier, char direction, int tempsAttente){
 	}
 	montrain.longueur=LONGT; //Longueur du train
 	montrain.vitesse= VITESSETRAIN; //Vitesse des trains
-	montrain.etat='d'; //dehors
-	montrain.portes=0; //fermées
+	montrain.etat='d'; //Dehors
+	montrain.portes=0; //Fermées
 	montrain.tempsAttente=tempsAttente; //Temps d'attente avant l'entrée en gare
 	montrain.tempsAQuai=TEMPSAQUAI; //Temps à attendre en quai
 	montrain.vide='v'; //Train vide
-	montrain.custom = (char **)malloc(LARGT*sizeof(char *)); //matrice du train
+	montrain.custom = (char **)malloc(LARGT*sizeof(char *)); //Matrice du train
 	for(int i =0; i<LARGT;i++) { //Chargement de la matrice à partir du fichier
 		montrain.custom[i] = (char *)malloc(LONGT*sizeof(char));
 	}
@@ -45,46 +45,46 @@ void afficherCarTrain(char c, int x, int y){ //Afficher le caractere du train en
 	x += 1;
 	y += 1;
 	switch (c) {
-		case 'a':
+		case 'a': //Tête ou queue du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎛", DEFAULT_COLOR);
 		break;
-		case 'w':
+		case 'w': //Tête ou queue du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎝", DEFAULT_COLOR);
 		break;
-		case '-':
+		case '-': //Corps du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "▔", DEFAULT_COLOR);
 		break;
-		case '=':
+		case '=': //Corps du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "▁", DEFAULT_COLOR);
 		break;
-		case '|':
+		case '|': //Corps du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "|", DEFAULT_COLOR);
 		break;
-		case 'e':
+		case 'e': //Tête ou queue du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎞", DEFAULT_COLOR);
 		break;
-		case 'c':
+		case 'c': //Tête ou queue du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎠", DEFAULT_COLOR);
 		break;
-		case 'l':
+		case 'l': //Corps du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎣", DEFAULT_COLOR);
 		break;
-		case 'j':
+		case 'j': //Corps du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎦", DEFAULT_COLOR);
 		break;
-		case 'u':
+		case 'u': //Corps du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎤", DEFAULT_COLOR);
 		break;
-		case 'o':
+		case 'o': //Corps du train
 		printf("\033[%d;%dH%s%s%s\n", x, y,TRAINCOLOR, "⎡", DEFAULT_COLOR);
 		break;
-		case 'd':
+		case 'd': //Porte
 		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "-", DEFAULT_COLOR);
 		break;
-		case 'f':
+		case 'f': //Porte
 		printf("\033[%d;%dH%s%s%s\n", x, y,DOORCOLOR, "-", DEFAULT_COLOR);
 		break;
-		default:
+		default: //Si le caractère n'est pas reconnu
 		printf("\033[%d;%dH%c\n", x, y, c);
 		break;
 	}

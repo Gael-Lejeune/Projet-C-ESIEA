@@ -10,7 +10,7 @@ GARE init_gare(char * fichier){
     magare.custom = (char **)malloc(LARGEUR*sizeof(char *));
     for(int i =0; i<LARGEUR; i++) {
         magare.custom[i] = (char *)malloc(LONGUEUR*sizeof(char));
-    } //Allocation de l'espace mémoire pour la gare.
+    } //Allocation de l'espace mémoire pour la gare
     char c;
     for(int i=0; i<LARGEUR; i++){
         for(int j=0; j<LONGUEUR; j++){
@@ -18,7 +18,7 @@ GARE init_gare(char * fichier){
             magare.custom[i][j] = c;
         }
         fgetc(gare);
-    } //Remplissage de la gare en lisant le fichier txt correspondant.
+    } //Remplissage de la gare en lisant le fichier txt correspondant
     fclose(gare);
     return magare;
 } //init_gare()
@@ -49,7 +49,7 @@ void afficher_gare (GARE magare){ //affichage de la gare
                 case '|': //mur
                 printf("%s%s%s", WALLCOLOR, "║", DEFAULT_COLOR);
                 break;
-                case 'l':
+                case 'l': //mur
                 printf("%s%s%s", WALLCOLOR, "═", DEFAULT_COLOR);
                 break;
                 case '-': //rails

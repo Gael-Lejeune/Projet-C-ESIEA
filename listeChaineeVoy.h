@@ -19,19 +19,19 @@ struct listeV
     ELEMENTV *dernier;
 };
 
-void init_listeV(LISTEV *l); //Initialisation de la listeV chainée
+void init_liste_voy(LISTEV *l); //Initialisation de la listeV chainée
 
-void ajoutVF(LISTEV *l, VOYAGEUR t); //ajout d'élément en fin de listeV
+void ajout_voy_fin(LISTEV *l, VOYAGEUR t); //ajout d'élément en fin de listeV
 
-void ajoutVD(LISTEV *l, VOYAGEUR t); //ajoute au début
+void ajout_voy_debut(LISTEV *l, VOYAGEUR t); //ajoute au début
 
-void suppVF(LISTEV *l); //supprime le dernier
+void supp_voy_fin(LISTEV *l); //supprime le dernier
 
-void suppVD(LISTEV *l); //supprime le premier
+void supp_voy_debut(LISTEV *l); //supprime le premier
 
-void suppV(LISTEV*l, ELEMENTV * element); //supprime un élément quelconque
+void supp_voy(LISTEV*l, ELEMENTV * element); //supprime un élément quelconque
 
-void ClearV(LISTEV *l); //Vide la listeV
+void clear_voy(LISTEV *l); //Vide la listeV
 
 
 

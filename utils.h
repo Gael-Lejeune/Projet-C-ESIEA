@@ -1,6 +1,8 @@
 #ifndef H_UTILS
 #define H_UTILS
 
+
+//VALEURS DE LA GARE
 #define LONGUEUR 125
 #define LARGEUR 29
 

@@ -7,12 +7,12 @@
 
 typedef struct train TRAIN;
 struct train{
-    char direction ;    //N => Nord, S => Sud, E => EST, O => OUEST
+    char direction ;    //E => EST, O => OUEST
     int posx;           //Position courante x de la tête du train
     int vitesse;        //Vitesse du train
     int lPortes;        //Ligne des portes du train
-    char ** custom;     //Contient le train customisé, il faut choisir la bonne taille de votre tableau
-    char etat;          //État du train => dehors, entrant, stationné, sortant, sorti
+    char ** custom;     //Contient la matrice du train
+    char etat;          //État du train => dehors, entrant, stationné, partant
     int portes;         //Portes ouvertes ou fermées
     int longueur;       //Longueur du train
     int tempsAttente;   //Temps d'attente du train avant d'arriver en gare
@@ -20,8 +20,8 @@ struct train{
     char vide;          //v vide, p plein
 };
 
-TRAIN init_train(FILE * fichier, char direction, int tempsAttente);
+TRAIN init_train(FILE * fichier, char direction, int tempsAttente); //Initialisation du train
 
-void afficherCarTrain(char c, int x, int y);
+void afficherCarTrain(char c, int x, int y); //Affichage du train
 
 #endif
