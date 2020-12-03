@@ -4,6 +4,8 @@
 #define LONGUEUR 125
 #define LARGEUR 29
 
+
+//COULEURS
 #define BLACK           "\033[1;30m"
 #define RED             "\033[1;31m"
 #define GREEN           "\033[1;32m"
@@ -20,11 +22,14 @@
 #define TRAINCOLOR      PURPLE
 #define DOORCOLOR      	CYAN
 
+//VALEURS DU TRAIN
 #define TEMPSAQUAI      250
+#define VITESSETRAIN    5000000
 
 #define LARGT           3
 #define LONGT           116
 
+//FICHIERS
 #define FICTRAIN        "txt/train.txt"
 #define FICGARE         "txt/gare.txt"
 #define FICMENU         "txt/menu.txt"
