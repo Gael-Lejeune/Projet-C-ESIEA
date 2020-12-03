@@ -1,34 +1,34 @@
       ╒══════════════════════════════════════════════════════════════════════╕
       │                                                                      │
-      │          Bienvenue sur notre simulateur de Metro.                    │
+      │          Bienvenue sur notre simulateur de Métro.                    │
       │                                                                      │
       └──────────────────────────────────────────────────────────────────────┘
       ╒══════════════════════════════════════════════════════════════════════╕
       ║                                                                      ║
       ║   Pour commencer la simulation, veuillez sélectionner un mode      ║
-      ║   de simulation avec « d » ou « q ».                               ║
+      ║   de simulation avec « Q » ou « D ».                               ║
       ║                                                                      ║
       ╘══════════════════════════════════════════════════════════════════════╛
-                        ▼                                  ▼
-      ╔══════════════════════════════════╗╔══════════════════════════════════╗
-      ║              Mode 1 :            ║║             Mode 2 :             ║
-      ║                                  ║║                                  ║
-      ║                                  ║║  Des voyageurs se déplacent et   ║
-      ║  Seuls les trains apparaissent   ║║    prennent le Métro, il est     ║
-      ║           dans la gare.          ║║   aussi possible de prendre le   ║
-      ║                                  ║║      contrôle d'un voyageur.     ║
-      ║                                  ║║                                  ║
+                        ▼                                  ▼                                _\|/_
+      ╔══════════════════════════════════╗╔══════════════════════════════════╗	            (o o)
+      ║              Mode 1 :            ║║             Mode 2 :             ║	    +----oOO-{_}-OOo----------------------+
+      ║                                  ║║                                  ║	    |   Ce simulateur utilise des sons.   |
+      ║                                  ║║  Des voyageurs se déplacent et   ║	    |    Veuillez ajuster votre volume    |
+      ║  Seuls les trains apparaissent   ║║    prennent le Métro, il est     ║	    |      à l'aide de notre démo :       |
+      ║           dans la gare.          ║║   aussi possible de prendre le   ║ 	    |             L : Lire                |
+      ║                                  ║║      contrôle d'un voyageur.     ║	    |             M : Arrêter             |
+      ║                                  ║║                                  ║      +-------------------------------------+
       ╚══════════════════════════════════╝╚══════════════════════════════════╝
 
       ┌──────────────────────────────────────────────────────────────────────┐
       │                                                                      │
-      │             Appuyez sur « o » pour lancer la simulation.             │
+      │             Appuyez sur « ESPACE » pour lancer la simulation.        │
       │             La simulation va débuter, amusez vous bien !             │
       │                                                                      │
-      │             Pour quitter le simulateur, appuyez sur « k ».           │
+      │             Pour quitter le simulateur, appuyez sur « K ».           │
       │                                                                      │
       ╘══════════════════════════════════════════════════════════════════════╛
 
 
-                                                                            By Angélique PROUX
-                                                                            and Gaël LEJEUNE
+                                                                      By Angélique PROUX
+                                                                      and Gaël LEJEUNE
